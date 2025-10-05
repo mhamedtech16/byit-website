@@ -1,0 +1,44 @@
+image: docker:20.10.16
+
+services:
+  - docker:20.10.16-dind
+
+variables:
+  DOCKER_DRIVER: overlay2
+  IMAGE_NAME: $DOCKER_USERNAME/byit-stg-website
+  IMAGE_TAG: latest
+
+stages:
+  - build
+  - deploy
+
+# Trigger only on stage branch
+workflow:
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "stage"'
+      when: always
+
+before_script:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
+build:
+  stage: build
+  script:
+    - docker build -t $IMAGE_NAME:$IMAGE_TAG .
+    - docker push $IMAGE_NAME:$IMAGE_TAG
+
+deploy:
+  stage: deploy
+  script:
+    - mkdir -p ~/.ssh
+    - echo "$VPS_SSH_KEY" > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - ssh-keyscan -H "$VPS_HOST" >> ~/.ssh/known_hosts
+    - |
+      ssh -i ~/.ssh/id_rsa $VPS_USER@$VPS_HOST << EOF
+        docker stop byit-stg-website-container || true
+        docker rm byit-stg-website-container || true
+        docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+        docker pull $IMAGE_NAME:$IMAGE_TAG
+        docker run -d --network host --name byit-stg-website-container $IMAGE_NAME:$IMAGE_TAG
+      EOF
