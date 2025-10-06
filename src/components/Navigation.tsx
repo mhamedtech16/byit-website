@@ -2,16 +2,24 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import * as React from "react";
 
 import { routes } from "@/_lib/routes";
 import { useMobile } from "@/hooks/useMobile";
+import { useIsRTL } from "@/hooks/useRTL";
+import { Button } from "@/shadcn/components/ui/button";
+import { NavigationMenu } from "@/shadcn/components/ui/navigation-menu";
 import { cn } from "@/shadcn/lib/utils";
+import { useAuthStore } from "@/store/authStore";
 
+import { AlertDialogDemo } from "./Alret";
+import LocaleSwitcher from "./LocaleSwitcher";
 import LoginPage from "./Login";
 import MobileNavigation from "./MobileNavigation";
 import ModalDemo from "./Modal";
 import SignUpPage from "./Signup";
+import UserAccount from "./UserAccount";
 import WebNavigation from "./WebNavigation";
 
 // const components: { title: string; href: string; description: string }[] = [
@@ -54,9 +62,18 @@ import WebNavigation from "./WebNavigation";
 
 export function NavigationMenuDemo() {
   const [isOpen, setIsOpen] = React.useState(false);
+  const [openAlertDialog, setOpenAlertDialog] = React.useState(false);
+  const [openAlertDialogClosingForm, setOpenAlertDialogClosingForm] =
+    React.useState(false);
+  const t = useTranslations("Header");
   const [mode, setMode] = React.useState<"login" | "signup">("login");
+  const { currentUser, hasHydrated } = useAuthStore();
+  const isAuthenticated = currentUser?.user.approved;
   const isMobile = useMobile();
+  const isRTL = useIsRTL();
   const router = useRouter();
+
+  if (!hasHydrated) return null;
 
   const onClose = () => {
     setIsOpen(false);
@@ -72,32 +89,78 @@ export function NavigationMenuDemo() {
     }, 200);
   };
 
+  const isLoggedInDeals = () => {
+    if (!isAuthenticated) {
+      setOpenAlertDialog(true);
+    } else {
+      setOpenAlertDialogClosingForm(false);
+      router.push(routes.ClosingForm);
+    }
+  };
+
+  const isLoggedInSharesDeal = () => {
+    if (!isAuthenticated) {
+      setOpenAlertDialog(true);
+    } else {
+      setOpenAlertDialogClosingForm(false);
+      router.push(routes.SharesDeals);
+    }
+  };
+
+  const openLoginModal = () => {
+    setOpenAlertDialog(false);
+    onOpen("login");
+  };
+
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 w-full bg-white dark:bg-gray-900 shadow-md flex z-50 items-center md:justify-between lg:justify-around px-4 h-[11vmin] md:h-[11vmin]",
-        isMobile && "h-[11vmin] justify-between"
+        "fixed top-0 left-0 w-full bg-white dark:bg-gray-900 shadow-md flex z-50 items-center md:justify-between lg:justify-around h-[11vmin] md:h-[11vmin]",
+        isMobile && "h-[11vmin] justify-between px-4"
       )}
     >
-      <button
-        className="relative w-[16vmin] h-[8vmin] cursor-pointer"
-        onClick={() => router.push(routes.Home)}
-      >
-        <Image
-          src={"/images/logo.jpg"}
-          alt="Logo"
-          fill
-          //  width={130}
-          // height={100}
-          className="object-contain rounded-[3px]"
-        />
-      </button>
-
       {/* The Responsive of (Mobile,IPad) and Web */}
       {isMobile ? (
-        <MobileNavigation onOpen={onOpen} />
+        <>
+          <button
+            className="relative w-[16vmin] h-[8vmin] cursor-pointer"
+            onClick={() => router.push(routes.Home)}
+          >
+            <Image
+              src={"/images/logo.jpg"}
+              alt="Logo"
+              fill
+              //  width={130}
+              // height={100}
+              className="object-contain rounded-[3px]"
+            />
+          </button>
+          <MobileNavigation onOpen={onOpen} />
+        </>
       ) : (
-        <WebNavigation onOpen={onOpen} />
+        <>
+          <WebNavigation onOpen={onOpen} />
+          <div className="flex gap-1 items-center">
+            {isAuthenticated ? (
+              <NavigationMenu>
+                <UserAccount />
+              </NavigationMenu>
+            ) : (
+              <Button
+                onClick={() => onOpen("login")}
+                variant="login"
+                size="login"
+              >
+                {t("login")}
+              </Button>
+            )}
+
+            <Button onClick={() => setOpenAlertDialogClosingForm(true)}>
+              {t("closingForm")}
+            </Button>
+            <LocaleSwitcher />
+          </div>
+        </>
       )}
 
       <ModalDemo isOpen={isOpen} onClose={onClose}>
@@ -112,6 +175,40 @@ export function NavigationMenuDemo() {
             CloseModal={() => setIsOpen(false)}
           />
         )}
+      </ModalDemo>
+
+      {openAlertDialog && (
+        <AlertDialogDemo
+          open={openAlertDialog}
+          title="warning"
+          description="mustLogin"
+          action="login"
+          cancel="later"
+          translate="Header"
+          headerClassName={isRTL ? "items-start" : "items-start"}
+          onCancel={() => setOpenAlertDialog(false)}
+          onAction={openLoginModal}
+        />
+      )}
+
+      <ModalDemo
+        isOpen={openAlertDialogClosingForm}
+        onClose={() => setOpenAlertDialogClosingForm(false)}
+      >
+        <div className="items-center flex flex-col">
+          <h2 className="text-lg font-medium mb-4">{t("closingForm")}</h2>
+          <div className="flex gap-4">
+            <Button
+              onClick={isLoggedInSharesDeal}
+              className="p-10 flex flex-col"
+            >
+              {t("sharesDeals")}
+            </Button>
+            <Button onClick={isLoggedInDeals} className="p-10">
+              {t("deals")}
+            </Button>
+          </div>
+        </div>
       </ModalDemo>
     </header>
   );

@@ -66,11 +66,14 @@ export default function UserAccount() {
       {isRTL ? (
         <NavigationMenuItem>
           <NavigationMenuTriggerDemo
+            className=" hover:bg-white w-20"
             onPointerMove={(e) => e.preventDefault()} // disable hover
             onPointerLeave={(e) => e.preventDefault()} // disable hover
           >
-            <User2 size={24} />
-            {currentUser?.user.fullname.charAt(0) ?? ""}
+            <div className="flex gap-2">
+              <User2 size={24} color={colors.black} />
+              <p>{currentUser?.user.fullname.charAt(0) ?? ""}</p>
+            </div>
           </NavigationMenuTriggerDemo>
 
           <NavigationMenuContent>
@@ -134,11 +137,14 @@ export default function UserAccount() {
       ) : (
         <NavigationMenuItem>
           <NavigationMenuTriggerDemo
+            className=" hover:bg-white w-20"
             onPointerMove={(e) => e.preventDefault()} // disable hover
-            onPointerLeave={(e) => e.preventDefault()}
+            onPointerLeave={(e) => e.preventDefault()} // disable hover
           >
-            <User2 size={24} />
-            {currentUser?.user.fullname.charAt(0) ?? ""}
+            <div className="flex gap-2">
+              <User2 size={24} color={colors.black} />
+              <p>{currentUser?.user.fullname.charAt(0) ?? ""}</p>
+            </div>
           </NavigationMenuTriggerDemo>
 
           <NavigationMenuContent>
