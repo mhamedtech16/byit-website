@@ -6,6 +6,7 @@ import MessageModal from "@/components/MessageModal";
 import ModalDemo from "@/components/Modal";
 import PropertyCalculator from "@/components/PropertyCalculator";
 import FavouriteButton from "@/components/ui/FavouriteButton";
+import { useMobile } from "@/hooks/useMobile";
 import { useIsRTL } from "@/hooks/useRTL";
 import { pricePerLangauge } from "@/lib/PriceArray";
 import { cn } from "@/shadcn/lib/utils";
@@ -20,6 +21,7 @@ type Props = {
 const PropertyListItem = ({ item }: Props) => {
   const t = useTranslations();
   const isRTL = useIsRTL();
+  const isMobile = useMobile();
   const currentLang = useLocale();
   const [isCalOpen, setCalcOpen] = useState(false);
   const [isAlretOpen, setAlretOpen] = useState(false);
@@ -72,8 +74,13 @@ const PropertyListItem = ({ item }: Props) => {
           />
         </div>
       </div>
-      <div className="flex flex-row justify-between my-5">
-        <div className="flex flex-col w-[49%] gap-3">
+      <div
+        className={cn(
+          "flex flex-row justify-between my-5",
+          isMobile ? "px-0" : "px-[8%]"
+        )}
+      >
+        <div className={cn("flex flex-col gap-3", isMobile && "w-[49%]")}>
           <div>
             <p className="font-bold ">{item?.project?.name}</p>
             <p className="text-gray-400 ">{item?.location?.name}</p>
@@ -115,7 +122,7 @@ const PropertyListItem = ({ item }: Props) => {
             ))}
           </div>
         </div>
-        <div className="flex flex-col w-[49%] gap-2">
+        <div className={cn("flex flex-col  gap-3", isMobile && "w-[49%]")}>
           <Image
             alt="property image"
             src={item.company?.logo}
