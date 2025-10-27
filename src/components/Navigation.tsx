@@ -9,7 +9,6 @@ import { routes } from "@/_lib/routes";
 import { useMobile } from "@/hooks/useMobile";
 import { useIsRTL } from "@/hooks/useRTL";
 import { Button } from "@/shadcn/components/ui/button";
-import { NavigationMenu } from "@/shadcn/components/ui/navigation-menu";
 import { cn } from "@/shadcn/lib/utils";
 import { useAuthStore } from "@/store/authStore";
 
@@ -19,7 +18,6 @@ import LoginPage from "./Login";
 import MobileNavigation from "./MobileNavigation";
 import ModalDemo from "./Modal";
 import SignUpPage from "./Signup";
-import UserAccount from "./UserAccount";
 import WebNavigation from "./WebNavigation";
 
 // const components: { title: string; href: string; description: string }[] = [
@@ -141,11 +139,7 @@ export function NavigationMenuDemo() {
         <>
           <WebNavigation onOpen={onOpen} />
           <div className="flex gap-1 items-center">
-            {isAuthenticated ? (
-              <NavigationMenu>
-                <UserAccount />
-              </NavigationMenu>
-            ) : (
+            {!isAuthenticated && (
               <Button
                 onClick={() => onOpen("login")}
                 variant="login"
