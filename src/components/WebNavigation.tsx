@@ -24,6 +24,7 @@ import { cn } from "@/shadcn/lib/utils";
 import { useAuthStore } from "@/store/authStore";
 
 import { AlertDialogDemo } from "./Alret";
+import UserAccount from "./UserAccount";
 
 function WebNavigation({
   onOpen,
@@ -242,6 +243,8 @@ function WebNavigation({
               </Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
+
+          {isAuthenticated && <UserAccount />}
 
           {openAlertDialog && (
             <AlertDialogDemo
