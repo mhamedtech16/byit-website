@@ -275,7 +275,8 @@
     "country": "Country",
     "yearsExperience": "Years of Experience",
     "myEarnings": "My Earnings",
-    "currency": "EGP"
+    "currency": "EGP",
+    "myHistory": "My History"
   },
   "Favourites": {
     "Favourites": "المفضلة"

@@ -80,7 +80,7 @@ export default function LanguageDropdown({
 
       <PopoverContent
         align="center"
-        className="p-0 shadow-md rounded-xl border bg-white"
+        className="p-0 shadow-md rounded-xl border bg-white pointer-events-auto"
         style={{
           width: popoverWidth ?? "auto",
           minWidth: Math.max(popoverWidth ?? 0, 120),

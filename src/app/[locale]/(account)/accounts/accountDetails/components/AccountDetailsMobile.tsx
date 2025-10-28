@@ -1,13 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { HandCoins, History } from "lucide-react";
+import { HandCoins } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 
 import { routes } from "@/_lib/routes";
 import MobileNavigationSelect from "@/components/ui/MobileNavigationSelect";
-import { colors } from "@/constants/colors";
 import { pricePerLangauge } from "@/lib/PriceArray";
 import {
   Avatar,
@@ -87,10 +86,12 @@ export default function AccountDetailsMobile() {
                   </div>
 
                   <button
-                    className="bg-white shadow-lg rounded-full w-15 h-12 flex items-center justify-center cursor-pointer"
+                    className="bg-white shadow-lg rounded-2xl h-12 w-30 flex items-center justify-center cursor-pointer"
                     onClick={() => router.push(routes.History)}
                   >
-                    <History size={30} color={colors.orange} />
+                    <p className="text-orangeApp text-sm font-bold">
+                      {t("myHistory")}
+                    </p>
                   </button>
                 </div>
                 <Separator className="my-6" />
