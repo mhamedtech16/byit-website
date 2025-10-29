@@ -168,6 +168,11 @@ const NewLaunchItem = ({ item }: Props) => {
         <div className="flex flex-row mt-10">
           <div className="flex flex-col w-[90%] gap-3">
             <div>
+              <p className="font-bold ">{t("developerName")}</p>
+              <p className="text-gray-400 ">{item.company.name}</p>
+            </div>
+
+            <div>
               <p className="font-bold ">{t("Project Name")}</p>
               <p className="text-gray-400 ">{item.name}</p>
             </div>

@@ -82,6 +82,10 @@ const PropertyListItem = ({ item }: Props) => {
       >
         <div className={cn("flex flex-col gap-3", isMobile && "w-[49%]")}>
           <div>
+            <p className="font-bold text-xl">{item?.company?.name}</p>
+          </div>
+
+          <div>
             <p className="font-bold ">{item?.project?.name}</p>
             <p className="text-gray-400 ">{item?.location?.name}</p>
           </div>

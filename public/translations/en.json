@@ -256,7 +256,8 @@
     "Developer Sales Name": "Developer Sales Name",
     "Developer Sales Number": "Developer Sales Number",
     "Commission": "Commission",
-    "commissionToBeAnnounced": "Commission to be announced"
+    "commissionToBeAnnounced": "Commission to be announced",
+    "developerName": "Developer Name"
   },
   "Settings": {
     "settings": "Settings",

@@ -257,7 +257,8 @@
     "Developer Sales Name": "اسم سيلز المطور",
     "Developer Sales Number": "رقم سيلز المطور",
     "Commission": "العمولة",
-    "commissionToBeAnnounced": "العمولة لم تحدد بعد"
+    "commissionToBeAnnounced": "العمولة لم تحدد بعد",
+    "developerName": "اسم المطور"
   },
   "Settings": {
     "settings": "الإعدادات",
