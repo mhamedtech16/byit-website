@@ -105,7 +105,7 @@ function MobileNavigation({
           )}
         >
           <Image
-            src={"/images/logo.jpg"}
+            src={"/images/logo.png"}
             alt="Logo"
             // fill
             width={100}

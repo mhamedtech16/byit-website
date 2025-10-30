@@ -55,7 +55,7 @@ function WebNavigation({
             onClick={() => router.push(routes.Home)}
           >
             <Image
-              src={"/images/logo.jpg"}
+              src={"/images/logo.png"}
               alt="Logo"
               fill
               //  width={130}
@@ -99,7 +99,7 @@ function WebNavigation({
                         className={cn(
                           linkClass(routes.PropertiesList, "COMPOUND"),
                           isRTL &&
-                            "text-right flex-row items-center justify-end gap-3"
+                          "text-right flex-row items-center justify-end gap-3"
                         )}
                       >
                         {t("searchCompounds")}
@@ -119,7 +119,7 @@ function WebNavigation({
                         className={cn(
                           linkClass(routes.PropertiesList, "SEPARATED"),
                           isRTL &&
-                            "text-right flex-row items-center justify-end gap-3"
+                          "text-right flex-row items-center justify-end gap-3"
                         )}
                       >
                         {t("searchSeparates")}
