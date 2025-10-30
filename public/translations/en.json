@@ -161,6 +161,7 @@
   "Finishing": "Finishing",
   "Bedrooms": "Bedrooms",
   "Search": "Search",
+  "Select":"Select",
   "Reset": "Reset",
   "Starting Price": "Starting Price",
   "Down Payment": "Down Payment",
@@ -206,6 +207,8 @@
   "STUDIO": "Studio",
   "contactPerson": "Contact person",
   "ok": "Ok",
+  "From Price":"From Price",
+  "To Price":"To Price",
 
   "UpdateAccount": {
     "title": "Update Account",
@@ -257,7 +260,8 @@
     "Developer Sales Name": "Developer Sales Name",
     "Developer Sales Number": "Developer Sales Number",
     "Commission": "Commission",
-    "commissionToBeAnnounced": "Commission to be announced"
+    "commissionToBeAnnounced": "Commission to be announced",
+    "developerName": "Developer Name"
   },
   "Settings": {
     "settings": "Settings",

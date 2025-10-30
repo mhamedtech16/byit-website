@@ -45,10 +45,10 @@ const useGetApis = () => {
       if (selectedProject) {
         params = `${params}&project=${selectedProject?.id}`;
       }
-      if (fromPrice != null) {
+      if (fromPrice != null && fromPrice > 0) {
         params = `${params}&priceFrom=${fromPrice}`;
       }
-      if (fromPrice != null) {
+      if (toPrice != null && toPrice > 0 && toPrice > (fromPrice || 0)) {
         params = `${params}&priceTo=${toPrice}`;
       }
     }
@@ -76,9 +76,8 @@ const useGetApis = () => {
 
     // لو موجود propertyType ضيفه
     if (propertyType) {
-      params = `type=${
-        propertyType == "SEPARATED" ? propertyType : "COMPOUND"
-      }`;
+      params = `type=${propertyType == "SEPARATED" ? propertyType : "COMPOUND"
+        }`;
     }
 
     if (search) {
@@ -120,8 +119,7 @@ const useGetApis = () => {
       params += `&search=${search}`;
     }
     return axios.get(
-      `${BASE_END_POINT}projects?page=${page}&type=${
-        propertyType == "SEPARATED" ? propertyType : "COMPOUND"
+      `${BASE_END_POINT}projects?page=${page}&type=${propertyType == "SEPARATED" ? propertyType : "COMPOUND"
       }${params}`,
       {
         headers: {

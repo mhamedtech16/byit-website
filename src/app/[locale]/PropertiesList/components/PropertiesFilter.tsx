@@ -61,8 +61,8 @@ const PropertiesFilter = ({ propertyType, onFilterPress }: Props) => {
 
   const [selectedDeveloper, setSelectedDeveloper] = useState<Developer>();
   const [selectedProject, setSelectedProject] = useState<Project>();
-  const [fromPrice, setFromPrice] = useState(1000000);
-  const [toPrice, setToPrice] = useState(2000000);
+  const [fromPrice, setFromPrice] = useState(0);
+  const [toPrice, setToPrice] = useState(0);
   const [categories, setCategories] = useState<Category[]>([]);
   const [locations, setLocations] = useState<Location[]>([]);
 
@@ -231,8 +231,8 @@ const PropertiesFilter = ({ propertyType, onFilterPress }: Props) => {
     setSelectedFinishingTypes([]);
     setSelectedTypeIds([]);
     setSelectedBedroom([]);
-    setFromPrice(10000000);
-    setToPrice(2000000);
+    setFromPrice(0);
+    setToPrice(0);
   };
   useEffect(() => {
     getAllDevelopers(1, false, "");
@@ -285,7 +285,7 @@ const PropertiesFilter = ({ propertyType, onFilterPress }: Props) => {
 
       <div className="border-t-1 my-[2vmin]" />
       <PriceDropdownList
-        title={"From"}
+        title={"From Price"}
         data={priceArray()}
         value={fromPrice}
         width="w-full"
@@ -293,7 +293,7 @@ const PropertiesFilter = ({ propertyType, onFilterPress }: Props) => {
       />
       <div className="my-[2vmin]" />
       <PriceDropdownList
-        title={"To"}
+        title={"To Price"}
         data={priceArray()}
         value={toPrice}
         width="w-[100%]"

@@ -189,6 +189,7 @@
   "stateLoading": "جاري تحميل المحافظات...",
   "yearsExperience": "سنوات الخبرة",
   "search": "بحث",
+  "Select":"إختار",
   "Million": "مليون",
   "unitPrice": "سعر الوحدة",
   "sharePrice": "سعر الحصة",
@@ -207,6 +208,8 @@
   "STUDIO": "ستوديو",
   "contactPerson": "مسئول المبيعات",
   "ok": "تم",
+  "From Price":"من سعر",
+  "To Price":"إلي سعر",
 
   "UpdateAccount": {
     "title": "تحديث الحساب",
@@ -258,7 +261,8 @@
     "Developer Sales Name": "اسم سيلز المطور",
     "Developer Sales Number": "رقم سيلز المطور",
     "Commission": "العمولة",
-    "commissionToBeAnnounced": "العمولة لم تحدد بعد"
+    "commissionToBeAnnounced": "العمولة لم تحدد بعد",
+    "developerName": "اسم المطور"
   },
   "Settings": {
     "settings": "الإعدادات",
