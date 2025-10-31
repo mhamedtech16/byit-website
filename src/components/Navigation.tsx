@@ -109,7 +109,7 @@ export function NavigationMenuDemo() {
     setOpenAlertDialog(false);
     onOpen("login");
   };
-  const isTabletOrMobile = isMobile || window.innerWidth <= 1240;
+  const isTabletOrMobile = isMobile || window.innerWidth <= 1230;
   return (
     <header
       className={cn(
