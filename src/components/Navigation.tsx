@@ -109,17 +109,17 @@ export function NavigationMenuDemo() {
     setOpenAlertDialog(false);
     onOpen("login");
   };
-
+  const isTabletOrMobile = isMobile || window.innerWidth <= 1240;
   return (
     <header
       className={cn(
         "fixed top-0 left-0 w-full bg-white dark:bg-gray-900 shadow-md flex z-50 items-center md:justify-between lg:justify-around h-[11vmin] md:h-[11vmin]",
-        isMobile && "h-[11vmin] justify-between px-4"
+        isTabletOrMobile && "h-[11vmin] justify-between px-4"
       )}
     >
       {/* The Responsive of (Mobile,IPad) and Web */}
-      {isMobile ? (
-        <>
+      {isTabletOrMobile ? (
+        <div className="flex flex-row w-full justify-between">
           <button
             className="relative w-[16vmin] h-[8vmin] cursor-pointer"
             onClick={() => router.push(routes.Home)}
@@ -134,16 +134,15 @@ export function NavigationMenuDemo() {
             />
           </button>
           <MobileNavigation onOpen={onOpen} />
-        </>
+        </div>
       ) : (
-        <div
-          className={`flex items-center justify-between w-full px-4 py-2 ${isRTL ? "flex-row-reverse" : "flex-row"
-            }`}
-        >
-          <div className="flex-1 min-w-0 overflow-hidden">
+        <div className="flex items-center justify-between w-full px-4 py-2 relative">
+          {/* Navigation */}
+          <div className="flex-1 min-w-0">
             <WebNavigation onOpen={onOpen} />
           </div>
-          <div className="flex gap-1 items-center">
+          {/* <div className="flex gap-1 items-center"> */}
+          <div className="flex gap-2 items-center flex-shrink-0">
             {!isAuthenticated && (
               <Button
                 onClick={() => onOpen("login")}

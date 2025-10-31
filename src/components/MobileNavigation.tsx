@@ -90,7 +90,7 @@ function MobileNavigation({
   return (
     <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
       <SheetTrigger asChild>
-        <Button variant="outline" size="icon" className="lg:hidden">
+        <Button variant="outline" size="icon" >
           <Menu className="h-6 w-6" />
         </Button>
       </SheetTrigger>
@@ -156,7 +156,7 @@ function MobileNavigation({
                   query: { propertyType: "COMPOUND" },
                 }}
                 onClick={onCloseSheet}
-                className={linkClass(routes.PropertiesList)}
+                className={cn(linkClass(routes.PropertiesList, "COMPOUND"), "flex flex-row")}
               >
                 <Dot size={30} />
                 {t("searchCompounds")}
@@ -167,7 +167,8 @@ function MobileNavigation({
                   pathname: routes.PropertiesList,
                   query: { propertyType: "SEPARATED" },
                 }}
-                className={linkClass(routes.PropertyDetails)}
+                className={cn(linkClass(routes.PropertiesList, "SEPARATED"), "flex flex-row")}
+
               >
                 <Dot size={30} />
                 {t("searchSeparates")}
@@ -210,10 +211,18 @@ function MobileNavigation({
                 setIsSheetOpen(false);
               }
             }}
-            className={cn(linkClass(routes.Contests), "cursor-pointer")}
+            className={cn(linkClass(routes.Contests), `cursor-pointer ${isRTL ? "text-right" : "text-left"}`)}
           >
             {t("contests")}
           </button>
+
+          {/* <Link
+            href={routes.Contests}
+            className={linkClass(routes.Contests)}
+            onClick={onCloseSheet}
+          >
+            {t("contests")}
+          </Link> */}
 
           <Link
             href={routes.GuideLines}
@@ -235,7 +244,7 @@ function MobileNavigation({
             <>
               <Link
                 href={routes.AccountDetails}
-                className={cn(linkClass(routes.AccountDetails), " gap-2")}
+                className={cn(linkClass(routes.AccountDetails), " gap-2 flex flex-row ")}
                 onClick={onCloseSheet}
               >
                 <User2Icon size={24} color="gray" />
@@ -244,7 +253,7 @@ function MobileNavigation({
 
               <Link
                 href={routes.Favourites}
-                className={cn(linkClass(routes.Favourites), " gap-2")}
+                className={cn(linkClass(routes.Favourites), " gap-2 flex flex-row")}
                 onClick={onCloseSheet}
               >
                 <Heart size={24} color="gray" />
