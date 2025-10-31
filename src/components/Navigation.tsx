@@ -136,8 +136,13 @@ export function NavigationMenuDemo() {
           <MobileNavigation onOpen={onOpen} />
         </>
       ) : (
-        <>
-          <WebNavigation onOpen={onOpen} />
+        <div
+          className={`flex items-center justify-between w-full px-4 py-2 ${isRTL ? "flex-row-reverse" : "flex-row"
+            }`}
+        >
+          <div className="flex-1 min-w-0 overflow-hidden">
+            <WebNavigation onOpen={onOpen} />
+          </div>
           <div className="flex gap-1 items-center">
             {!isAuthenticated && (
               <Button
@@ -154,7 +159,7 @@ export function NavigationMenuDemo() {
             </Button>
             <LocaleSwitcher />
           </div>
-        </>
+        </div>
       )}
 
       <ModalDemo isOpen={isOpen} onClose={onClose}>
