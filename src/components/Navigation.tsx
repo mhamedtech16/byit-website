@@ -140,7 +140,7 @@ export function NavigationMenuDemo() {
           className={`flex items-center justify-between w-full px-4 py-2 ${isRTL ? "flex-row-reverse" : "flex-row"
             }`}
         >
-          <div className="flex-1 min-w-0 overflow-hidden">
+          <div className="flex-1 min-w-0 ">
             <WebNavigation onOpen={onOpen} />
           </div>
           <div className="flex gap-1 items-center">

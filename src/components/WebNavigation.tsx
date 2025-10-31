@@ -47,18 +47,11 @@ function WebNavigation({
   };
 
   return (
-    // <div className="lg:flex hidden">
-    <div
-      className={`flex items-center justify-between w-full px-4 py-2 ${isRTL ? "flex-row-reverse" : "flex-row"}`}
-    >
+    <div className="lg:flex hidden">
       <NavigationMenu viewport={false} key="main-nav">
-        <NavigationMenuList className={cn(
-          isRTL ? "flex-row-reverse" : "flex-row",
-          "items-center justify-center gap-3",
-          "max-w-full overflow-x-auto md:flex-wrap lg:flex-nowrap lg:gap-6"
-        )}>
+        <NavigationMenuList className={isRTL ? "flex-row-reverse" : "flex-row"}>
           <button
-            className="relative flex-shrink-0 w-[120px] h-[60px] cursor-pointer"
+            className="relative w-[13vmin] h-[8vmin] cursor-pointer"
             onClick={() => router.push(routes.Home)}
           >
             <Image
