@@ -47,16 +47,12 @@ function WebNavigation({
   };
 
   return (
-    // <div className="lg:flex hidden">
-    <div
-      className={`flex items-center justify-between w-full px-4 py-2 ${isRTL ? "flex-row-reverse" : "flex-row"}`}
-    >
-      <NavigationMenu viewport={false} key="main-nav">
-        <NavigationMenuList className={cn(
-          isRTL ? "flex-row-reverse" : "flex-row",
-          "items-center justify-center gap-3",
-          "max-w-full overflow-x-auto md:flex-wrap lg:flex-nowrap lg:gap-6"
-        )}>
+    <div className="lg:flex hidden">
+      {/* <div
+       className={`flex items-center justify-between w-full px-1 py-2 ${isRTL ? "flex-row-reverse" : "flex-row"}`}
+  > */}
+      <NavigationMenu viewport={false} key="main-nav" className="z-[200]">
+        <NavigationMenuList className={isRTL ? "flex-row-reverse gap-3" : "flex-row gap-3"}>
           <button
             className="relative flex-shrink-0 w-[120px] h-[60px] cursor-pointer"
             onClick={() => router.push(routes.Home)}
@@ -332,6 +328,7 @@ function WebNavigation({
 
           {/* <LocaleSwitcher /> */}
         </NavigationMenuList>
+
       </NavigationMenu>
     </div>
   );
