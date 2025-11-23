@@ -12,6 +12,7 @@ import { z } from "zod";
 import { routes } from "@/_lib/routes";
 import { updateAccountSchema } from "@/_utils/validation";
 import { updateAccountApi } from "@/Apis/Auth";
+import AccountMenu from "@/components/AccountMenu";
 import { AlertDialogDemo } from "@/components/Alret";
 import { CountryDropdown } from "@/components/CountryCodeDropdown";
 import { FormDropdownInput } from "@/components/form/FormDropdownInput";
@@ -144,7 +145,9 @@ export default function UpdateAccount() {
           />
         </div>
       ) : (
-        <Sidebar />
+        <Sidebar label="settings">
+          <AccountMenu />
+        </Sidebar>
       )}
 
       <motion.div

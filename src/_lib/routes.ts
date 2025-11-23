@@ -8,6 +8,7 @@ export const routes = {
   PropertiesList: "/PropertiesList",
   PropertyDetails: "/PropertyDetails",
   NewLaunches: "/NewLaunches",
+  LeadGenration: "/byit-A-team/lead-genration",
   SharedProperties: "/shared-properties",
   Contests: "/Contests",
   AboutUs: "/AboutUs",

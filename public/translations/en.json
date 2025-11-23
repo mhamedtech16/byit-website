@@ -21,7 +21,9 @@
     "sharesDeals": "Shares deals",
     "deals": "Deals",
     "sharedProperties": "Fractional Real Estate",
-    "myAccount": "My Account"
+    "myAccount": "My Account",
+    "Byit_A_Team": "Byit-A-Team",
+    "leadGenration": "Lead Generation"
   },
   "HomePage": {
     "title": "Hello world!",
@@ -161,7 +163,7 @@
   "Finishing": "Finishing",
   "Bedrooms": "Bedrooms",
   "Search": "Search",
-  "Select":"Select",
+  "Select": "Select",
   "Reset": "Reset",
   "Starting Price": "Starting Price",
   "Down Payment": "Down Payment",
@@ -207,8 +209,11 @@
   "STUDIO": "Studio",
   "contactPerson": "Contact person",
   "ok": "Ok",
-  "From Price":"From Price",
-  "To Price":"To Price",
+  "From Price": "From Price",
+  "To Price": "To Price",
+  "leadGenration": "Lead Generation",
+  "join": "join",
+  "readMore": "Read more details",
 
   "UpdateAccount": {
     "title": "Update Account",

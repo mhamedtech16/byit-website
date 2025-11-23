@@ -10,6 +10,7 @@ import { useState } from "react";
 import { routes } from "@/_lib/routes";
 import { useActiveLink } from "@/_utils/navigation";
 import { imgs } from "@/assets";
+import { Button } from "@/shadcn/components/ui/button";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -24,6 +25,7 @@ import { cn } from "@/shadcn/lib/utils";
 import { useAuthStore } from "@/store/authStore";
 
 import { AlertDialogDemo } from "./Alret";
+import ModalDemo from "./Modal";
 import UserAccount from "./UserAccount";
 
 function WebNavigation({
@@ -36,6 +38,7 @@ function WebNavigation({
   const locale = useLocale();
   const router = useRouter();
   const [openAlertDialog, setOpenAlertDialog] = useState(false);
+  const [openByitTeamDialog, setOpenByitTeamDialog] = useState(false);
   const isRTL = locale === "ar";
   const { currentUser, hasHydrated } = useAuthStore();
   const isAuthenticated = currentUser?.user.approved;
@@ -52,7 +55,9 @@ function WebNavigation({
        className={`flex items-center justify-between w-full px-1 py-2 ${isRTL ? "flex-row-reverse" : "flex-row"}`}
   > */}
       <NavigationMenu viewport={false} key="main-nav" className="z-[200]">
-        <NavigationMenuList className={isRTL ? "flex-row-reverse gap-3" : "flex-row gap-3"}>
+        <NavigationMenuList
+          className={isRTL ? "flex-row-reverse gap-3" : "flex-row gap-3"}
+        >
           <button
             className="relative flex-shrink-0 w-[120px] h-[60px] cursor-pointer"
             onClick={() => router.push(routes.Home)}
@@ -102,7 +107,7 @@ function WebNavigation({
                         className={cn(
                           linkClass(routes.PropertiesList, "COMPOUND"),
                           isRTL &&
-                          "text-right flex-row items-center justify-end gap-3"
+                            "text-right flex-row items-center justify-end gap-3"
                         )}
                       >
                         {t("searchCompounds")}
@@ -122,7 +127,7 @@ function WebNavigation({
                         className={cn(
                           linkClass(routes.PropertiesList, "SEPARATED"),
                           isRTL &&
-                          "text-right flex-row items-center justify-end gap-3"
+                            "text-right flex-row items-center justify-end gap-3"
                         )}
                       >
                         {t("searchSeparates")}
@@ -198,6 +203,25 @@ function WebNavigation({
               asChild
               className={navigationMenuTriggerStyle()}
             >
+              <button
+                onClick={() => {
+                  setOpenByitTeamDialog(true);
+                }}
+                className={cn(
+                  linkClass(routes.LeadGenration),
+                  "cursor-pointer"
+                )}
+              >
+                Byit A-Team
+              </button>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+
+          <NavigationMenuItem>
+            <NavigationMenuLink
+              asChild
+              className={navigationMenuTriggerStyle()}
+            >
               <Link
                 href={routes.SharedProperties}
                 className={linkClass(routes.SharedProperties)}
@@ -262,6 +286,25 @@ function WebNavigation({
               onAction={openLoginModal}
             />
           )}
+
+          <ModalDemo
+            isOpen={openByitTeamDialog}
+            onClose={() => setOpenByitTeamDialog(false)}
+          >
+            <div className="flex justify-center items-center p-16 space-x-6">
+              <Button
+                onClick={() => {
+                  router.push(routes.LeadGenration);
+                  setOpenByitTeamDialog(false);
+                }}
+              >
+                Lead Generation
+              </Button>
+              {/* <Button onClick={() => router.push(routes.LeadGenration)}>
+                Close
+              </Button> */}
+            </div>
+          </ModalDemo>
 
           {/* <NavigationMenuItem>
             <NavigationMenuLink
@@ -328,7 +371,6 @@ function WebNavigation({
 
           {/* <LocaleSwitcher /> */}
         </NavigationMenuList>
-
       </NavigationMenu>
     </div>
   );

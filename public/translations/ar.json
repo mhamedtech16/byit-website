@@ -189,7 +189,7 @@
   "stateLoading": "جاري تحميل المحافظات...",
   "yearsExperience": "سنوات الخبرة",
   "search": "بحث",
-  "Select":"إختار",
+  "Select": "إختار",
   "Million": "مليون",
   "unitPrice": "سعر الوحدة",
   "sharePrice": "سعر الحصة",
@@ -208,8 +208,10 @@
   "STUDIO": "ستوديو",
   "contactPerson": "مسئول المبيعات",
   "ok": "تم",
-  "From Price":"من سعر",
-  "To Price":"إلي سعر",
+  "From Price": "من سعر",
+  "To Price": "إلي سعر",
+  "join": "انضم",
+  "readMore": "اقرأ المزيد",
 
   "UpdateAccount": {
     "title": "تحديث الحساب",

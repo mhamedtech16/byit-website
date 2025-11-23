@@ -76,8 +76,9 @@ const useGetApis = () => {
 
     // لو موجود propertyType ضيفه
     if (propertyType) {
-      params = `type=${propertyType == "SEPARATED" ? propertyType : "COMPOUND"
-        }`;
+      params = `type=${
+        propertyType == "SEPARATED" ? propertyType : "COMPOUND"
+      }`;
     }
 
     if (search) {
@@ -119,7 +120,8 @@ const useGetApis = () => {
       params += `&search=${search}`;
     }
     return axios.get(
-      `${BASE_END_POINT}projects?page=${page}&type=${propertyType == "SEPARATED" ? propertyType : "COMPOUND"
+      `${BASE_END_POINT}projects?page=${page}&type=${
+        propertyType == "SEPARATED" ? propertyType : "COMPOUND"
       }${params}`,
       {
         headers: {
@@ -221,6 +223,14 @@ const useGetApis = () => {
     });
   }, []);
 
+  const getCampaignApi = useCallback(() => {
+    return axios.get("https://api-stg.byitapp.com/api/v1/campaigns", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  }, []);
+
   const getGuideLinesApi = useCallback(() => {
     return api.get("guidelines");
   }, []);
@@ -252,6 +262,7 @@ const useGetApis = () => {
     getSharedPropertiesApi,
     getVendorsApi,
     getProjectsByDeveloperApi,
+    getCampaignApi,
   };
 };
 

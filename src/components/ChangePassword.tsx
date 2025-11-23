@@ -21,6 +21,7 @@ import { cn } from "@/shadcn/lib/utils";
 import { useAuthStore } from "@/store/authStore";
 import { UpdatePasswordRequest } from "@/types/User";
 
+import AccountMenu from "./AccountMenu";
 import { AlertDialogDemo } from "./Alret";
 import { FormPasswordInput } from "./form/FormPasswordInput";
 import MobileNavigationSelect from "./ui/MobileNavigationSelect";
@@ -108,7 +109,9 @@ export default function ChangePassword() {
           />
         </div>
       ) : (
-        <Sidebar />
+        <Sidebar label="Settings">
+          <AccountMenu />
+        </Sidebar>
       )}
 
       <motion.div
