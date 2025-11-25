@@ -1,3 +1,15 @@
+type Broker = {
+  fullname: string;
+  id: number;
+  type: string;
+};
+
+type Country = {
+  countryCode: string;
+  name: string;
+  id: number;
+};
+
 export interface Campaign {
   id: number;
   name: string;
@@ -14,4 +26,16 @@ export interface Campaign {
   brokersCount: number;
   leadsCount: number;
   created_at: string;
+}
+
+export interface Leads {
+  id: number;
+  fullname: string;
+  phone: string;
+  campaign: { name: string; id: number } | null;
+  status: string;
+  notes: string;
+  created_at: string;
+  broker: Broker | null;
+  conutry: Country;
 }

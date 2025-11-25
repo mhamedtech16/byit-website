@@ -208,7 +208,7 @@ function WebNavigation({
                   setOpenByitTeamDialog(true);
                 }}
                 className={cn(
-                  linkClass(routes.LeadGenration),
+                  linkClass(routes.LeadGenration.Root),
                   "cursor-pointer"
                 )}
               >
@@ -294,7 +294,7 @@ function WebNavigation({
             <div className="flex justify-center items-center p-16 space-x-6">
               <Button
                 onClick={() => {
-                  router.push(routes.LeadGenration);
+                  router.push(routes.LeadGenration.Root);
                   setOpenByitTeamDialog(false);
                 }}
               >

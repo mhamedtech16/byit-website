@@ -4,15 +4,22 @@ import { useEffect, useState } from "react";
 
 import useGetApis from "@/Apis/useGetApis";
 import { Campaign } from "@/types/Campaigns";
+import { User } from "@/types/User";
 
-export default function useCampaigns() {
+export default function useCampaigns(user: User | null) {
   const { getCampaignApi } = useGetApis();
   const [campaigns, setCampaigns] = useState<Campaign[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    getCampaignApi()
+    if (!user) {
+      setLoading(false);
+      setCampaigns(null);
+      return;
+    }
+
+    getCampaignApi(user)
       .then((res) => {
         setCampaigns(res.data.data);
       })
@@ -23,7 +30,7 @@ export default function useCampaigns() {
       .finally(() => {
         setLoading(false);
       });
-  }, [getCampaignApi]);
+  }, [getCampaignApi, user]);
 
   return { campaigns, loading, error };
 }

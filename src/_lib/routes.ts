@@ -8,7 +8,6 @@ export const routes = {
   PropertiesList: "/PropertiesList",
   PropertyDetails: "/PropertyDetails",
   NewLaunches: "/NewLaunches",
-  LeadGenration: "/byit-A-team/lead-genration",
   SharedProperties: "/shared-properties",
   Contests: "/Contests",
   AboutUs: "/AboutUs",
@@ -21,6 +20,11 @@ export const routes = {
   Favourites: "/favourites",
   History: "/accounts/history",
   GuideLines: "/guideLines",
+  LeadGenration: {
+    Root: "/byit-A-team/lead-genration",
+    MyLeads: (campaignId: number | string) =>
+      `/byit-A-team/lead-genration/my-leads/${campaignId}`,
+  },
   Blog: {
     Root: "/blog",
     slug: (slug: string) => `/blog/${slug}`,

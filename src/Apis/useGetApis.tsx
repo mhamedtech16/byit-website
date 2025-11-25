@@ -223,10 +223,20 @@ const useGetApis = () => {
     });
   }, []);
 
-  const getCampaignApi = useCallback(() => {
-    return axios.get("https://api-stg.byitapp.com/api/v1/campaigns", {
+  const getCampaignApi = useCallback((user: User | null) => {
+    return api.get("campaigns", {
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${user?.token}`,
+      },
+    });
+  }, []);
+
+  const getLeadsApi = useCallback((user: User | null) => {
+    return api.get("leads", {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user?.token}`,
       },
     });
   }, []);
@@ -263,6 +273,7 @@ const useGetApis = () => {
     getVendorsApi,
     getProjectsByDeveloperApi,
     getCampaignApi,
+    getLeadsApi,
   };
 };
 

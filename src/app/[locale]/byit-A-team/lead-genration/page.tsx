@@ -1,9 +1,5 @@
-import React from "react";
-
 import LeadGenration from "./components/LeadGenration";
 
-function page() {
+export default function Page() {
   return <LeadGenration />;
 }
-
-export default page;
