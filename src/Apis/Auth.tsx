@@ -5,6 +5,7 @@ import {
   ConfirmLoginCode,
   LoginRequestValues,
   LoginResponse,
+  NewMeetingsRequest,
   SharesDealRequest,
   SharesDealResponse,
   SignUpRequest,
@@ -219,6 +220,39 @@ export const sharesDealFormApi = async (
   }
 
   return api.post("deals", formData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Accept-Language": lang,
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
+
+export const newMeetingsApi = async (
+  values: NewMeetingsRequest,
+  lang: string
+): Promise<ClosignFormResponse> => {
+  const token = useAuthStore.getState().currentUser?.token;
+
+  const formData = new FormData();
+
+  // Append as string, because FormData doesn't support native numbers, but backend will cast them
+  // formData.append("conpany", String(values.developer)); // ⬅ conpany = developer ID
+  formData.append("company", String(values.developer)); // Developer
+  formData.append("project", String(values.project)); // Project
+  formData.append("clientCountry", String(values.clientCountry ?? 0)); // client country
+
+  formData.append("clientName", values.clientName || ""); // Client Name
+  formData.append("clientPhone", values.clientPhone || ""); // Client Phone
+  formData.append("salesName", values.salesName || ""); // Sales Name
+  formData.append("salesCountry", String(values.salesCountry ?? 0)); // sales country
+  formData.append("salesPhone", values.salesPhone || ""); // Sales Number
+
+  if (values.uploadFile) {
+    formData.append("idCardImg", values.uploadFile as unknown as File); // Provement
+  }
+
+  return api.post("meetings", formData, {
     headers: {
       Authorization: `Bearer ${token}`,
       "Accept-Language": lang,

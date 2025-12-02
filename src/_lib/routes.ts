@@ -19,6 +19,8 @@ export const routes = {
   ChangePassword: "/accounts/changePassword",
   Favourites: "/favourites",
   History: "/accounts/history",
+  IncentiveByMeetings: "/byit-A-team/incentive-by-meetings",
+  NewMeetings: "/byit-A-team/incentive-by-meetings/new-meetings",
   GuideLines: "/guideLines",
   LeadGenration: {
     Root: "/byit-A-team/lead-genration",

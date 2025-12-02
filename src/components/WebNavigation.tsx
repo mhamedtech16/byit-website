@@ -208,7 +208,11 @@ function WebNavigation({
                   setOpenByitTeamDialog(true);
                 }}
                 className={cn(
-                  linkClass(routes.LeadGenration.Root),
+                  linkClass(
+                    routes.LeadGenration.Root &&
+                      routes.IncentiveByMeetings &&
+                      routes.NewMeetings
+                  ),
                   "cursor-pointer"
                 )}
               >
@@ -299,6 +303,15 @@ function WebNavigation({
                 }}
               >
                 Lead Generation
+              </Button>
+
+              <Button
+                onClick={() => {
+                  router.push(routes.IncentiveByMeetings);
+                  setOpenByitTeamDialog(false);
+                }}
+              >
+                Incentive By Meetings
               </Button>
               {/* <Button onClick={() => router.push(routes.LeadGenration)}>
                 Close

@@ -108,6 +108,29 @@
     "partnerLoading": "Loading partners..."
   },
 
+  "NewMeetings": {
+    "newMeetings": "New Meetings",
+    "submit": "Submit",
+    "submitting": "Submitting...",
+    "ok": "Ok",
+    "meetingSubmitted": "Meeting Submitted",
+    "developer": "Developer",
+    "project": "Project",
+    "clientName": "Client Name",
+    "clientPhone": "Client Phone",
+    "developerSalesName": "Sales Name",
+    "developerSalesNumber": "Sales Number",
+    "verficationMethod": "Verfication Method",
+    "selectDeveloper": "Select developer",
+    "searchDeveloper": "Search developer",
+    "developerLoading": "Loading developers...",
+    "selectProject": "Select project",
+    "searchProject": "Search project",
+    "projectLoading": "Loading projects...",
+    "sendToWhatsapp": "Send to WhatsApp",
+    "success": "Success!"
+  },
+
   "AboutUs": {
     "title": "About Us",
     "missionTitle": "Our Mission",
@@ -214,6 +237,18 @@
   "leadGenration": "Lead Generation",
   "join": "join",
   "readMore": "Read more details",
+  "clientName": "Client Name",
+  "date": "Date",
+  "salesName": "Sales Name",
+  "developer": "Developer",
+  "project": "Project",
+  "status": "Status",
+  "months": "Months",
+  "myMeetings": "My Meetings",
+  "myMeetingEarnings": "My Meeting Earnings",
+  "remainingMeetings": "Remaining Meetings",
+  "noMeetings": "No. Meetings",
+  "newMeetings": "New Meetings",
 
   "UpdateAccount": {
     "title": "Update Account",

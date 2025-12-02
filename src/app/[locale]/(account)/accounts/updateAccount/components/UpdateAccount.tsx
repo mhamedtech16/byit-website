@@ -135,7 +135,7 @@ export default function UpdateAccount() {
       {isMobile ? (
         <div className="absolute w-full z-50">
           <MobileNavigationSelect
-            label="settings"
+            label={t("settings")}
             options={[
               { label: t("account"), value: routes.AccountDetails },
               { label: t("changePassword"), value: routes.ChangePassword },

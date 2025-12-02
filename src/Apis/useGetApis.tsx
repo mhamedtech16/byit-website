@@ -241,6 +241,15 @@ const useGetApis = () => {
     });
   }, []);
 
+  const getMeetingsApi = useCallback((user: User | null) => {
+    return api.get("meetings", {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user?.token}`,
+      },
+    });
+  }, []);
+
   const getGuideLinesApi = useCallback(() => {
     return api.get("guidelines");
   }, []);
@@ -274,6 +283,7 @@ const useGetApis = () => {
     getProjectsByDeveloperApi,
     getCampaignApi,
     getLeadsApi,
+    getMeetingsApi,
   };
 };
 

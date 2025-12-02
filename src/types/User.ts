@@ -20,6 +20,10 @@ export interface User {
     networkEarns: number;
     totalNetworkEarns: number;
     totalNetworkDeals: number;
+    totalMeetingsCount: number;
+    monthMeetingsCount: number;
+    meetingsEarns: number;
+    totalMeetingsEarns: number;
     country: Country;
     city: City;
     yearsExperience: string;
@@ -237,6 +241,18 @@ export interface ClosignFormRequest {
   salesCountry?: number; // Country code for phone number validation
   uploadFile?: File; // File object for the uploaded document
   type: string;
+}
+
+export interface NewMeetingsRequest {
+  salesName?: string;
+  salesPhone?: string;
+  salesCountry?: number; // Country code for phone number validation
+  developer: number;
+  project: number;
+  clientName?: string;
+  clientPhone?: string;
+  clientCountry?: number;
+  uploadFile?: File; // File object for the uploaded document
 }
 
 export interface SharesDealRequest {
