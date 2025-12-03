@@ -2,6 +2,7 @@ import { useCallback, useState } from "react";
 
 import useGetApis from "@/Apis/useGetApis";
 import { Developer, Project } from "@/types/Properties";
+import { AxiosResponse } from "axios";
 
 export function useDevelopersAndProjects(propertyType?: string) {
   const { getAllDevelopersApi, getProjectsByDeveloperApi } = useGetApis();
@@ -45,7 +46,7 @@ export function useDevelopersAndProjects(propertyType?: string) {
       try {
         setProjectsLoading(true);
 
-        let response;
+        let response: AxiosResponse<any, any>;
 
         if (developerId && developerId > 0) {
           response = await getProjectsByDeveloperApi(developerId, page);
