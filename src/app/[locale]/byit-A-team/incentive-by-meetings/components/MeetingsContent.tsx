@@ -47,10 +47,7 @@ export default function MeetingsContent({
               {t("myMeetingEarnings")}
             </p>
             <p className="font-bold text-lg text-green-500">
-              {`${
-                (currentUser?.user.totalMeetingsEarns ?? 0) +
-                (currentUser?.user?.meetingsEarns ?? 0)
-              } ${t("EGP")}`}
+              {`${currentUser?.user?.meetingsEarns ?? 0} ${t("EGP")}`}
             </p>
           </Card>
 

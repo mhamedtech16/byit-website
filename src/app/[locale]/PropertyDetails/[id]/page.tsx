@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: Props) {
   };
 
   return {
-    title: titles[locales] || "Guidelines Videos",
+    title: titles[locales] || "Properties Details",
     // description: "دي صفحة الـ Closing Form الخاصة بالموقع",
   };
 }
