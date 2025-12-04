@@ -40,7 +40,11 @@ const PropertyDetails = () => {
   }
 
   if (error) {
-    return;
+    return (
+      <div className="flex items-center justify-center">
+        <p className="text-app-gray font-bold">Not Found</p>
+      </div>
+    );
   }
   if (!property) {
     return (
