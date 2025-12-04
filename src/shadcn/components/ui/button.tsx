@@ -22,7 +22,8 @@ const buttonVariants = cva(
         ghost:
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
-        languageFlag:
+        languageFlag: "bg-background",
+        languageFlagMobile:
           "border bg-background shadow-xs hover:bg-primary hover:text-white dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
         iconENClose: "absolute top-6 right-8 text-gray-500 bg-white text-md",
         iconARClose: "absolute top-6 left-8 text-gray-500 bg-white text-md",
@@ -30,15 +31,18 @@ const buttonVariants = cva(
           "text-primary hover:underline hover:translate-x-1 transition-transform duration-200",
         scrollUp: `bg-primary text-white border-2 border-white shadow-md transition duration-300 hover:bg-white hover:text-primary hover:border-primary hover:shadow-lg active:scale-95`,
         icon: "bg-white text-primary hover:text-white shadow-xs hover:bg-primary/90 items-center justify-center flex",
+        login: "bg-white text-black underline",
       },
       size: {
         default: "h-9 px-10 py-6 has-[>svg]:px-3",
         sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
         lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
         icon: "size-9",
-        languageFlag: "h-9 px-0 py-6 has-[>svg]:px-3",
+        languageFlag: "p-1",
+        languageFlagMobile: "h-9 px-0 py-6 has-[>svg]:px-3",
         iconClose: "px-2",
         linkUnderline: "p-0",
+        login: "p-3",
       },
     },
     defaultVariants: {

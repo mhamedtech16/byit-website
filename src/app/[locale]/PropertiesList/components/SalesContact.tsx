@@ -6,6 +6,7 @@ import { useState } from "react";
 
 import ModalDemo from "@/components/Modal";
 import VoicePlayer from "@/components/VoicePlayer";
+import { cn } from "@/shadcn/lib/utils";
 import { Property, NewLaunch } from "@/types/Properties";
 
 type Props = {
@@ -32,8 +33,13 @@ const SalesContact = ({ item, type = "property" }: Props) => {
       : (item as NewLaunch)?.vendors;
 
   return (
-    <div className="flex flex-row w-full justify-between items-center border-t border-t-gray-300 py-4">
-      <div className="w-[40%] items-center">
+    <div
+      className={cn(
+        "flex flex-row w-full justify-between items-center border-t border-t-gray-300 py-4",
+        type === "property" && "pl-[8%] pr-[4%]"
+      )}
+    >
+      <div className="items-center">
         <button
           onClick={() => setOpen(true)}
           className="font-bold cursor-pointer hover:opacity-90"

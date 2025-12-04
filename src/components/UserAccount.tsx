@@ -1,14 +1,8 @@
 "use client";
 
-import {
-  CheckCircle2Icon,
-  Heart,
-  LogOut,
-  User2,
-  User2Icon,
-} from "lucide-react";
+import { CheckCircle2Icon, Heart, LogOut, User2Icon } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 
@@ -22,13 +16,13 @@ import {
   NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuLink,
+  NavigationMenuTrigger,
 } from "@/shadcn/components/ui/navigation-menu";
 import { Separator } from "@/shadcn/components/ui/separator";
 import { cn } from "@/shadcn/lib/utils";
 import { useAuthStore } from "@/store/authStore";
 
 import { AlertDialogDemo } from "./Alret";
-import { NavigationMenuTriggerDemo } from "./ui/NavigationMenuTrigger";
 
 export default function UserAccount() {
   const router = useRouter();
@@ -38,7 +32,12 @@ export default function UserAccount() {
   const { linkClass } = useActiveLink();
   const isRTL = useIsRTL();
   const locale = useLocale();
+  const pathname = usePathname();
   const { openDialog } = useAutoCloseDialog(setOpenAlertDialog, 2000);
+
+  const isActive =
+    pathname.startsWith(routes.AccountDetails) ||
+    pathname.startsWith(routes.Favourites);
 
   const handleLogout = () => {
     if (!currentUser?.token) {
@@ -65,13 +64,17 @@ export default function UserAccount() {
     <>
       {isRTL ? (
         <NavigationMenuItem>
-          <NavigationMenuTriggerDemo
+          <NavigationMenuTrigger
+            className={cn(
+              linkClass(routes.AccountDetails && routes.Favourites),
+              "cursor-pointer",
+              isActive && "bg-primary/10 text-black"
+            )}
             onPointerMove={(e) => e.preventDefault()} // disable hover
             onPointerLeave={(e) => e.preventDefault()} // disable hover
           >
-            <User2 size={24} />
-            {currentUser?.user.fullname.charAt(0) ?? ""}
-          </NavigationMenuTriggerDemo>
+            {t("myAccount")}
+          </NavigationMenuTrigger>
 
           <NavigationMenuContent>
             <div className="flex justify-center items-center">
@@ -133,13 +136,17 @@ export default function UserAccount() {
         </NavigationMenuItem>
       ) : (
         <NavigationMenuItem>
-          <NavigationMenuTriggerDemo
+          <NavigationMenuTrigger
+            className={cn(
+              linkClass(routes.AccountDetails && routes.Favourites),
+              "cursor-pointer",
+              isActive && "bg-primary/10 text-black"
+            )}
             onPointerMove={(e) => e.preventDefault()} // disable hover
-            onPointerLeave={(e) => e.preventDefault()}
+            onPointerLeave={(e) => e.preventDefault()} // disable hover
           >
-            <User2 size={24} />
-            {currentUser?.user.fullname.charAt(0) ?? ""}
-          </NavigationMenuTriggerDemo>
+            {t("myAccount")}
+          </NavigationMenuTrigger>
 
           <NavigationMenuContent>
             <div className="flex justify-center items-center">

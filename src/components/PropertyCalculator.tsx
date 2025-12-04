@@ -196,13 +196,13 @@ const PropertyCalculator = ({
                       <motion.div
                         key={i}
                         animate={{
-                          x: isRTL ? [0, 30] : [30, 0],
-                          opacity: [1, 0],
+                          x: isRTL ? [0, 30, 0] : [30, 0, 30], // add a return phase
+                          opacity: [1, 0, 1], // fade in/out smoothly
                         }}
                         transition={{
-                          duration: 0.8,
+                          duration: 2.5, // a bit longer for smoothness
                           repeat: Infinity,
-                          ease: "linear",
+                          ease: "easeInOut", // smoother easing
                           delay,
                         }}
                         className={cn(
@@ -215,7 +215,7 @@ const PropertyCalculator = ({
                         <i
                           className={cn(
                             "fa-play fa-solid h-3.5 w-4 text-primary",
-                            isRTL ? "rotate-180" : ""
+                            isRTL && "rotate-180"
                           )}
                         />
                       </motion.div>

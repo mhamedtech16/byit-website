@@ -3,6 +3,7 @@
 import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
+import { useMobile } from "@/hooks/useMobile";
 import { Locale, routing, usePathname, useRouter } from "@/i18n/routing";
 
 import LanguageDropdown from "./LanguageDropdown";
@@ -15,6 +16,7 @@ export default function LocaleSwitcherSelect({ defaultValue }: Props) {
   const router = useRouter();
   const pathname = usePathname();
   const params = useParams();
+  const isMobile = useMobile();
   const searchParams = useSearchParams();
   const [selectedLocale, setSelectedLocale] = useState(defaultValue);
 
@@ -52,7 +54,7 @@ export default function LocaleSwitcherSelect({ defaultValue }: Props) {
       options={localeOptions}
       value={selectedLocale.toUpperCase()}
       onChange={handleLocaleChange}
-      width="w-[100px]"
+      width={isMobile ? "w-[100px]" : ""}
     />
   );
 }

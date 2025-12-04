@@ -1,7 +1,7 @@
 "use client";
 
 import { Check, ChevronsUpDown } from "lucide-react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import * as React from "react";
 import { ClassNameValue } from "tailwind-merge";
 
@@ -11,7 +11,6 @@ import {
   Command,
   CommandEmpty,
   CommandGroup,
-  CommandInput,
   CommandItem,
   CommandList,
 } from "@/shadcn/components/ui/command";
@@ -44,7 +43,7 @@ export function PriceDropdownList({
   const [open, setOpen] = React.useState(false);
   const buttonRef = React.useRef<HTMLButtonElement>(null);
   const [popoverWidth, setPopoverWidth] = React.useState<number | null>(null);
-
+  const t = useTranslations();
   React.useEffect(() => {
     if (buttonRef.current) {
       setPopoverWidth(buttonRef.current.offsetWidth);
@@ -71,10 +70,10 @@ export function PriceDropdownList({
         >
           {value
             ? pricePerLangauge(
-                data.find((framework: number) => framework === value) || 0,
-                locale
-              )
-            : `Select ${title}...`}
+              data.find((framework: number) => framework === value) || 0,
+              locale
+            )
+            : `${t(title)}...`}
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -83,7 +82,7 @@ export function PriceDropdownList({
         style={{ width: popoverWidth ?? undefined }}
       >
         <Command>
-          <CommandInput placeholder={`Search ${title}...`} className="h-9" />
+          {/* <CommandInput placeholder={`${t('Search')} ${title}...`} className="h-9" /> */}
           <CommandList>
             <CommandEmpty>{title} loading...</CommandEmpty>
             <CommandGroup>

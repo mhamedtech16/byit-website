@@ -23,9 +23,10 @@ function convertAboutUsTextToHTML(text: string) {
       const content = line.startsWith("-") ? line.replace(/^-+\s*/, "") : line;
 
       if (index === 1 || index === 2) {
-        return `<ul class="list-disc pl-6 text-white mb-10"><li>${content}</li></ul>`;
+        //return `<ul class="list-disc pl-6 text-white mb-10"><li>${content}</li></ul>`;
+        return `<p class='mb-2'>${content}</p>`;
       } else {
-        return `<p class='mb-10'>${content}</p>`;
+        return `<p class='mb-2'>${content}</p>`;
       }
     })
     .join("");

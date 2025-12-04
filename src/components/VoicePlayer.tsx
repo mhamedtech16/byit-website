@@ -1,5 +1,5 @@
 "use client";
-import { Play, Pause } from "lucide-react";
+import { Play, Pause, AudioLines } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 
 import { Button } from "@/shadcn/components/ui/button";
@@ -81,7 +81,7 @@ export default function VoicePlayer({ src, title }: Props) {
     <Dialog onOpenChange={handleDialogChange}>
       <DialogTrigger asChild>
         <button className="w-[6vmin] h-[6vmin] rounded-[3vmin] hover:bg-primary/5 cursor-pointer shadow-md flex items-center justify-center">
-          <i className="fa-duotone fa-solid fa-sliders text-gray-500 text-2xl"></i>
+          <AudioLines className="text-gray-500" size={28} />
         </button>
       </DialogTrigger>
       <DialogContent className="max-w-sm">

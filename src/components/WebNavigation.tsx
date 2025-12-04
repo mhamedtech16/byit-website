@@ -10,7 +10,6 @@ import { useState } from "react";
 import { routes } from "@/_lib/routes";
 import { useActiveLink } from "@/_utils/navigation";
 import { imgs } from "@/assets";
-import { Button } from "@/shadcn/components/ui/button";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -25,8 +24,6 @@ import { cn } from "@/shadcn/lib/utils";
 import { useAuthStore } from "@/store/authStore";
 
 import { AlertDialogDemo } from "./Alret";
-import LocaleSwitcher from "./LocaleSwitcher";
-import ModalDemo from "./Modal";
 import UserAccount from "./UserAccount";
 
 function WebNavigation({
@@ -39,30 +36,10 @@ function WebNavigation({
   const locale = useLocale();
   const router = useRouter();
   const [openAlertDialog, setOpenAlertDialog] = useState(false);
-  const [openAlertDialogClosingForm, setOpenAlertDialogClosingForm] =
-    useState(false);
   const isRTL = locale === "ar";
   const { currentUser, hasHydrated } = useAuthStore();
   const isAuthenticated = currentUser?.user.approved;
   if (!hasHydrated) return null;
-
-  const isLoggedInDeals = () => {
-    if (!isAuthenticated) {
-      setOpenAlertDialog(true);
-    } else {
-      setOpenAlertDialogClosingForm(false);
-      router.push(routes.ClosingForm);
-    }
-  };
-
-  const isLoggedInSharesDeal = () => {
-    if (!isAuthenticated) {
-      setOpenAlertDialog(true);
-    } else {
-      setOpenAlertDialogClosingForm(false);
-      router.push(routes.SharesDeals);
-    }
-  };
 
   const openLoginModal = () => {
     setOpenAlertDialog(false);
@@ -70,9 +47,25 @@ function WebNavigation({
   };
 
   return (
-    <div className="lg:flex hidden ">
-      <NavigationMenu viewport={false} key="main-nav">
-        <NavigationMenuList className={isRTL ? "flex-row-reverse" : "flex-row"}>
+    <div className="lg:flex hidden">
+      {/* <div
+       className={`flex items-center justify-between w-full px-1 py-2 ${isRTL ? "flex-row-reverse" : "flex-row"}`}
+  > */}
+      <NavigationMenu viewport={false} key="main-nav" className="z-[200]">
+        <NavigationMenuList className={isRTL ? "flex-row-reverse gap-3" : "flex-row gap-3"}>
+          <button
+            className="relative flex-shrink-0 w-[120px] h-[60px] cursor-pointer"
+            onClick={() => router.push(routes.Home)}
+          >
+            <Image
+              src={"/images/logo.png"}
+              alt="Logo"
+              fill
+              //  width={130}
+              // height={100}
+              className="object-contain rounded-[3px]"
+            />
+          </button>
           <NavigationMenuItem>
             <NavigationMenuLink
               asChild
@@ -109,7 +102,7 @@ function WebNavigation({
                         className={cn(
                           linkClass(routes.PropertiesList, "COMPOUND"),
                           isRTL &&
-                            "text-right flex-row items-center justify-end gap-3"
+                          "text-right flex-row items-center justify-end gap-3"
                         )}
                       >
                         {t("searchCompounds")}
@@ -129,7 +122,7 @@ function WebNavigation({
                         className={cn(
                           linkClass(routes.PropertiesList, "SEPARATED"),
                           isRTL &&
-                            "text-right flex-row items-center justify-end gap-3"
+                          "text-right flex-row items-center justify-end gap-3"
                         )}
                       >
                         {t("searchSeparates")}
@@ -254,7 +247,23 @@ function WebNavigation({
             </NavigationMenuLink>
           </NavigationMenuItem>
 
-          <NavigationMenuItem>
+          {isAuthenticated && <UserAccount />}
+
+          {openAlertDialog && (
+            <AlertDialogDemo
+              open={openAlertDialog}
+              title="warning"
+              description="mustLogin"
+              action="login"
+              cancel="later"
+              translate="Header"
+              headerClassName={isRTL ? "items-start" : "items-start"}
+              onCancel={() => setOpenAlertDialog(false)}
+              onAction={openLoginModal}
+            />
+          )}
+
+          {/* <NavigationMenuItem>
             <NavigationMenuLink
               asChild
               className={navigationMenuTriggerStyle()}
@@ -263,7 +272,7 @@ function WebNavigation({
                 {t("about")}
               </Link>
             </NavigationMenuLink>
-          </NavigationMenuItem>
+          </NavigationMenuItem> */}
 
           {/* <NavigationMenuItem>
                         <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
@@ -272,7 +281,7 @@ function WebNavigation({
                     </NavigationMenuItem> */}
           {/* Mobile Toggle */}
 
-          {isAuthenticated ? (
+          {/* {isAuthenticated ? (
             <UserAccount />
           ) : (
             <Button onClick={() => onOpen("login")} variant="outline">
@@ -282,8 +291,8 @@ function WebNavigation({
 
           <Button onClick={() => setOpenAlertDialogClosingForm(true)}>
             {t("closingForm")}
-          </Button>
-          {openAlertDialog && (
+          </Button> */}
+          {/* {openAlertDialog && (
             <AlertDialogDemo
               open={openAlertDialog}
               title="warning"
@@ -315,10 +324,11 @@ function WebNavigation({
                 </Button>
               </div>
             </div>
-          </ModalDemo>
+          </ModalDemo> */}
 
-          <LocaleSwitcher />
+          {/* <LocaleSwitcher /> */}
         </NavigationMenuList>
+
       </NavigationMenu>
     </div>
   );

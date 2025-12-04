@@ -1,13 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { HandCoins, History } from "lucide-react";
+import { HandCoins } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 
 import { routes } from "@/_lib/routes";
 import { Sidebar } from "@/components/ui/Sidebar";
-import { colors } from "@/constants/colors";
 import { pricePerLangauge } from "@/lib/PriceArray";
 import {
   Avatar,
@@ -77,10 +76,10 @@ export default function AccountDetails() {
                   </div>
 
                   <button
-                    className="bg-white shadow-lg rounded-4xl w-16 h-16 flex items-center justify-center cursor-pointer"
+                    className="bg-white hover:bg-primary/5 shadow-lg rounded-4xl p-4 flex items-center justify-center cursor-pointer"
                     onClick={() => router.push(routes.History)}
                   >
-                    <History size={40} color={colors.orange} />
+                    <p className="text-orangeApp font-bold">{t("myHistory")}</p>
                   </button>
                 </div>
 

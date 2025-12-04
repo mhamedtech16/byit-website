@@ -2,7 +2,6 @@ import { useLocale, useTranslations } from "next-intl";
 import { ReactNode } from "react";
 
 import { pricePerLangauge } from "@/lib/PriceArray";
-import { Button } from "@/shadcn/components/ui/button";
 import { Label } from "@/shadcn/components/ui/label";
 import {
   Popover,
@@ -28,9 +27,7 @@ export function AvailabilityPopoverButton({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button className={className} variant="outline">
-          {children}
-        </Button>
+        <button className={className}>{children}</button>
       </PopoverTrigger>
       <PopoverContent className="w-80">
         <div className="grid gap-4">

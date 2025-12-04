@@ -17,10 +17,11 @@
     "later": "Later",
     "mustLogin": "You must Login first",
     "warning": "Warning",
-    "guideLines": "GuideLines Videos",
+    "guideLines": "Guideline Videos",
     "sharesDeals": "Shares deals",
     "deals": "Deals",
-    "sharedProperties": "Fractional Real Estate"
+    "sharedProperties": "Fractional Real Estate",
+    "myAccount": "My Account"
   },
   "HomePage": {
     "title": "Hello world!",
@@ -71,7 +72,7 @@
     "terms": "Terms of Service",
     "language": "Language",
     "rights": "All rights reserved",
-    "guideLines": "GuideLines Videos"
+    "guideLines": "Guideline Videos"
   },
   "ClosingForm": {
     "closeForm": "Closing Form",
@@ -160,6 +161,7 @@
   "Finishing": "Finishing",
   "Bedrooms": "Bedrooms",
   "Search": "Search",
+  "Select":"Select",
   "Reset": "Reset",
   "Starting Price": "Starting Price",
   "Down Payment": "Down Payment",
@@ -167,7 +169,7 @@
   "Sales in charge": "Sales in charge",
   "Search in properties": "Search in properties",
   "yourPocketSizedBrokerageFirm": "Your Pocket Sized Brokerage Firm",
-  "commissionForDevelopersEveryDeal": "80% - 90% Commission for developers on every deal",
+  "commissionForDevelopersEveryDeal": "Earn 80-90% of the developers' commission on each deal",
   "ourPartners": "OUR PARTNERS",
   "noHistoryFound": "No history found",
   "Not Available": "Not Available",
@@ -205,6 +207,8 @@
   "STUDIO": "Studio",
   "contactPerson": "Contact person",
   "ok": "Ok",
+  "From Price":"From Price",
+  "To Price":"To Price",
 
   "UpdateAccount": {
     "title": "Update Account",
@@ -256,7 +260,8 @@
     "Developer Sales Name": "Developer Sales Name",
     "Developer Sales Number": "Developer Sales Number",
     "Commission": "Commission",
-    "commissionToBeAnnounced": "Commission to be announced"
+    "commissionToBeAnnounced": "Commission to be announced",
+    "developerName": "Developer Name"
   },
   "Settings": {
     "settings": "Settings",
@@ -275,7 +280,8 @@
     "country": "Country",
     "yearsExperience": "Years of Experience",
     "myEarnings": "My Earnings",
-    "currency": "EGP"
+    "currency": "EGP",
+    "myHistory": "My History"
   },
   "Favourites": {
     "Favourites": "المفضلة"

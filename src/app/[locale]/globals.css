@@ -139,3 +139,16 @@
     @apply bg-background text-foreground;
   }
 }
+
+nav ul,
+nav li,
+.NavigationMenuRoot ul,
+.NavigationMenuRoot li {
+  list-style: none !important;
+}
+
+nav li::marker,
+.NavigationMenuRoot li::marker {
+  display: none !important;
+  content: none !important;
+}
