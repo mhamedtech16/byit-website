@@ -6,7 +6,9 @@ export const routes = {
   Contact: "/contact",
   Profile: "/profile",
   PropertiesList: "/PropertiesList",
-  PropertyDetails: "/PropertyDetails",
+  PropertyDetails: {
+    Details: (id: number | undefined) => `/PropertyDetails/${id}`,
+  },
   NewLaunches: "/NewLaunches",
   SharedProperties: "/shared-properties",
   Contests: "/Contests",

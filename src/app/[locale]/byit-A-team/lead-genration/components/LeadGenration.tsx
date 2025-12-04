@@ -29,7 +29,11 @@ export default function LeadGenration() {
 
   return (
     <CampaignDetailsCard
-      onReadMore={() => router.push(routes.PropertyDetails)}
+      onReadMore={() =>
+        router.push(
+          routes.PropertyDetails.Details(selectedCampaign.project?.id)
+        )
+      }
       img={selectedCampaign.img}
       name={isRTL ? selectedCampaign.name_ar : selectedCampaign.name_en}
       description={

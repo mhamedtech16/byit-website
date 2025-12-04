@@ -6,31 +6,35 @@ import useGetApis from "@/Apis/useGetApis";
 import { Meeting } from "@/types/Meetings";
 import { User } from "@/types/User";
 
-export default function useMeetings(user: User | null) {
+export default function useMeetings(
+  user: User | null,
+  startDate: string,
+  endDate: string
+) {
   const { getMeetingsApi } = useGetApis();
   const [meetings, setMeetings] = useState<Meeting[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!user) {
-      setLoading(false);
-      setMeetings([]);
+    if (!user || isNaN(Date.parse(startDate)) || isNaN(Date.parse(endDate))) {
+      setLoading(true);
       return;
     }
 
-    getMeetingsApi(user)
+    setLoading(true);
+    getMeetingsApi(user, startDate, endDate)
       .then((res) => {
         setMeetings(res.data.data);
       })
       .catch((err) => {
-        console.error("API Error (getCampaignApi): ", err);
+        console.error("API Error (meetings): ", err);
         setError(err);
       })
       .finally(() => {
         setLoading(false);
       });
-  }, [getMeetingsApi, user]);
+  }, [endDate, getMeetingsApi, startDate, user]);
 
   return { meetings, loading, error };
 }

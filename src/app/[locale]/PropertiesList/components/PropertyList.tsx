@@ -27,7 +27,6 @@ const PropertiesList = () => {
   const searchParams = useSearchParams();
   const { getPropertiesApi } = useGetApis();
   const propertyType = searchParams.get("propertyType") || "";
-  // console.log(propertyType);
 
   const [loadingPg, setLoadingPg] = useState(true);
 

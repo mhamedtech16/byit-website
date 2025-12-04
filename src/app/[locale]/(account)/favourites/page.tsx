@@ -36,7 +36,7 @@ export default function Page() {
   const [favouriteType, setFavouriteType] = useState<string>("PROPERTY");
   const [loadingPg, setLoadingPg] = useState(true);
   const [favourites, setFavourites] = useState<Property[] | NewLaunch[]>([]);
-  console.log(favourites);
+  favourites;
 
   const getFavourites = useCallback(
     (page: number, type: string) => {

@@ -205,7 +205,11 @@ function WebNavigation({
             >
               <button
                 onClick={() => {
-                  setOpenByitTeamDialog(true);
+                  if (!isAuthenticated) {
+                    setOpenAlertDialog(true);
+                  } else {
+                    setOpenByitTeamDialog(true);
+                  }
                 }}
                 className={cn(
                   linkClass(

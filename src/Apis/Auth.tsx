@@ -49,8 +49,6 @@ export const signupApi = async (
     // token: await AsyncStorage.getItem('@FCMToken'),
   };
 
-  console.log("Signup data", data);
-
   return api.post("signUp", JSON.stringify(data), {
     headers: {
       "Accept-Language": lang,

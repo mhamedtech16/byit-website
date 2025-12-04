@@ -56,7 +56,6 @@ const useGetApis = () => {
       propertyType == "COMPOUND" ? "RELATED-TO-COMPOUND" : "SEPARATED";
     //params = `${params}&sortByOnspotRatio=UP&available=true&type=${currentPropertyType}`;
     params = `${params}&available=true&type=${currentPropertyType}`;
-    console.log('URL', `${BASE_END_POINT}properties?page=${page}${params}`);
 
     return axios.get(`${BASE_END_POINT}properties?page=${page}${params}`, {
       headers: {
@@ -78,8 +77,9 @@ const useGetApis = () => {
 
     // لو موجود propertyType ضيفه
     if (propertyType) {
-      params = `type=${propertyType == "SEPARATED" ? propertyType : "COMPOUND"
-        }`;
+      params = `type=${
+        propertyType == "SEPARATED" ? propertyType : "COMPOUND"
+      }`;
     }
 
     if (search) {
@@ -100,7 +100,6 @@ const useGetApis = () => {
   ///////
   const getProjectsByDeveloperApi = (developerId: number, page: number = 1) => {
     const params = developerId ? `&company=${developerId}` : "";
-    console.log('UUUUU', `projects?page=${page}${params}`);
 
     return api.get(`projects?page=${page}&${params}`, {
       headers: {
@@ -122,7 +121,8 @@ const useGetApis = () => {
       params += `&search=${search}`;
     }
     return axios.get(
-      `${BASE_END_POINT}projects?page=${page}&type=${propertyType == "SEPARATED" ? propertyType : "COMPOUND"
+      `${BASE_END_POINT}projects?page=${page}&type=${
+        propertyType == "SEPARATED" ? propertyType : "COMPOUND"
       }${params}`,
       {
         headers: {
@@ -242,14 +242,30 @@ const useGetApis = () => {
     });
   }, []);
 
-  const getMeetingsApi = useCallback((user: User | null) => {
-    return api.get("meetings", {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${user?.token}`,
-      },
-    });
-  }, []);
+  const getMeetingsApi = useCallback(
+    (user: User | null, startDate: string, endDate: string) => {
+      return api.get(`meetings?startDate=${startDate}&endDate=${endDate}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user?.token}`,
+        },
+      });
+    },
+    []
+  );
+
+  const getPropertyDetailsApi = useCallback(
+    (user: User | null, id: number) => {
+      return api.get(`properties/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user?.token}`,
+          "Accept-Language": currentLang,
+        },
+      });
+    },
+    [currentLang]
+  );
 
   const getGuideLinesApi = useCallback(() => {
     return api.get("guidelines");
@@ -285,6 +301,7 @@ const useGetApis = () => {
     getCampaignApi,
     getLeadsApi,
     getMeetingsApi,
+    getPropertyDetailsApi,
   };
 };
 

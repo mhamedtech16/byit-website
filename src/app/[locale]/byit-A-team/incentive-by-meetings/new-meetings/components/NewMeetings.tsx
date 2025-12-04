@@ -86,7 +86,7 @@ export default function NewMeetings() {
   // ===== Effect to fetch projects when developer changes =====
   useEffect(() => {
     const developerId = Number(form.watch("developer"));
-    console.log('URL', developerId);
+    "URL", developerId;
 
     form.setValue("project", "");
 

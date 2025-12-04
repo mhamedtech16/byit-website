@@ -7,7 +7,7 @@ import "dayjs/locale/en";
 dayjs.extend(utc);
 import { motion } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
-import { useEffect, useMemo, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 
 import MeetingsLoader from "@/components/ui/MeetingsLoader";
 import { Sidebar } from "@/components/ui/Sidebar";
@@ -22,13 +22,20 @@ const linkVariants = {
   visible: { opacity: 1, x: 0 },
 };
 
-export default function MeetingsHorizontal({ data }: { data: Meeting[] }) {
+export default function MeetingsHorizontal({
+  data,
+  activeMonth,
+  setActiveMonth,
+}: {
+  data: Meeting[];
+  activeMonth: string;
+  setActiveMonth: Dispatch<SetStateAction<string>>;
+}) {
   const t = useTranslations();
   const locale = useLocale();
   dayjs.locale(locale);
   const { currentUser } = useAuthStore();
 
-  const [activeMonth, setActiveMonth] = useState("");
   const [loading, setLoading] = useState(true);
 
   const year = dayjs().year();
@@ -39,21 +46,11 @@ export default function MeetingsHorizontal({ data }: { data: Meeting[] }) {
     );
   }, [year]);
 
-  const groupedMeetings = useMemo(() => {
-    const grouped: Record<string, Meeting[]> = {};
-    data.forEach((m) => {
-      const month = dayjs(m.createdAt).utc().format("MMMM YYYY");
-      if (!grouped[month]) grouped[month] = [];
-      grouped[month].push(m);
-    });
-    return grouped;
-  }, [data]);
-
   // auto select current month on mount
   useEffect(() => {
     const currentMonth = dayjs().utc().format("MMMM YYYY");
     setActiveMonth(currentMonth);
-  }, []);
+  }, [setActiveMonth]);
 
   useEffect(() => {
     if (!activeMonth) return;
@@ -67,9 +64,7 @@ export default function MeetingsHorizontal({ data }: { data: Meeting[] }) {
     return () => clearTimeout(timeout);
   }, [activeMonth]);
 
-  const activeMeetings = useMemo(() => {
-    return activeMonth ? groupedMeetings[activeMonth] ?? [] : [];
-  }, [activeMonth, groupedMeetings]);
+  const activeMeetings = useMemo(() => data, [data]);
 
   const acceptedMeetings = useMemo(
     () => activeMeetings.filter((m) => m.status === "ACCEPTED").length,
@@ -77,7 +72,9 @@ export default function MeetingsHorizontal({ data }: { data: Meeting[] }) {
   );
 
   const remainingMeetings = Math.max(4 - acceptedMeetings, 0);
-
+  if (loading) {
+    return <MeetingsLoader />;
+  }
   return (
     <div className="flex w-full p-16 min-h-screen">
       {/* Sidebar */}
@@ -104,8 +101,6 @@ export default function MeetingsHorizontal({ data }: { data: Meeting[] }) {
       <div className="flex-1 px-10">
         {!activeMonth ? (
           <p className="text-muted-foreground text-lg">Select a month</p>
-        ) : loading ? (
-          <MeetingsLoader />
         ) : (
           <MeetingsContent
             activeMonth={activeMonth}
