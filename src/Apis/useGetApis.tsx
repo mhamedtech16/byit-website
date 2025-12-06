@@ -267,6 +267,18 @@ const useGetApis = () => {
     [currentLang]
   );
 
+  const getFeedbackApi = useCallback(
+    (user: User | null, id: number | undefined) => {
+      return api.get(`leads/${id}/getLeadFeedBack`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user?.token}`,
+        },
+      });
+    },
+    []
+  );
+
   const getGuideLinesApi = useCallback(() => {
     return api.get("guidelines");
   }, []);
@@ -302,6 +314,7 @@ const useGetApis = () => {
     getLeadsApi,
     getMeetingsApi,
     getPropertyDetailsApi,
+    getFeedbackApi,
   };
 };
 

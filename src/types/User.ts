@@ -193,6 +193,15 @@ export interface SignUpRequest {
   //   token?: string; // JWT or session token
 }
 
+export interface CreateFeedback {
+  notes: string;
+  status: string | undefined;
+}
+
+export interface CreateFeedbackResponse {
+  success: boolean;
+}
+
 export interface UpdateAccountRequest {
   fullname: string;
   email: string;

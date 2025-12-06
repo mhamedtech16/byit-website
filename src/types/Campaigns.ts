@@ -33,9 +33,21 @@ export interface Leads {
   fullname: string;
   phone: string;
   campaign: { name: string; id: number } | null;
-  status: string;
+  status: string | undefined;
   notes: string;
   created_at: string;
   broker: Broker | null;
   conutry: Country;
 }
+
+export interface Feedback {
+  status: string | undefined;
+  notes: string;
+  id: number;
+  createdAt: string;
+}
+
+// export interface FeedbackResponse {
+//   success: boolean;
+//   data: Feedback;
+// }
