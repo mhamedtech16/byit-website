@@ -27,6 +27,9 @@ export interface User {
     country: Country;
     city: City;
     yearsExperience: string;
+    enableMeetings: boolean;
+    enableByitATeam: boolean;
+    enableLeadGeneration: boolean;
   };
   token: string;
 }

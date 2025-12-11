@@ -3,16 +3,35 @@
 import { motion, useScroll, useTransform, Variants } from "framer-motion";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 
+import { getUserDataApi } from "@/Apis/Auth";
 import EmblaCarousel from "@/components/EmblaCarousel";
 import { APP_STORE, GOOGLE_APP } from "@/constants/downloadApps";
 import { HOMEIMAGES } from "@/constants/imgs";
 import { OPTIONS } from "@/constants/options";
+import { useAuthStore } from "@/store/authStore";
 
 function HomePage() {
   const t = useTranslations();
   const containerRef = useRef(null);
+  const { currentUser, setcurrentUser } = useAuthStore();
+
+  useEffect(() => {
+    getUserDataApi(currentUser)
+      .then((res) => {
+        if (res && res.data) {
+          const currentUserData = { ...currentUser };
+
+          currentUserData["user"] = res.data.data;
+          if (currentUserData) {
+            setcurrentUser(currentUserData);
+          }
+        }
+      })
+      .catch((err) => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Track scroll progress of the image container
   const { scrollYProgress } = useScroll({

@@ -8,7 +8,27 @@ import { SkeletonLoading } from "@/components/SkeletonComponent";
 import { Sidebar } from "@/components/ui/Sidebar";
 import { useCampaignStore } from "@/context/CampaignContext";
 import { useIsRTL } from "@/hooks/useRTL";
+import { isLocale } from "@/lib/isLocale";
 import { Button } from "@/shadcn/components/ui/button";
+
+type Props = {
+  params: Promise<{ locale: string }>;
+};
+
+export async function generateMetadata({ params }: Props) {
+  const { locale } = await params;
+  const locales = isLocale(locale) ? locale : "en";
+
+  const titles: Record<string, string> = {
+    ar: "Byit A team | Lead generation",
+    en: "Byit A team | Lead generation",
+  };
+
+  return {
+    title: titles[locales] || "Byit A team | Lead generation",
+    // description: "دي صفحة الـ Closing Form الخاصة بالموقع",
+  };
+}
 
 export default function LeadGenLayout({
   children,
