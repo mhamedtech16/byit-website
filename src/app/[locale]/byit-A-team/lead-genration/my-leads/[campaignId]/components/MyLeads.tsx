@@ -19,6 +19,7 @@ import ModalDemo from "@/components/Modal";
 import { SkeletonLoading } from "@/components/SkeletonComponent";
 import useCampaigns from "@/hooks/useCampagin";
 import useLeads from "@/hooks/useLeads";
+import { useMobile } from "@/hooks/useMobile";
 import { useIsRTL } from "@/hooks/useRTL";
 import {
   Breadcrumb,
@@ -31,12 +32,14 @@ import { Button } from "@/shadcn/components/ui/button";
 import { Label } from "@/shadcn/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/shadcn/components/ui/radio-group";
 import { Textarea } from "@/shadcn/components/ui/textarea";
+import { cn } from "@/shadcn/lib/utils";
 import { useAuthStore } from "@/store/authStore";
 import { Feedback, Leads } from "@/types/Campaigns";
 import { CreateFeedback } from "@/types/User";
 
 export default function CampaignLeadsPage() {
   const { currentUser } = useAuthStore();
+  const isMobile = useMobile();
   const isRTL = useIsRTL();
   const locale = useLocale();
   const params = useParams();
@@ -258,7 +261,11 @@ export default function CampaignLeadsPage() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbPage className="text-2xl font-bold">
+              <BreadcrumbPage
+                className={cn(
+                  isMobile ? "text-lg font-bold" : "text-2xl font-bold"
+                )}
+              >
                 {`${isRTL ? campaign?.name_ar : campaign?.name_en}`}
               </BreadcrumbPage>
             </BreadcrumbItem>
@@ -270,7 +277,9 @@ export default function CampaignLeadsPage() {
                   !openFeedback
                     ? "text-2xl font-bold text-orangeApp"
                     : " text-primary"
-                } ${isRTL ? "mr-1" : "ml-1"}`}
+                } ${isRTL ? "mr-1" : "ml-1"} 
+                ${isMobile ? "text-lg font-bold" : "text-2xl font-bold"}
+                `}
               >
                 {`${t("my_leads_title")}`}
               </BreadcrumbLink>
@@ -285,7 +294,13 @@ export default function CampaignLeadsPage() {
                       openFeedback
                         ? " text-orangeApp"
                         : "bg-gray-200 text-primary"
-                    } ${isRTL ? "mr-1" : "ml-1"}`}
+                    } ${isRTL ? "mr-1" : "ml-1"}
+                                    ${
+                                      isMobile
+                                        ? "text-lg font-bold"
+                                        : "text-2xl font-bold"
+                                    }
+                    `}
                   >
                     {`${t("feedback_list")}`}
                   </BreadcrumbLink>

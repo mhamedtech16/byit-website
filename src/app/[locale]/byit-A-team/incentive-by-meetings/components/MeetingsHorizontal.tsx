@@ -7,11 +7,22 @@ import "dayjs/locale/en";
 dayjs.extend(utc);
 import { motion } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 import MeetingsLoader from "@/components/ui/MeetingsLoader";
 import { Sidebar } from "@/components/ui/Sidebar";
+import { useMobile } from "@/hooks/useMobile";
+import { useIsRTL } from "@/hooks/useRTL";
 import { Button } from "@/shadcn/components/ui/button";
+import { ScrollArea, ScrollBar } from "@/shadcn/components/ui/scroll-area";
+import { cn } from "@/shadcn/lib/utils";
 import { useAuthStore } from "@/store/authStore";
 import { Meeting } from "@/types/Meetings";
 
@@ -31,7 +42,10 @@ export default function MeetingsHorizontal({
   activeMonth: string;
   setActiveMonth: Dispatch<SetStateAction<string>>;
 }) {
+  const monthRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const t = useTranslations();
+  const isMobile = useMobile();
+  const isRTL = useIsRTL();
   const locale = useLocale();
   dayjs.locale(locale);
   const { currentUser } = useAuthStore();
@@ -45,6 +59,25 @@ export default function MeetingsHorizontal({
       dayjs.utc(`${year}-${i + 1}-01`).format("MMMM YYYY")
     );
   }, [year]);
+
+  useEffect(() => {
+    if (!isMobile) return;
+    if (loading) return;
+    if (!activeMonth) return;
+
+    const monthIndex = months.findIndex((m) => m === activeMonth);
+    const el = monthRefs.current[monthIndex];
+
+    if (!el) return;
+
+    requestAnimationFrame(() => {
+      el.scrollIntoView({
+        behavior: "smooth",
+        inline: "center",
+        block: "nearest",
+      });
+    });
+  }, [activeMonth, months, loading, isMobile]);
 
   // auto select current month on mount
   useEffect(() => {
@@ -76,29 +109,60 @@ export default function MeetingsHorizontal({
     return <MeetingsLoader />;
   }
   return (
-    <div className="flex w-full p-16 min-h-screen">
-      {/* Sidebar */}
-      <Sidebar label={t("months")}>
-        {months.map((month) => (
-          <motion.div variants={linkVariants} key={month}>
-            <Button
-              onClick={() => setActiveMonth(month)}
-              variant="linkUnderline"
-              size="linkUnderline"
-              className={
-                activeMonth === month
-                  ? "text-orangeApp font-semibold underline"
-                  : ""
-              }
-            >
-              {month}
-            </Button>
-          </motion.div>
-        ))}
-      </Sidebar>
+    <div
+      className={cn("flex w-full min-h-screen", isMobile ? "flex-col" : "p-16")}
+    >
+      {isMobile ? (
+        <ScrollArea
+          className="rounded-md whitespace-nowrap"
+          dir={isRTL ? "rtl" : "ltr"}
+        >
+          <div className="flex w-max space-x-4 p-4">
+            {months.map((month, index) => (
+              <Button
+                key={month}
+                ref={(el) => {
+                  monthRefs.current[index] = el;
+                }}
+                onClick={() => setActiveMonth(month)}
+                variant="linkUnderline"
+                size="linkUnderline"
+                className={
+                  activeMonth === month
+                    ? "text-orangeApp font-semibold underline"
+                    : ""
+                }
+              >
+                {month}
+              </Button>
+            ))}
+          </div>
+          <ScrollBar orientation="horizontal" hidden />
+        </ScrollArea>
+      ) : (
+        <Sidebar label={t("months")}>
+          {/*Side Bar for web */}
+          {months.map((month) => (
+            <motion.div variants={linkVariants} key={month}>
+              <Button
+                onClick={() => setActiveMonth(month)}
+                variant="linkUnderline"
+                size="linkUnderline"
+                className={
+                  activeMonth === month
+                    ? "text-orangeApp font-semibold underline"
+                    : ""
+                }
+              >
+                {month}
+              </Button>
+            </motion.div>
+          ))}
+        </Sidebar>
+      )}
 
       {/* Right content */}
-      <div className="flex-1 px-10">
+      <div className={cn(isMobile ? "" : "flex-1 px-10")}>
         {!activeMonth ? (
           <p className="text-muted-foreground text-lg">Select a month</p>
         ) : (
