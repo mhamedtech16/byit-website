@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 
-import useGetApis from "@/Apis/useGetApis";
+import useGetApis from "@/Apis/v1/useGetApis";
 import { useAuthStore } from "@/store/authStore";
 import { History } from "@/types/History";
 

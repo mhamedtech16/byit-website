@@ -7,7 +7,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useState } from "react";
 
 import { routes } from "@/_lib/routes";
-import { deleteAccountApi } from "@/Apis/Auth";
+import { deleteAccountApi } from "@/Apis/v1/Auth";
 import { colors } from "@/constants/colors";
 import { Button } from "@/shadcn/components/ui/button";
 import { useAuthStore } from "@/store/authStore";

@@ -1,7 +1,7 @@
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
-import useGetApis from "@/Apis/useGetApis";
+import useGetApis from "@/Apis/v1/useGetApis";
 import { DropdownInput } from "@/components/DropdownInput";
 import { PriceDropdownList } from "@/components/PriceDropdownList";
 import { priceArray } from "@/lib/PriceArray";

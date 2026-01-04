@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
 
-import { deleteAccountApi } from "@/Apis/Auth";
+import { deleteAccountApi } from "@/Apis/v1/Auth";
 import { colors } from "@/constants/colors";
 import {
   Select,

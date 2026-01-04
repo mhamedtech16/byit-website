@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 
-import useGetApis from "@/Apis/useGetApis";
+import useGetApis from "@/Apis/v1/useGetApis";
 import { GuideLines } from "@/types/GuideLines";
 
 export const useGuideLines = () => {

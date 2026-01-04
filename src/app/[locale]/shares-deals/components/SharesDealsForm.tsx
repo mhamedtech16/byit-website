@@ -11,7 +11,7 @@ import { z } from "zod";
 
 import { routes } from "@/_lib/routes";
 import { sharesProperties } from "@/_utils/validation";
-import { sharesDealFormApi } from "@/Apis/Auth";
+import { sharesDealFormApi } from "@/Apis/v1/Auth";
 import { AlertDialogDemo } from "@/components/Alret";
 import { CountryDropdown } from "@/components/CountryCodeDropdown";
 import { FormDropdownInputNumbers } from "@/components/form/FormDropdownInputNumbers";

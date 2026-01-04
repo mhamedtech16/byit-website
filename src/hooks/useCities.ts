@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import useGetApis from "@/Apis/useGetApis";
+import useGetApis from "@/Apis/v1/useGetApis";
 import { DropdownCity } from "@/types/User";
 
 export const useCities = () => {

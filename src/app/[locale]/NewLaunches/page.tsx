@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 
-import useGetApis from "@/Apis/useGetApis";
+import useGetApis from "@/Apis/v1/useGetApis";
 import { NewLaunch } from "@/types/Properties";
 
 import NewLaunchItem from "./components/NewLaunchItem";

@@ -11,7 +11,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { routes } from "@/_lib/routes";
-import { updatePassowrdApi } from "@/Apis/Auth";
+import { updatePassowrdApi } from "@/Apis/v1/Auth";
 import { colors } from "@/constants/colors";
 import { useMobile } from "@/hooks/useMobile";
 import { Button } from "@/shadcn/components/ui/button";

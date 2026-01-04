@@ -8,7 +8,7 @@ import { useState } from "react";
 
 import { routes } from "@/_lib/routes";
 import { useActiveLink } from "@/_utils/navigation";
-import { logoutApi } from "@/Apis/Auth";
+import { logoutApi } from "@/Apis/v1/Auth";
 import { colors } from "@/constants/colors";
 import { useAutoCloseDialog } from "@/hooks/useAutoCloseDialog";
 import { useIsRTL } from "@/hooks/useRTL";
