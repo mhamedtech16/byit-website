@@ -5,7 +5,7 @@ import { Building, Building2, Filter } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
-import useGetApis from "@/Apis/useGetApis";
+import useGetApis from "@/Apis/v1/useGetApis";
 import ModalDemo from "@/components/Modal";
 import NoData from "@/components/NoData";
 import { SkeletonLoading } from "@/components/SkeletonComponent";

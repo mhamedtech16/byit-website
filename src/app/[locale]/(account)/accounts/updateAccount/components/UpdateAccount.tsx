@@ -11,7 +11,7 @@ import { z } from "zod";
 
 import { routes } from "@/_lib/routes";
 import { updateAccountSchema } from "@/_utils/validation";
-import { updateAccountApi } from "@/Apis/Auth";
+import { updateAccountApi } from "@/Apis/v1/Auth";
 import { AlertDialogDemo } from "@/components/Alret";
 import { CountryDropdown } from "@/components/CountryCodeDropdown";
 import { FormDropdownInput } from "@/components/form/FormDropdownInput";

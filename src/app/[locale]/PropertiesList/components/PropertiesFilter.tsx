@@ -1,20 +1,27 @@
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
-import useGetApis from "@/Apis/useGetApis";
+import useGetApis from "@/Apis/v1/useGetApis";
+import useGetApisV2 from "@/Apis/v2/useGetApis";
 import { DropdownInput } from "@/components/DropdownInput";
 import { PriceDropdownList } from "@/components/PriceDropdownList";
+import { useIsRTL } from "@/hooks/useRTL";
 import { priceArray } from "@/lib/PriceArray";
 import { Button } from "@/shadcn/components/ui/button";
 import { Checkbox } from "@/shadcn/components/ui/checkbox";
 import { Label } from "@/shadcn/components/ui/label";
-import { Category, Developer, Location, Project } from "@/types/Properties";
+import { Category } from "@/types/Category";
+import { Deliveries } from "@/types/Deliveries";
+import { Finishes } from "@/types/Finishes";
+import { Locations } from "@/types/Locations";
+import { Developer, Project } from "@/types/Properties";
+import { UnitType } from "@/types/UnitType";
 
 type Props = {
   propertyType: string;
   onFilterPress: (
-    selectedLocationIds: number[],
-    selectedTypeIds: number[],
+    selectedLocationIds: string[],
+    selectedTypeIds: string[],
     selectedDeliveryTypes: string[],
     selectedFinishingTypes: string[],
     selectedBedroom: string[],
@@ -25,6 +32,7 @@ type Props = {
 };
 
 const PropertiesFilter = ({ propertyType, onFilterPress }: Props) => {
+  const isRTL = useIsRTL();
   const t = useTranslations();
   const {
     getAllDevelopersApi,
@@ -33,6 +41,13 @@ const PropertiesFilter = ({ propertyType, onFilterPress }: Props) => {
     getAllCategoriesApi,
     getAllLocationsApi,
   } = useGetApis();
+  const {
+    getCategories,
+    getUnitType,
+    getLocations,
+    getDevliveries,
+    getFinishing,
+  } = useGetApisV2();
   const [projectsLoading, setProjectsLoading] = useState(true);
   const [projects, setProjects] = useState<Project[]>([]);
   const [, setProjectsSearched] = useState<Project[]>([]);
@@ -40,11 +55,11 @@ const PropertiesFilter = ({ propertyType, onFilterPress }: Props) => {
   const [selectedFinishingTypes, setSelectedFinishingTypes] = useState<
     string[]
   >([]);
-  const [selectedTypeIds, setSelectedTypeIds] = useState<number[]>([]);
+  const [selectedTypeIds, setSelectedTypeIds] = useState<string[]>([]);
   const [selectedDeliveryTypes, setSelectedDeliveryTypes] = useState<string[]>(
     []
   );
-  const [selectedLocationIds, setSelectedLocationIds] = useState<number[]>([]);
+  const [selectedLocationIds, setSelectedLocationIds] = useState<string[]>([]);
   const [, setLoadingSearch] = useState(false);
   const [projectPage, setProjectPage] = useState(1);
   const [, setLaunchPage] = useState(1);
@@ -64,7 +79,10 @@ const PropertiesFilter = ({ propertyType, onFilterPress }: Props) => {
   const [fromPrice, setFromPrice] = useState(0);
   const [toPrice, setToPrice] = useState(0);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [locations, setLocations] = useState<Location[]>([]);
+  const [locations, setLocations] = useState<Locations[]>([]);
+  const [deliveries, setDeliveries] = useState<Deliveries[]>([]);
+  const [finishing, setFinishing] = useState<Finishes[]>([]);
+  const [unitTypes, setUnitTypes] = useState<UnitType[]>([]);
 
   const getAllDevelopers = async (
     page: number,
@@ -156,25 +174,52 @@ const PropertiesFilter = ({ propertyType, onFilterPress }: Props) => {
   };
 
   ///////// Get Categories
-  const getCategories = async () => {
+  const getAllCategories = async () => {
     try {
-      const response = await getAllCategoriesApi(propertyType);
+      const response = await getCategories();
       setCategories(response.data.data);
     } catch (error) {
       console.log("Error", error);
     }
   };
   ///////////// get locations
-  const getLocations = async () => {
+  const getAllLocations = async () => {
     try {
-      const response = await getAllLocationsApi(propertyType);
+      const response = await getLocations();
       setLocations(response.data.data);
     } catch (error) {
       console.log("Error", error);
     }
   };
 
-  const mergLocationIds = (id: number) => {
+  const getAllDeliveries = async () => {
+    try {
+      const response = await getDevliveries();
+      setDeliveries(response.data.data);
+    } catch (error) {
+      console.log("Error", error);
+    }
+  };
+
+  const getAllFinishes = async () => {
+    try {
+      const response = await getFinishing();
+      setFinishing(response.data.data);
+    } catch (error) {
+      console.log("Error", error);
+    }
+  };
+
+  const getAllUnitTypes = async () => {
+    try {
+      const response = await getUnitType();
+      setUnitTypes(response.data.data);
+    } catch (error) {
+      console.log("Error", error);
+    }
+  };
+
+  const mergLocationIds = (id: string) => {
     const locationIds = [...selectedLocationIds];
     if (locationIds.includes(id)) {
       locationIds.splice(locationIds.indexOf(id), 1);
@@ -184,7 +229,7 @@ const PropertiesFilter = ({ propertyType, onFilterPress }: Props) => {
     setSelectedLocationIds(locationIds);
   };
 
-  const mergTypeIds = (id: number) => {
+  const mergTypeIds = (id: string) => {
     const typeIds = [...selectedTypeIds];
     if (typeIds.includes(id)) {
       typeIds.splice(typeIds.indexOf(id), 1);
@@ -236,8 +281,11 @@ const PropertiesFilter = ({ propertyType, onFilterPress }: Props) => {
   };
   useEffect(() => {
     getAllDevelopers(1, false, "");
-    getCategories();
-    getLocations();
+    getAllCategories();
+    getAllLocations();
+    getAllDeliveries();
+    getAllFinishes();
+    getAllUnitTypes();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [propertyType]);
   return (
@@ -311,7 +359,7 @@ const PropertiesFilter = ({ propertyType, onFilterPress }: Props) => {
               checked={selectedTypeIds.includes(item.id)}
               onCheckedChange={() => mergTypeIds(item.id)}
             />
-            <Label htmlFor="terms">{item.categoryName}</Label>
+            <Label htmlFor="terms">{isRTL ? item.ar_name : item.en_name}</Label>
           </div>
         ))}
       </div>
@@ -328,7 +376,7 @@ const PropertiesFilter = ({ propertyType, onFilterPress }: Props) => {
               checked={selectedLocationIds.includes(item.id)}
               onCheckedChange={() => mergLocationIds(item.id)}
             />
-            <Label htmlFor="terms">{item.name}</Label>
+            <Label htmlFor="terms">{isRTL ? item.ar_name : item.en_name}</Label>
           </div>
         ))}
       </div>
@@ -338,19 +386,14 @@ const PropertiesFilter = ({ propertyType, onFilterPress }: Props) => {
       {/* delivery start */}
       <p className="text-md font-bold">{t("Delivery")}</p>
       <div className="grid grid-cols-2 gap-6 my-[2vmin]">
-        {[
-          "READY-To-MOVE",
-          "AFTER-ONE-YEAR",
-          "AFTER-TWO-YEARS",
-          "AFTER-THREE-YEARS",
-        ].map((item) => (
-          <div key={item} className="flex items-center gap-3">
+        {deliveries.map((item) => (
+          <div key={item.id} className="flex items-center gap-3">
             <Checkbox
-              id={item}
-              checked={selectedDeliveryTypes.includes(item)}
-              onCheckedChange={() => mergDeliveryTypes(item)}
+              id={item.id}
+              checked={selectedDeliveryTypes.includes(item.id)}
+              onCheckedChange={() => mergDeliveryTypes(item.id)}
             />
-            <Label htmlFor="terms">{t(item)}</Label>
+            <Label htmlFor="terms">{isRTL ? item.ar_name : item.en_name}</Label>
           </div>
         ))}
       </div>
@@ -360,14 +403,14 @@ const PropertiesFilter = ({ propertyType, onFilterPress }: Props) => {
       {/* finishing start */}
       <p className="text-md font-bold">{t("Finishing")}</p>
       <div className="grid grid-cols-2 gap-6 my-[2vmin]">
-        {["FULLY-FINISHED", "SEMI-FINISHED", "CORE-SHELL"].map((item) => (
-          <div key={item} className="flex items-center gap-3">
+        {finishing.map((item) => (
+          <div key={item.id} className="flex items-center gap-3">
             <Checkbox
-              id={item}
-              checked={selectedFinishingTypes.includes(item)}
-              onCheckedChange={() => mergeFinishingTypes(item)}
+              id={item.id}
+              checked={selectedFinishingTypes.includes(item.id)}
+              onCheckedChange={() => mergeFinishingTypes(item.id)}
             />
-            <Label htmlFor="terms">{t(item)}</Label>
+            <Label htmlFor="terms">{isRTL ? item.ar_name : item.en_name}</Label>
           </div>
         ))}
       </div>
@@ -377,18 +420,16 @@ const PropertiesFilter = ({ propertyType, onFilterPress }: Props) => {
       {/* bedrooms start */}
       <p className="text-md font-bold">{t("Bedrooms")}</p>
       <div className="grid grid-cols-2 gap-6 my-[2vmin]">
-        {["ONE-BEDROOM", "TWO-BEDROOM", "THREE-BEDROOM", "DUPLEX"].map(
-          (item) => (
-            <div key={item} className="flex items-center gap-3">
-              <Checkbox
-                id={item}
-                checked={selectedBedroom.includes(item)}
-                onCheckedChange={() => mergeBedRooms(item)}
-              />
-              <Label htmlFor="terms">{t(item)}</Label>
-            </div>
-          )
-        )}
+        {unitTypes.map((item) => (
+          <div key={item.id} className="flex items-center gap-3">
+            <Checkbox
+              id={item.id}
+              checked={selectedBedroom.includes(item.id)}
+              onCheckedChange={() => mergeBedRooms(item.id)}
+            />
+            <Label htmlFor="terms">{isRTL ? item.ar_name : item.en_name}</Label>
+          </div>
+        ))}
       </div>
       {/* bedrooms end */}
 
@@ -412,7 +453,7 @@ const PropertiesFilter = ({ propertyType, onFilterPress }: Props) => {
       </Button>
       <Button
         type="submit"
-        className="w-full bg-white border-1 border-primary mt-2 hover:bg-primary/4 "
+        className="w-full bg-white border-1 border-primary mt-2 hover:bg-primary/4"
         onClick={() => clearAll()}
       >
         <p className="text-primary">{t("Reset")}</p>

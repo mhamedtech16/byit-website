@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import usePostApis from "@/Apis/usePostApis";
+import usePostApis from "@/Apis/v1/usePostApis";
 import { useMobile } from "@/hooks/useMobile";
 import { cn } from "@/shadcn/lib/utils";
 import { useAuthStore } from "@/store/authStore";

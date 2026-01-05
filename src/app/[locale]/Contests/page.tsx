@@ -3,8 +3,8 @@
 import Image from "next/image";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
-import { getUserDataApi } from "@/Apis/Auth";
-import useGetApis from "@/Apis/useGetApis";
+import { getUserDataApi } from "@/Apis/v1/Auth";
+import useGetApis from "@/Apis/v1/useGetApis";
 import { useMobile } from "@/hooks/useMobile";
 import { cn } from "@/shadcn/lib/utils";
 import { useAuthStore } from "@/store/authStore";

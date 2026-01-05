@@ -76,8 +76,9 @@ const useGetApis = () => {
 
     // لو موجود propertyType ضيفه
     if (propertyType) {
-      params = `type=${propertyType == "SEPARATED" ? propertyType : "COMPOUND"
-        }`;
+      params = `type=${
+        propertyType == "SEPARATED" ? propertyType : "COMPOUND"
+      }`;
     }
 
     if (search) {
@@ -119,7 +120,8 @@ const useGetApis = () => {
       params += `&search=${search}`;
     }
     return axios.get(
-      `${BASE_END_POINT}projects?page=${page}&type=${propertyType == "SEPARATED" ? propertyType : "COMPOUND"
+      `${BASE_END_POINT}projects?page=${page}&type=${
+        propertyType == "SEPARATED" ? propertyType : "COMPOUND"
       }${params}`,
       {
         headers: {

@@ -11,7 +11,7 @@ import { z } from "zod";
 
 import { routes } from "@/_lib/routes";
 import { closingFormSchema } from "@/_utils/validation";
-import { closingFormApi } from "@/Apis/Auth";
+import { closingFormApi } from "@/Apis/v1/Auth";
 import { colors } from "@/constants/colors";
 import { useDevelopersAndProjects } from "@/hooks/useDevelopersAndProjects";
 import { useIsRTL } from "@/hooks/useRTL";

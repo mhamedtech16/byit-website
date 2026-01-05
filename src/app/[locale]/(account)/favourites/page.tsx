@@ -5,7 +5,7 @@ import { Heart } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
 
-import useGetApis from "@/Apis/useGetApis";
+import useGetApis from "@/Apis/v1/useGetApis";
 import NoData from "@/components/NoData";
 import { SkeletonLoading } from "@/components/SkeletonComponent";
 import { FavouriteSidebar } from "@/components/ui/FavouriteSidebar";

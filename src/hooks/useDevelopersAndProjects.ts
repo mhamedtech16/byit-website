@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 
-import useGetApis from "@/Apis/useGetApis";
+import useGetApis from "@/Apis/v1/useGetApis";
 import { Developer, Project } from "@/types/Properties";
 
 export function useDevelopersAndProjects(propertyType?: string) {

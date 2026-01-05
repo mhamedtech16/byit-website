@@ -17,7 +17,7 @@ import { useState } from "react";
 
 import { routes } from "@/_lib/routes";
 import { useActiveLink } from "@/_utils/navigation";
-import { logoutApi } from "@/Apis/Auth";
+import { logoutApi } from "@/Apis/v1/Auth";
 import { imgs } from "@/assets";
 import { useIsRTL } from "@/hooks/useRTL";
 import { Button } from "@/shadcn/components/ui/button";

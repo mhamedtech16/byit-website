@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { loginSchema } from "@/_utils/validation";
-import { loginApi } from "@/Apis/Auth";
+import { loginApi } from "@/Apis/v1/Auth";
 import { colors } from "@/constants/colors";
 import { useAutoCloseDialog } from "@/hooks/useAutoCloseDialog";
 import { useIsRTL } from "@/hooks/useRTL";

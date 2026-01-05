@@ -11,7 +11,7 @@ import { useIsRTL } from "@/hooks/useRTL";
 import { pricePerLangauge } from "@/lib/PriceArray";
 import { Label } from "@/shadcn/components/ui/label";
 import { cn } from "@/shadcn/lib/utils";
-import { NewLaunch } from "@/types/Properties";
+import { NewLaunch } from "@/types/PropertiesV2";
 
 import SalesContact from "../../PropertiesList/components/SalesContact";
 
@@ -31,7 +31,7 @@ const NewLaunchItem = ({ item }: Props) => {
         <div className="relative w-full h-[50vmin]">
           <Image
             alt="property image"
-            src={item.imgs[0]}
+            src={item.images[0]}
             fill
             className="object-cover rounded-xl"
           />
@@ -40,7 +40,7 @@ const NewLaunchItem = ({ item }: Props) => {
           <div className="absolute top-40 right-5 w-[12vmin] h-[12vmin]">
             <Image
               alt="company logo"
-              src={item.company.logo}
+              src={item.developer.logo}
               fill
               className="object-cover rounded-3xl shadow-md bg-white p-1"
             />
@@ -59,24 +59,26 @@ const NewLaunchItem = ({ item }: Props) => {
           </div>
 
           {/* Button Favorite */}
-          <div className={cn("absolute top-4", isRTL ? "left-4" : "right-4")}>
+          {/* <div className={cn("absolute top-4", isRTL ? "left-4" : "right-4")}>
             <FavouriteButton
               item={item}
               favoriteType={"NewLaunch"}
               isItemFavorite={item.isFavourite}
             />
-          </div>
+          </div> */}
         </div>
         <div className="flex flex-row mt-10 p-2">
           <div className="flex flex-col w-[90%] gap-3">
             <div>
               <p className="font-bold ">{t("Project Name")}</p>
-              <p className="text-gray-400 ">{item.name}</p>
+              <p className="text-gray-400 ">
+                {isRTL ? item.name_ar : item.name_en}
+              </p>
             </div>
 
             <div>
               <p className="font-bold ">{t("Location")}</p>
-              <p className="text-gray-400 ">{item.location.name}</p>
+              <p className="text-gray-400 ">{item.location}</p>
             </div>
           </div>
         </div>
@@ -86,11 +88,11 @@ const NewLaunchItem = ({ item }: Props) => {
           <p className="font-bold ">{t("Price")}</p>
 
           <div className="flex flex-col gap-3">
-            {item.features.map((featureItm, idx) => (
-              <Label className="font-bold" key={featureItm.category.name + idx}>
-                {featureItm.category.name} :{" "}
+            {item.units.map((unitItm, idx) => (
+              <Label className="font-bold" key={unitItm.unit_type + idx}>
+                {unitItm.unit_type} :{" "}
                 <Label className="text-gray-400 ">
-                  {pricePerLangauge(featureItm.price, locale)}
+                  {pricePerLangauge(unitItm.price, locale)}
                 </Label>
               </Label>
             ))}
@@ -114,11 +116,11 @@ const NewLaunchItem = ({ item }: Props) => {
           <div className="border-t-1 my-[1vmin]" />
           <p className="font-bold ">{t("EOI")}</p>
           <div className="flex flex-col gap-3">
-            {item.features.map((featureItm, idx) => (
-              <Label className="font-bold" key={featureItm.category.name + idx}>
-                {featureItm.category.name} :{" "}
+            {item.units.map((unitItm, idx) => (
+              <Label className="font-bold" key={unitItm.unit_type + idx}>
+                {unitItm.unit_type} :{" "}
                 <Label className="text-gray-400 ">
-                  {pricePerLangauge(featureItm.bookingPrice, locale)} {t("EGP")}
+                  {pricePerLangauge(unitItm.booking_price, locale)} {t("EGP")}
                 </Label>
               </Label>
             ))}
@@ -142,7 +144,7 @@ const NewLaunchItem = ({ item }: Props) => {
         <div className="relative w-[100%] h-[50vh]">
           <Image
             alt="property image"
-            src={item.imgs[0]}
+            src={item.images[0]}
             fill
             className="object-cover rounded-xl"
           />
@@ -157,36 +159,40 @@ const NewLaunchItem = ({ item }: Props) => {
               <i className="fa-solid fa-calculator text-white text-[5vmin]"></i>
             </button>
           </div>
-          <div className={cn("absolute top-4", isRTL ? "left-4" : "right-4")}>
+          {/* <div className={cn("absolute top-4", isRTL ? "left-4" : "right-4")}>
             <FavouriteButton
               item={item}
               favoriteType={"NewLaunch"}
               isItemFavorite={item.isFavourite}
             />
-          </div>
+          </div> */}
         </div>
         <div className="flex flex-row mt-10">
           <div className="flex flex-col w-[90%] gap-3">
             <div>
               <p className="font-bold ">{t("developerName")}</p>
-              <p className="text-gray-400 ">{item.company.name}</p>
+              <p className="text-gray-400 ">
+                {isRTL ? item.developer.ar_name : item.developer.en_name}
+              </p>
             </div>
 
             <div>
               <p className="font-bold ">{t("Project Name")}</p>
-              <p className="text-gray-400 ">{item.name}</p>
+              <p className="text-gray-400 ">
+                {isRTL ? item.name_ar : item.name_en}
+              </p>
             </div>
 
             <div>
               <p className="font-bold ">{t("Location")}</p>
-              <p className="text-gray-400 ">{item.location.name}</p>
+              <p className="text-gray-400 ">{item.location}</p>
             </div>
           </div>
 
           <div className="relative  w-[12vmin] h-[12vmin]">
             <Image
               alt="property image"
-              src={item.company.logo}
+              src={item.developer.logo}
               fill
               className="object-cover rounded-[2vmin]"
             />
@@ -198,11 +204,11 @@ const NewLaunchItem = ({ item }: Props) => {
           <p className="font-bold ">{t("Price")}</p>
 
           <div className="flex flex-col gap-3">
-            {item.features.map((featureItm, idx) => (
-              <Label className="font-bold" key={featureItm.category.name + idx}>
-                {featureItm.category.name} :{" "}
+            {item.units.map((unitItm, idx) => (
+              <Label className="font-bold" key={unitItm.unit_type + idx}>
+                {unitItm.unit_type} :{" "}
                 <Label className="text-gray-400 ">
-                  {pricePerLangauge(featureItm.price, locale)}
+                  {pricePerLangauge(unitItm.price, locale)}
                 </Label>
               </Label>
             ))}
@@ -226,11 +232,11 @@ const NewLaunchItem = ({ item }: Props) => {
           <div className="border-t-1 my-[1vmin]" />
           <p className="font-bold ">{t("EOI")}</p>
           <div className="flex flex-col gap-3">
-            {item.features.map((featureItm, idx) => (
-              <Label className="font-bold" key={featureItm.category.name + idx}>
-                {featureItm.category.name} :
+            {item.units.map((unitItm, idx) => (
+              <Label className="font-bold" key={unitItm.unit_type + idx}>
+                {unitItm.unit_type} :
                 <Label className="text-gray-400 ">
-                  {pricePerLangauge(featureItm.bookingPrice, locale)} {t("EGP")}
+                  {pricePerLangauge(unitItm.booking_price, locale)} {t("EGP")}
                 </Label>
               </Label>
             ))}

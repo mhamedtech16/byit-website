@@ -6,37 +6,43 @@ import { useState } from "react";
 
 import ModalDemo from "@/components/Modal";
 import VoicePlayer from "@/components/VoicePlayer";
+import { useIsRTL } from "@/hooks/useRTL";
 import { cn } from "@/shadcn/lib/utils";
-import { Property, NewLaunch } from "@/types/Properties";
+import { Projects, NewLaunch } from "@/types/PropertiesV2";
 
 type Props = {
-  item: Property | NewLaunch;
-  type?: "property" | "newLaunch";
+  item: Projects | NewLaunch;
+  type?: "projects" | "newLaunch";
 };
 
-const SalesContact = ({ item, type = "property" }: Props) => {
+const SalesContact = ({ item, type = "projects" }: Props) => {
   const t = useTranslations();
   const [isOpen, setOpen] = useState<boolean>(false);
+  const isRTL = useIsRTL();
 
   const voiceNote =
-    type === "property" ? (item as Property).voiceNote : undefined;
+    type === "projects" ? (item as Projects).voice_orientation : undefined;
 
   const projectName =
-    type === "property"
-      ? (item as Property).project?.name
-      : (item as NewLaunch).name;
+    type === "projects"
+      ? isRTL
+        ? (item as Projects).ar_name
+        : (item as Projects).en_name
+      : isRTL
+      ? (item as NewLaunch).name_ar
+      : (item as NewLaunch).name_en;
 
-  // vendors سواء في property أو newLaunch
-  const vendors =
-    type === "property"
-      ? (item as Property)?.project.vendors
-      : (item as NewLaunch)?.vendors;
+  // partners سواء في projects أو newLaunch
+  const partners =
+    type === "projects"
+      ? (item as Projects)?.partners
+      : (item as NewLaunch)?.partners;
 
   return (
     <div
       className={cn(
         "flex flex-row w-full justify-between items-center border-t border-t-gray-300 py-4",
-        type === "property" && "pl-[8%] pr-[4%]"
+        type === "projects" && "pl-[8%] pr-[4%]"
       )}
     >
       <div className="items-center">
@@ -68,7 +74,7 @@ const SalesContact = ({ item, type = "property" }: Props) => {
 
       <ModalDemo isOpen={isOpen} onClose={() => setOpen(false)}>
         <>
-          {vendors?.map((vendor, index) => (
+          {partners?.map((partner, index) => (
             <div
               className="p-4 flex flex-row justify-between items-center border-b-2"
               key={index}
@@ -76,18 +82,20 @@ const SalesContact = ({ item, type = "property" }: Props) => {
               <div>
                 <ul>
                   <li key={index} className="flex items-center gap-3">
-                    {/* Vendor Image */}
-                    {vendor.logo && (
+                    {/* Partner Image */}
+                    {partner.logo && (
                       <Image
-                        src={vendor.logo}
-                        alt={vendor.name}
+                        src={partner.logo}
+                        alt={partner.en_name}
                         width={40}
                         height={40}
                         className="rounded-full border-2 border-gray-500"
                       />
                     )}
 
-                    <span className="text-base font-medium">{vendor.name}</span>
+                    <span className="text-base font-medium">
+                      {isRTL ? partner.ar_name : partner.en_name}
+                    </span>
                   </li>
                 </ul>
 
@@ -96,14 +104,14 @@ const SalesContact = ({ item, type = "property" }: Props) => {
                     {t("Sales in charge")}
                   </p>
                   <p className="text-base text-app-gray font-semibold">
-                    {vendor.contactName}
+                    {partner.salesperson_phone}
                   </p>
                 </div>
               </div>
 
-              {/** Contact Vendor */}
+              {/** Contact Partner */}
               <div className="flex items-center gap-5">
-                <Link href={`tel:${vendor.contactPhone}`} target="_blank">
+                <Link href={`tel:${partner.salesperson_phone}`} target="_blank">
                   <button className="w-[6vmin] h-[6vmin] rounded-[3vmin] hover:bg-primary/5 cursor-pointer shadow-md flex items-center justify-center">
                     {/* <i className="fa-solid fa-phone-volume text-gray-500 text-2xl"></i> */}
                     <PhoneCall className=" text-gray-500 text-2xl" />
@@ -111,7 +119,7 @@ const SalesContact = ({ item, type = "property" }: Props) => {
                 </Link>
 
                 <Link
-                  href={`https://wa.me/${vendor.contactPhone}?text=Hi, i’m from Byit app by Ahya investments.`}
+                  href={`https://wa.me/${partner.salesperson_phone}?text=Hi, i’m from Byit app by Ahya investments.`}
                   target="_blank"
                 >
                   <button className=" w-[6vmin] h-[6vmin] rounded-[3vmin] hover:bg-primary/5 cursor-pointer shadow-md flex items-center justify-center">
