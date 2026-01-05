@@ -23,27 +23,19 @@ import {
   TabsTrigger,
 } from "@/shadcn/components/ui/tabs";
 import { cn } from "@/shadcn/lib/utils";
-import { NewLaunch, Property } from "@/types/Properties";
+import { NewLaunch, Partners, Projects } from "@/types/PropertiesV2";
 
 import FormattedNumberInput from "./ui/CurrencyInput";
 
-type Vendor = {
-  name: string;
-  logo?: string;
-  ratio?: number;
-  onspotRatio?: number;
-  netRatio?: number;
-};
-
 type Props = {
-  item: Property | NewLaunch;
-  type?: "property" | "newLaunch";
+  item: Projects | NewLaunch;
+  type?: "projects" | "newLaunch";
   setCalcOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const PropertyCalculator = ({
   item,
-  type = "property",
+  type = "projects",
   setCalcOpen,
 }: Props) => {
   const t = useTranslations();
@@ -55,53 +47,60 @@ const PropertyCalculator = ({
     "NormalCalc"
   );
   const [earnings, setEarnings] = useState(0);
-  const [selectedVendorId, setSelectedVendorId] = useState<string | null>(null);
+  const [selectedPartnerId, setSelectedPartnerId] = useState<string | null>(
+    null
+  );
   const [dealValue, setDealValue] = useState<number>(0);
 
-  // اختار vendors حسب النوع
-  const vendors: Vendor[] | undefined =
-    type === "property"
-      ? (item as Property)?.project.vendors
-      : (item as NewLaunch)?.vendors;
+  // اختار partners حسب النوع
+  const partners: Partners[] | undefined =
+    type === "projects"
+      ? (item as Projects)?.partners
+      : (item as NewLaunch)?.partners;
 
-  // اختر أفضل vendor تلقائياً لو موجودين
+  // اختر أفضل partner تلقائياً لو موجودين
   useEffect(() => {
-    if (vendors?.length) {
-      const bestVendor = vendors.reduce((prev, curr) => {
+    if (partners?.length) {
+      const bestPartner = partners.reduce((prev, curr) => {
         const prevRatio =
-          calcType === "OnspotCalc" ? prev.onspotRatio ?? 0 : prev.ratio ?? 0;
+          calcType === "OnspotCalc"
+            ? prev.on_spot_commission ?? 0
+            : prev.communicated_commission ?? 0;
         const currRatio =
-          calcType === "OnspotCalc" ? curr.onspotRatio ?? 0 : curr.ratio ?? 0;
+          calcType === "OnspotCalc"
+            ? curr.on_spot_commission ?? 0
+            : curr.communicated_commission ?? 0;
         return currRatio > prevRatio ? curr : prev;
       });
-      setSelectedVendorId(bestVendor.name);
+      setSelectedPartnerId(bestPartner.id);
     } else {
-      setSelectedVendorId(null);
+      setSelectedPartnerId(null);
     }
-  }, [vendors, calcType]);
-
-  const selectedVendor = vendors?.find((v) => v.name === selectedVendorId);
+  }, [partners, calcType]);
+  const selectedPartner = partners?.find((p) => p.id === selectedPartnerId);
 
   // احسب الأرباح
   useEffect(() => {
-    if (!selectedVendor || !dealValue) {
+    if (!selectedPartner || !dealValue) {
       setEarnings(0);
       return;
     }
 
     const ratio =
       calcType === "OnspotCalc"
-        ? selectedVendor.onspotRatio ?? 0
-        : selectedVendor.ratio ?? 0;
+        ? selectedPartner.on_spot_commission ?? 0
+        : selectedPartner.communicated_commission ?? 0;
     const netRatio =
-      calcType === "OnspotCalc" ? 80 : selectedVendor.netRatio ?? 0;
+      calcType === "OnspotCalc"
+        ? selectedPartner.on_spot_broker_commission
+        : selectedPartner.broker_commission ?? 0;
 
     const grossComm = dealValue * (ratio / 100);
     const txs = grossComm * 0.36;
     const netComm = grossComm - txs;
 
     setEarnings(netComm * (netRatio / 100));
-  }, [dealValue, calcType, selectedVendor]);
+  }, [dealValue, calcType, selectedPartner]);
 
   return (
     <div className="flex flex-col justify-center items-center w-full">
@@ -167,7 +166,7 @@ const PropertyCalculator = ({
               onChange={(val) => setDealValue(isNaN(+val) ? 0 : +val)}
             />
 
-            {vendors?.length ? (
+            {partners?.length ? (
               <>
                 <p
                   className={cn("mb-2 font-medium ", isRTL ? "text-right" : "")}
@@ -175,8 +174,8 @@ const PropertyCalculator = ({
                   {t("partner")}
                 </p>
                 <Select
-                  onValueChange={(val) => setSelectedVendorId(val)}
-                  value={selectedVendorId ?? ""}
+                  onValueChange={(val) => setSelectedPartnerId(val)}
+                  value={selectedPartnerId ?? ""}
                 >
                   <SelectTrigger
                     size="lg"
@@ -223,9 +222,9 @@ const PropertyCalculator = ({
                     <SelectValue placeholder={t("selectVendor")} />
                   </SelectTrigger>
                   <SelectContent>
-                    {vendors.map((vendor) => (
-                      <SelectItem key={vendor.name} value={vendor.name}>
-                        {vendor.name}
+                    {partners.map((partner) => (
+                      <SelectItem key={partner.id} value={partner.id}>
+                        {isRTL ? partner.ar_name : partner.en_name}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -246,9 +245,14 @@ const PropertyCalculator = ({
             <span>
               {pricePerLangauge(earnings, locale)} {t("LE")}
             </span>
-            {calcType === "NormalCalc" && selectedVendor && (
+            {calcType === "NormalCalc" && selectedPartner && (
               <span className="text-[var(--orangeApp)]">
-                ({pricePerLangauge(selectedVendor.netRatio ?? 0, locale)}%)
+                (
+                {pricePerLangauge(
+                  selectedPartner.broker_commission ?? 0,
+                  locale
+                )}
+                %)
               </span>
             )}
           </div>

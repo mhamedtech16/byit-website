@@ -1,23 +1,23 @@
 import { useEffect, useState } from "react";
 
-import useGetApis from "@/Apis/v1/useGetApis";
+import useGetApisV2 from "@/Apis/v2/useGetApis";
 import { AboutUsResponse } from "@/types/AboutUs";
 
 export function useAboutUs() {
   const [data, setData] = useState<AboutUsResponse | null>(null);
-  const { getAboutUsApi } = useGetApis();
+  const { getAboutUs } = useGetApisV2();
 
   useEffect(() => {
     const fetchAboutUs = async () => {
       try {
-        const res = await getAboutUsApi();
+        const res = await getAboutUs();
         setData(res.data);
       } catch (err: unknown) {
         console.error(err);
       }
     };
     fetchAboutUs();
-  }, [getAboutUsApi]);
+  }, [getAboutUs]);
 
   return { data };
 }

@@ -1,28 +1,25 @@
 "use client";
 import React, { useEffect, useState } from "react";
 
-import useGetApis from "@/Apis/v1/useGetApis";
-import { NewLaunch } from "@/types/Properties";
+import useGetApisV2 from "@/Apis/v2/useGetApis";
+import { NewLaunch } from "@/types/PropertiesV2";
 
 import NewLaunchItem from "./components/NewLaunchItem";
 
 const NewLaunches = () => {
-  const { getAllNewLaunchesApi } = useGetApis();
+  const { getNewLaunch } = useGetApisV2();
   const [newLaunches, setNewLaunches] = useState<NewLaunch[]>();
 
-  const getNewLaunches = React.useCallback(
-    (page: number, search: string, developerId: number) => {
-      getAllNewLaunchesApi(page, search, developerId)
-        .then((res) => {
-          setNewLaunches(res.data.data);
-        })
-        .catch(() => {});
-    },
-    [getAllNewLaunchesApi]
-  );
+  const getNewLaunches = React.useCallback(() => {
+    getNewLaunch()
+      .then((res) => {
+        setNewLaunches(res.data.data);
+      })
+      .catch(() => {});
+  }, [getNewLaunch]);
 
   useEffect(() => {
-    getNewLaunches(1, "", 0);
+    getNewLaunches();
   }, [getNewLaunches]);
   return (
     <div className="flex flex-col bg-primary pb-2">

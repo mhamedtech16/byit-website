@@ -10,6 +10,15 @@ const nextConfig: NextConfig = {
     contentDispositionType: "attachment",
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
+
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: "https://byit-real-estate.k.frappe.cloud/api/:path*",
+      },
+    ];
+  },
 };
 
 const withNextIntl = createNextIntlPlugin();

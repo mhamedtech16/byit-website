@@ -10,9 +10,7 @@ import { useAboutUs } from "@/hooks/useAboutUs";
 import { useIsRTL } from "@/hooks/useRTL";
 
 function convertAboutUsTextToHTML(text: string) {
-  const cleanedText = text.startsWith("edit") ? text.slice(4).trim() : text;
-
-  const lines = cleanedText
+  const lines = text
     .split("\n")
     .map((line) => line.trim())
     .filter(Boolean);
@@ -43,8 +41,8 @@ export default function AboutUs() {
     if (!htmlRef.current || !data?.data) return;
 
     const html = isRTL
-      ? convertAboutUsTextToHTML(data.data.aboutUs_ar)
-      : convertAboutUsTextToHTML(data.data.aboutUs_en);
+      ? convertAboutUsTextToHTML(data.data.ar_about_us)
+      : convertAboutUsTextToHTML(data.data.en_about_us);
 
     htmlRef.current.innerHTML = html;
   }, [data, isRTL]);

@@ -161,7 +161,7 @@
   "Finishing": "Finishing",
   "Bedrooms": "Bedrooms",
   "Search": "Search",
-  "Select":"Select",
+  "Select": "Select",
   "Reset": "Reset",
   "Starting Price": "Starting Price",
   "Down Payment": "Down Payment",
@@ -207,8 +207,9 @@
   "STUDIO": "Studio",
   "contactPerson": "Contact person",
   "ok": "Ok",
-  "From Price":"From Price",
-  "To Price":"To Price",
+  "From Price": "From Price",
+  "To Price": "To Price",
+  "noGuideLinesFound": "No guideline videos found",
 
   "UpdateAccount": {
     "title": "Update Account",
