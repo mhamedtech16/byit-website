@@ -36,7 +36,7 @@ type Vendor = {
 };
 
 type Props = {
-  item: Property | NewLaunch;
+  item: Property | NewLaunch | null;
   type?: "property" | "newLaunch";
   setCalcOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };

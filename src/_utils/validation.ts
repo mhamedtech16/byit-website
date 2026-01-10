@@ -90,6 +90,37 @@ export const closingFormSchema = z
     validatePhoneNumber("developerSalesNumber", "countryCode")(data, ctx);
   });
 
+export const newMeetingsFormSchema = z
+  .object({
+    developer: z
+      .union([z.string(), z.number()])
+      .refine((val) => val !== "" && val !== null && val !== undefined, {
+        message: "Developer is required",
+      }),
+
+    project: z
+      .union([z.string(), z.number()])
+      .refine((val) => val !== "" && val !== null && val !== undefined, {
+        message: "Project is required",
+      }),
+    clientName: z.string().min(1, "Client name is required"),
+    clientPhone: z.string().min(1, "Client phone number is required"),
+    salesName: z.string().min(1, "Developer sales name is required"),
+    salesPhone: z.string().min(1, "Developer sales number is required"),
+    uploadFile: z
+      .custom<File>((val) => val instanceof File && val.size > 0, {
+        message: "File is required",
+      })
+      .optional(),
+    countryCode: z.string().min(1, "Country code is required"),
+  })
+  .superRefine((data, ctx) => {
+    validatePhoneNumber("clientPhone", "countryCode")(data, ctx);
+  })
+  .superRefine((data, ctx) => {
+    validatePhoneNumber("salesPhone", "countryCode")(data, ctx);
+  });
+
 export const sharesProperties = z
   .object({
     sharedProperty: z

@@ -240,6 +240,7 @@ const PropertiesFilter = ({ propertyType, onFilterPress }: Props) => {
     getLocations();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [propertyType]);
+
   return (
     <div className="w-[100%] shadow-md p-2">
       <p className="font-bold mb-3">{t("Search in properties")}</p>

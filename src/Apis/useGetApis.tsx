@@ -23,40 +23,39 @@ const useGetApis = () => {
     isFilter: boolean,
     page: number,
     propertyType: string,
-    user: User | null
+    user: User | null,
+    projectId: number
   ): Promise<PropertiesResponse> => {
-    let params = "";
+    let paramsArray: string[] = [];
     if (isFilter) {
-      if (selectedTypeIds.length > 0) {
-        params = `${params}&category=${selectedTypeIds}`;
-      }
-      if (selectedLocationIds.length > 0) {
-        params = `${params}&location=${selectedLocationIds}`;
-      }
-      if (selectedDeliveryTypes.length > 0) {
-        params = `${params}&deliveryStatus=${selectedDeliveryTypes}`;
-      }
-      if (selectedFinishingTypes.length > 0) {
-        params = `${params}&finishingType=${selectedFinishingTypes}`;
-      }
-      if (selectedBedroom.length > 0) {
-        params = `${params}&bedroom=${selectedBedroom}`;
-      }
-      if (selectedProject) {
-        params = `${params}&project=${selectedProject?.id}`;
-      }
-      if (fromPrice != null && fromPrice > 0) {
-        params = `${params}&priceFrom=${fromPrice}`;
-      }
-      if (toPrice != null && toPrice > 0 && toPrice > (fromPrice || 0)) {
-        params = `${params}&priceTo=${toPrice}`;
-      }
+      if (selectedTypeIds.length > 0)
+        paramsArray.push(`category=${selectedTypeIds}`);
+      if (selectedLocationIds.length > 0)
+        paramsArray.push(`location=${selectedLocationIds}`);
+      if (selectedDeliveryTypes.length > 0)
+        paramsArray.push(`deliveryStatus=${selectedDeliveryTypes}`);
+      if (selectedFinishingTypes.length > 0)
+        paramsArray.push(`finishingType=${selectedFinishingTypes}`);
+      if (selectedBedroom.length > 0)
+        paramsArray.push(`bedroom=${selectedBedroom}`);
+      if (selectedProject) paramsArray.push(`project=${selectedProject.id}`);
+      if (fromPrice && fromPrice > 0)
+        paramsArray.push(`priceFrom=${fromPrice}`);
+      if (toPrice && toPrice > 0 && toPrice > (fromPrice || 0))
+        paramsArray.push(`priceTo=${toPrice}`);
     }
     const currentPropertyType =
-      propertyType == "COMPOUND" ? "RELATED-TO-COMPOUND" : "SEPARATED";
-    //params = `${params}&sortByOnspotRatio=UP&available=true&type=${currentPropertyType}`;
-    params = `${params}&available=true&type=${currentPropertyType}`;
-    return axios.get(`${BASE_END_POINT}properties?page=${page}${params}`, {
+      propertyType === "COMPOUND" ? "RELATED-TO-COMPOUND" : "SEPARATED";
+    paramsArray.push(`available=true`);
+    paramsArray.push(`type=${currentPropertyType}`);
+
+    if (projectId) {
+      paramsArray = [`project=${projectId}`];
+    }
+
+    const params = paramsArray.join("&");
+
+    return axios.get(`${BASE_END_POINT}properties?page=${page}&${params}`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${user?.token}`,
@@ -64,6 +63,7 @@ const useGetApis = () => {
       },
     });
   };
+
   ////////
   /////==========
   // useGetApis.ts
@@ -221,6 +221,61 @@ const useGetApis = () => {
     });
   }, []);
 
+  const getCampaignApi = useCallback((user: User | null) => {
+    return api.get("campaigns", {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user?.token}`,
+      },
+    });
+  }, []);
+
+  const getLeadsApi = useCallback((user: User | null) => {
+    return api.get("leads", {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user?.token}`,
+      },
+    });
+  }, []);
+
+  const getMeetingsApi = useCallback(
+    (user: User | null, startDate: string, endDate: string) => {
+      return api.get(`meetings?startDate=${startDate}&endDate=${endDate}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user?.token}`,
+        },
+      });
+    },
+    []
+  );
+
+  const getPropertyDetailsApi = useCallback(
+    (user: User | null, id: number) => {
+      return api.get(`properties/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user?.token}`,
+          "Accept-Language": currentLang,
+        },
+      });
+    },
+    [currentLang]
+  );
+
+  const getFeedbackApi = useCallback(
+    (user: User | null, id: number | undefined) => {
+      return api.get(`leads/${id}/getLeadFeedBack`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user?.token}`,
+        },
+      });
+    },
+    []
+  );
+
   const getGuideLinesApi = useCallback(() => {
     return api.get("guidelines");
   }, []);
@@ -252,6 +307,11 @@ const useGetApis = () => {
     getSharedPropertiesApi,
     getVendorsApi,
     getProjectsByDeveloperApi,
+    getCampaignApi,
+    getLeadsApi,
+    getMeetingsApi,
+    getPropertyDetailsApi,
+    getFeedbackApi,
   };
 };
 

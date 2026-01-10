@@ -20,9 +20,16 @@ export interface User {
     networkEarns: number;
     totalNetworkEarns: number;
     totalNetworkDeals: number;
+    totalMeetingsCount: number;
+    monthMeetingsCount: number;
+    meetingsEarns: number;
+    totalMeetingsEarns: number;
     country: Country;
     city: City;
     yearsExperience: string;
+    enableMeetings: boolean;
+    enableByitATeam: boolean;
+    enableLeadGeneration: boolean;
   };
   token: string;
 }
@@ -189,6 +196,15 @@ export interface SignUpRequest {
   //   token?: string; // JWT or session token
 }
 
+export interface CreateFeedback {
+  notes: string;
+  status: string | undefined;
+}
+
+export interface CreateFeedbackResponse {
+  success: boolean;
+}
+
 export interface UpdateAccountRequest {
   fullname: string;
   email: string;
@@ -237,6 +253,18 @@ export interface ClosignFormRequest {
   salesCountry?: number; // Country code for phone number validation
   uploadFile?: File; // File object for the uploaded document
   type: string;
+}
+
+export interface NewMeetingsRequest {
+  salesName?: string;
+  salesPhone?: string;
+  salesCountry?: number; // Country code for phone number validation
+  developer: number;
+  project: number;
+  clientName?: string;
+  clientPhone?: string;
+  clientCountry?: number;
+  uploadFile?: File; // File object for the uploaded document
 }
 
 export interface SharesDealRequest {

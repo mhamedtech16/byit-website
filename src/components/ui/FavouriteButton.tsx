@@ -8,9 +8,9 @@ import { useFavouritesStore } from "@/store/favourites";
 import { NewLaunch, Property } from "@/types/Properties";
 
 type Props = {
-  item: Property | NewLaunch;
+  item: Property | NewLaunch | null;
   favoriteType: string;
-  isItemFavorite: boolean;
+  isItemFavorite: boolean | undefined;
 };
 
 const FavouriteButton = ({ item, favoriteType, isItemFavorite }: Props) => {
@@ -31,7 +31,7 @@ const FavouriteButton = ({ item, favoriteType, isItemFavorite }: Props) => {
   const addFavorite = () => {
     if (!currentUser) return;
     addFavouriteApi(
-      item?.id,
+      item?.id ?? 0,
       favoriteType == "Property" ? "addProperty" : "addNewLaunch",
       currentUser
     )
@@ -39,10 +39,10 @@ const FavouriteButton = ({ item, favoriteType, isItemFavorite }: Props) => {
         setIsFavorite(true);
         if (favoriteType == "Property") {
           if (
-            "type" in item &&
-            "priceType" in item &&
-            "price" in item &&
-            "downPayment" in item
+            "type" in (item ?? {}) &&
+            "priceType" in (item ?? {}) &&
+            "price" in (item ?? {}) &&
+            "downPayment" in (item ?? {})
           ) {
             setFavouritesProperties([item as Property, ...favProperties]);
           }
@@ -56,16 +56,18 @@ const FavouriteButton = ({ item, favoriteType, isItemFavorite }: Props) => {
   const removeFavorite = () => {
     if (!currentUser) return;
     removeFromFavoriteApi(
-      item?.id,
+      item?.id ?? 0,
       favoriteType == "Property" ? "removeProperty" : "removeNewLaunch",
       currentUser
     )
       .then(() => {
         if (favoriteType == "Property") {
-          setFavouritesProperties(favProperties.filter((i) => i.id != item.id));
+          setFavouritesProperties(
+            favProperties.filter((i) => i.id != item?.id)
+          );
         } else {
           setFavouritesNewlaunches(
-            favNewLaunches.filter((i) => i.id != item.id)
+            favNewLaunches.filter((i) => i.id != item?.id)
           );
         }
         setIsFavorite(false);

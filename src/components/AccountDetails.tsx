@@ -19,18 +19,23 @@ import { Label } from "@/shadcn/components/ui/label";
 import { Separator } from "@/shadcn/components/ui/separator";
 import { useAuthStore } from "@/store/authStore";
 
+import AccountMenu from "./AccountMenu";
+
 export default function AccountDetails() {
   const t = useTranslations("Settings");
   const { currentUser } = useAuthStore();
   const locale = useLocale();
   const router = useRouter();
+
   const user = {
     avatarUrl: "/placeholder-profile.jpg",
   };
 
   return (
     <div className="flex min-h-screen w-screen p-16 bg-slate-50">
-      <Sidebar />
+      <Sidebar label="settings">
+        <AccountMenu />
+      </Sidebar>
 
       <div className="flex-1 p-10">
         <motion.div

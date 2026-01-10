@@ -166,7 +166,6 @@ export default function SharesDealsForm() {
             fileInputRef.current.value = "";
           }
         }
-        console.log(response.data);
 
         setOpenAlertDialog(true);
       } catch (err) {
