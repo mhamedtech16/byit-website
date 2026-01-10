@@ -175,15 +175,15 @@ export default function CampaignLeadsPage() {
               return prev.map((f) =>
                 f.id === currentFeedbackId
                   ? {
-                      ...f,
-                      status,
-                      notes: feedback,
-                      createdAt: new Date().toLocaleString(locale, {
-                        day: "2-digit",
-                        month: "short",
-                        year: "numeric",
-                      }),
-                    }
+                    ...f,
+                    status,
+                    notes: feedback,
+                    createdAt: new Date().toLocaleString(locale, {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    }),
+                  }
                   : f
               );
             });
@@ -253,23 +253,21 @@ export default function CampaignLeadsPage() {
 
         {/* Button for back to leads when the user inside feedbacks */}
         <button
-          className={`text-2xl font-bold  cursor-pointer ${
-            !openFeedback
+          className={`text-2xl font-bold  cursor-pointer ${!openFeedback
               ? "text-2xl font-bold text-orangeApp"
               : " text-primary"
-          } ${isRTL ? "mr-1" : "ml-1"}`}
+            } ${isRTL ? "mr-1" : "ml-1"}`}
           onClick={() => setOpenFeedback(false)}
         >
-          {`---> ${t("my_leads_title")}`}
+          {`-> ${t("my_leads_title")}`}
         </button>
         {openFeedback && (
           <button
-            className={`text-2xl font-bold ml-1 cursor-pointer ${
-              openFeedback ? " text-orangeApp" : "bg-gray-200 text-primary"
-            } ${isRTL ? "mr-1" : "ml-1"}`}
+            className={`text-2xl font-bold ml-1 cursor-pointer ${openFeedback ? " text-orangeApp" : "bg-gray-200 text-primary"
+              } ${isRTL ? "mr-1" : "ml-1"}`}
             onClick={() => getFeedbacks(selectedLeadId)}
           >
-            {`---> ${t("feedback_list")}`}
+            {`-> ${t("feedback_list")}`}
           </button>
         )}
       </div>
