@@ -22,7 +22,7 @@ export default function Page() {
   const { currentUser } = useAuthStore();
   const [activeMonth, setActiveMonth] = useState("");
   const { startDate, endDate } = getMonthRange(activeMonth, locale);
-  const { meetings } = useMeetings(currentUser, startDate, endDate);
+  const { meetings, earning } = useMeetings(currentUser, startDate, endDate);
 
   return (
     <div className="p-6 bg-slate-50">
@@ -51,6 +51,7 @@ export default function Page() {
       </div>
       <MeetingsHorizontal
         data={meetings}
+        earning={earning}
         activeMonth={activeMonth}
         setActiveMonth={setActiveMonth}
       />

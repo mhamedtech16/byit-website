@@ -23,7 +23,6 @@ import { useIsRTL } from "@/hooks/useRTL";
 import { Button } from "@/shadcn/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/shadcn/components/ui/scroll-area";
 import { cn } from "@/shadcn/lib/utils";
-import { useAuthStore } from "@/store/authStore";
 import { Meeting } from "@/types/Meetings";
 
 import MeetingsContent from "./MeetingsContent";
@@ -35,10 +34,12 @@ const linkVariants = {
 
 export default function MeetingsHorizontal({
   data,
+  earning,
   activeMonth,
   setActiveMonth,
 }: {
   data: Meeting[];
+  earning: number;
   activeMonth: string;
   setActiveMonth: Dispatch<SetStateAction<string>>;
 }) {
@@ -48,7 +49,6 @@ export default function MeetingsHorizontal({
   const isRTL = useIsRTL();
   const locale = useLocale();
   dayjs.locale(locale);
-  const { currentUser } = useAuthStore();
 
   const [loading, setLoading] = useState(true);
 
@@ -166,10 +166,11 @@ export default function MeetingsHorizontal({
         {!activeMonth ? (
           <p className="text-muted-foreground text-lg">Select a month</p>
         ) : (
+          // <></>
           <MeetingsContent
             activeMonth={activeMonth}
             activeMeetings={activeMeetings}
-            currentUser={currentUser}
+            earning={earning}
             remainingMeetings={remainingMeetings}
             acceptedMeetings={acceptedMeetings}
           />

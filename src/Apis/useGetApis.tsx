@@ -243,7 +243,7 @@ const useGetApis = () => {
 
   const getMeetingsApi = useCallback(
     (user: User | null, startDate: string, endDate: string) => {
-      return api.get(`meetings?startDate=${startDate}&endDate=${endDate}`, {
+      return api.get(`meetings?startDate=${startDate}& endDate=${endDate}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${user?.token}`,

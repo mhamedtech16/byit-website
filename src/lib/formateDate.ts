@@ -15,17 +15,10 @@ export function formatDate(dateString: string, locale: string) {
   return `${day}-${month}-${year}`;
 }
 
-function formatDatesAsYearMonthDay(dateString: Date, locale: string) {
-  const date = new Date(dateString);
-
-  const yearMonthDay = dayjs(date).locale(locale).utc().format("YYYY-MM-DD");
-
-  return yearMonthDay;
-}
-
 export const getMonthRange = (monthYear: string, locale: string) => {
   const localeDataObj = dayjs.localeData();
   const months = localeDataObj.months();
+
   const monthMap = months.reduce((acc, name, index) => {
     acc[name] = index;
     return acc;
@@ -34,11 +27,10 @@ export const getMonthRange = (monthYear: string, locale: string) => {
   const [monthText, year] = monthYear.trim().split(/\s+/);
   const monthIndex = monthMap[monthText];
 
-  const startDate = new Date(Number(year), monthIndex, 1);
-  const endDate = new Date(Number(year), monthIndex + 1, 0);
+  const baseDate = dayjs(`${year}-${monthIndex + 1}-01`).locale(locale);
 
   return {
-    startDate: formatDatesAsYearMonthDay(startDate, locale),
-    endDate: formatDatesAsYearMonthDay(endDate, locale),
+    startDate: baseDate.startOf("month").format("YYYY-MM-DD"),
+    endDate: baseDate.endOf("month").format("YYYY-MM-DD"),
   };
 };

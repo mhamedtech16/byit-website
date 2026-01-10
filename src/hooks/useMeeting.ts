@@ -13,6 +13,7 @@ export default function useMeetings(
 ) {
   const { getMeetingsApi } = useGetApis();
   const [meetings, setMeetings] = useState<Meeting[]>([]);
+  const [earning, setEarning] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -25,7 +26,8 @@ export default function useMeetings(
     setLoading(true);
     getMeetingsApi(user, startDate, endDate)
       .then((res) => {
-        setMeetings(res.data.data);
+        setMeetings(res.data.data?.data);
+        setEarning(res.data.data?.earning?.amount);
       })
       .catch((err) => {
         console.error("API Error (meetings): ", err);
@@ -36,5 +38,5 @@ export default function useMeetings(
       });
   }, [endDate, getMeetingsApi, startDate, user]);
 
-  return { meetings, loading, error };
+  return { meetings, loading, error, earning };
 }

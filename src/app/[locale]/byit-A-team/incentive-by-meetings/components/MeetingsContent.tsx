@@ -12,22 +12,21 @@ import {
 } from "@/shadcn/components/ui/card";
 import { Separator } from "@/shadcn/components/ui/separator";
 import { Meeting } from "@/types/Meetings";
-import { User } from "@/types/User";
 
 interface MeetingsContentProps {
   activeMonth: string;
   activeMeetings: Meeting[];
-  currentUser?: User | null;
   remainingMeetings: number;
   acceptedMeetings: number;
+  earning: number;
 }
 
 export default function MeetingsContent({
   activeMonth,
   activeMeetings,
-  currentUser,
   remainingMeetings,
   acceptedMeetings,
+  earning,
 }: MeetingsContentProps) {
   const t = useTranslations();
 
@@ -47,7 +46,7 @@ export default function MeetingsContent({
               {t("myMeetingEarnings")}
             </p>
             <p className="font-bold text-lg text-green-500">
-              {`${currentUser?.user?.meetingsEarns ?? 0} ${t("EGP")}`}
+              {`${earning ?? 0} ${t("EGP")}`}
             </p>
           </Card>
 
