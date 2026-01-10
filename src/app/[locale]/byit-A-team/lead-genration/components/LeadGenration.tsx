@@ -17,10 +17,15 @@ export default function LeadGenration() {
   const selectedCampaign = campaigns.find((c) => c.id === activeCampaign);
 
   useEffect(() => {
-    return () => {
-      localStorage.removeItem("activeCampaign");
-    };
+    localStorage.removeItem("activeCampaign");
   }, []);
+
+  const handleReadMore = () => {
+    if (!selectedCampaign?.project?.id) return;
+    router.push(
+      `/PropertiesList?project=${selectedCampaign.project.id}&propertyType=COMPOUND`
+    );
+  };
 
   if (!selectedCampaign)
     return <p className="text-center">No Campaigns Found</p>;
@@ -29,11 +34,7 @@ export default function LeadGenration() {
 
   return (
     <CampaignDetailsCard
-      onReadMore={() =>
-        router.push(
-          routes.PropertyDetails.Details(selectedCampaign.project?.id)
-        )
-      }
+      onReadMore={() => handleReadMore()}
       img={selectedCampaign.img}
       name={isRTL ? selectedCampaign.name_ar : selectedCampaign.name_en}
       description={

@@ -43,9 +43,9 @@ export const CampaignProvider = ({
     if (saved) {
       setActiveCampaign(Number(saved));
     } else if (campaignsData.length > 0) {
-      const lastCampaign = campaignsData.length;
-      setActiveCampaign(lastCampaign);
-      localStorage.setItem("activeCampaign", String(lastCampaign));
+      const firstCampaignId = campaignsData[0].id;
+      setActiveCampaign(firstCampaignId);
+      localStorage.setItem("activeCampaign", String(firstCampaignId));
     }
   }, [campaignsData]);
 

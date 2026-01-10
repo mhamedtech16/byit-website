@@ -30,7 +30,7 @@ export default function Footer() {
   const { currentUser } = useAuthStore();
   const [openAlertDialog, setOpenAlertDialog] = useState(false);
   const { data } = useAboutUs();
-  const isAuthenticated = currentUser?.user.approved;
+  const isAuthenticated = currentUser?.user?.approved;
 
   const onClose = () => {
     setIsOpen(false);

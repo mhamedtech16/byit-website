@@ -41,9 +41,14 @@ function WebNavigation({
   const [openByitTeamDialog, setOpenByitTeamDialog] = useState(false);
   const isRTL = locale === "ar";
   const { currentUser, hasHydrated } = useAuthStore();
-  const isAuthenticated = currentUser?.user.approved;
+
   if (!hasHydrated) return null;
 
+  const isAuthenticated = currentUser?.user?.approved ?? false;
+
+  const enableMeetings = currentUser?.user?.enableMeetings ?? false;
+  const enableLeadGenration = currentUser?.user?.enableLeadGeneration ?? false;
+  const enableByitATeam = currentUser?.user?.enableByitATeam ?? false;
   const openLoginModal = () => {
     setOpenAlertDialog(false);
     onOpen("login");
@@ -305,6 +310,7 @@ function WebNavigation({
                   router.push(routes.LeadGenration.Root);
                   setOpenByitTeamDialog(false);
                 }}
+                disabled={!enableLeadGenration || !enableByitATeam}
               >
                 Lead Generation
               </Button>
@@ -314,6 +320,7 @@ function WebNavigation({
                   router.push(routes.IncentiveByMeetings);
                   setOpenByitTeamDialog(false);
                 }}
+                disabled={!enableMeetings || !enableByitATeam}
               >
                 Incentive By Meetings
               </Button>

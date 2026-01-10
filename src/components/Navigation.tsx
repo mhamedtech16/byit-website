@@ -66,7 +66,7 @@ export function NavigationMenuDemo() {
   const t = useTranslations("Header");
   const [mode, setMode] = React.useState<"login" | "signup">("login");
   const { currentUser, hasHydrated } = useAuthStore();
-  const isAuthenticated = currentUser?.user.approved;
+  const isAuthenticated = currentUser?.user?.approved;
   const isMobile = useMobile();
   const isRTL = useIsRTL();
   const router = useRouter();

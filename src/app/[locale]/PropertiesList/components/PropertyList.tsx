@@ -21,6 +21,9 @@ import PropertiesFilter from "./PropertiesFilter";
 import PropertyListItem from "./PropertyListItem";
 
 const PropertiesList = () => {
+  const params = useSearchParams();
+  const projectIdFromQuery = Number(params.get("project"));
+
   const currentUser = useAuthStore((state) => state.currentUser);
   const isMobile = useMobile();
   const isRTL = useIsRTL();
@@ -49,19 +52,25 @@ const PropertiesList = () => {
     ) => {
       setLoadingPg(true);
 
+      const projectToFetch =
+        projectIdFromQuery && !selectedProject
+          ? ({ id: projectIdFromQuery } as Project)
+          : selectedProject;
+
       getPropertiesApi(
-        selectedLocationIds,
-        selectedTypeIds,
-        selectedDeliveryTypes,
-        selectedFinishingTypes,
-        selectedBedroom,
-        selectedProject || null,
+        projectToFetch && !isFilterP ? [] : selectedLocationIds,
+        projectToFetch && !isFilterP ? [] : selectedTypeIds,
+        projectToFetch && !isFilterP ? [] : selectedDeliveryTypes,
+        projectToFetch && !isFilterP ? [] : selectedFinishingTypes,
+        projectToFetch && !isFilterP ? [] : selectedBedroom,
+        projectToFetch || null,
         fromPrice,
         toPrice,
         isFilterP,
         page,
         propertyType,
-        currentUser
+        currentUser,
+        projectIdFromQuery
       )
         .then((res) => {
           setProperties((prev) => {
@@ -85,8 +94,9 @@ const PropertiesList = () => {
           setLoadingPg(false);
         });
     },
-    [currentUser, getPropertiesApi, propertyType]
+    [currentUser, getPropertiesApi, projectIdFromQuery, propertyType]
   );
+
   useEffect(() => {
     fetchProperties(1, true, false);
     // eslint-disable-next-line react-hooks/exhaustive-deps

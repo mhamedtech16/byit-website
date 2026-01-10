@@ -1,6 +1,6 @@
 "use client";
 
-import { History } from "lucide-react";
+import { History, SlashIcon } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
@@ -19,17 +19,27 @@ import ModalDemo from "@/components/Modal";
 import { SkeletonLoading } from "@/components/SkeletonComponent";
 import useCampaigns from "@/hooks/useCampagin";
 import useLeads from "@/hooks/useLeads";
+import { useMobile } from "@/hooks/useMobile";
 import { useIsRTL } from "@/hooks/useRTL";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+} from "@/shadcn/components/ui/breadcrumb";
 import { Button } from "@/shadcn/components/ui/button";
 import { Label } from "@/shadcn/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/shadcn/components/ui/radio-group";
 import { Textarea } from "@/shadcn/components/ui/textarea";
+import { cn } from "@/shadcn/lib/utils";
 import { useAuthStore } from "@/store/authStore";
 import { Feedback, Leads } from "@/types/Campaigns";
 import { CreateFeedback } from "@/types/User";
 
 export default function CampaignLeadsPage() {
   const { currentUser } = useAuthStore();
+  const isMobile = useMobile();
   const isRTL = useIsRTL();
   const locale = useLocale();
   const params = useParams();
@@ -247,29 +257,55 @@ export default function CampaignLeadsPage() {
   return (
     <div>
       <div className="flex items-center mb-6">
-        <h1 className="text-2xl font-bold">
-          {`${isRTL ? campaign?.name_ar : campaign?.name_en}`}
-        </h1>
-
-        {/* Button for back to leads when the user inside feedbacks */}
-        <button
-          className={`text-2xl font-bold  cursor-pointer ${!openFeedback
-              ? "text-2xl font-bold text-orangeApp"
-              : " text-primary"
-            } ${isRTL ? "mr-1" : "ml-1"}`}
-          onClick={() => setOpenFeedback(false)}
-        >
-          {`-> ${t("my_leads_title")}`}
-        </button>
-        {openFeedback && (
-          <button
-            className={`text-2xl font-bold ml-1 cursor-pointer ${openFeedback ? " text-orangeApp" : "bg-gray-200 text-primary"
-              } ${isRTL ? "mr-1" : "ml-1"}`}
-            onClick={() => getFeedbacks(selectedLeadId)}
-          >
-            {`-> ${t("feedback_list")}`}
-          </button>
-        )}
+        {/* Breadcrumb for leads when the user inside feedbacks */}
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbPage
+                className={cn(
+                  isMobile ? "text-lg font-bold" : "text-2xl font-bold"
+                )}
+              >
+                {`${isRTL ? campaign?.name_ar : campaign?.name_en}`}
+              </BreadcrumbPage>
+            </BreadcrumbItem>
+            <SlashIcon />
+            <BreadcrumbItem>
+              <BreadcrumbLink
+                onClick={() => setOpenFeedback(false)}
+                className={`text-2xl font-bold  cursor-pointer ${!openFeedback
+                    ? "text-2xl font-bold text-orangeApp"
+                    : " text-primary"
+                  } ${isRTL ? "mr-1" : "ml-1"} 
+                ${isMobile ? "text-lg font-bold" : "text-2xl font-bold"}
+                `}
+              >
+                {`${t("my_leads_title")}`}
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            {openFeedback && (
+              <>
+                <SlashIcon />
+                <BreadcrumbItem>
+                  <BreadcrumbLink
+                    onClick={() => getFeedbacks(selectedLeadId)}
+                    className={`text-2xl font-bold ml-1 cursor-pointer ${openFeedback
+                        ? " text-orangeApp"
+                        : "bg-gray-200 text-primary"
+                      } ${isRTL ? "mr-1" : "ml-1"}
+                                    ${isMobile
+                        ? "text-lg font-bold"
+                        : "text-2xl font-bold"
+                      }
+                    `}
+                  >
+                    {`${t("feedback_list")}`}
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+              </>
+            )}
+          </BreadcrumbList>
+        </Breadcrumb>
       </div>
 
       <>
@@ -385,6 +421,15 @@ export default function CampaignLeadsPage() {
             className="grid grid-cols-2 gap-4"
           >
             <div className="space-y-3">
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem
+                  disabled={saleDone}
+                  value="PENDING"
+                  id="PENDING"
+                />
+                <Label htmlFor="NO-ANSWER">{t("new")}</Label>
+              </div>
+
               <div className="flex items-center space-x-2">
                 <RadioGroupItem
                   disabled={saleDone}
