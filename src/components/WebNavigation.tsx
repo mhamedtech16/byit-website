@@ -203,7 +203,7 @@ function WebNavigation({
             </NavigationMenuLink>
           </NavigationMenuItem>
 
-          <NavigationMenuItem>
+          {/* <NavigationMenuItem>
             <NavigationMenuLink
               asChild
               className={navigationMenuTriggerStyle()}
@@ -228,7 +228,7 @@ function WebNavigation({
                 Byit A-Team
               </button>
             </NavigationMenuLink>
-          </NavigationMenuItem>
+          </NavigationMenuItem> */}
 
           <NavigationMenuItem>
             <NavigationMenuLink
