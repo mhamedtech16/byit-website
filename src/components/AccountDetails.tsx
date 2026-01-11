@@ -50,14 +50,14 @@ export default function AccountDetails() {
                   <Avatar className="w-28 h-28 border-4 border-white shadow-md bg-primary">
                     <AvatarImage src={user.avatarUrl} alt="User" />
                     <AvatarFallback className="bg-primary text-white text-center text-3xl">
-                      {currentUser?.user.fullname?.[0]}
+                      {currentUser?.user?.fullname?.[0]}
                     </AvatarFallback>
                   </Avatar>
                 </div>
 
                 <div className="pt-6 text-center">
                   <h2 className="text-2xl font-semibold">
-                    {currentUser?.user.fullname}
+                    {currentUser?.user?.fullname}
                   </h2>
                 </div>
 
@@ -70,7 +70,7 @@ export default function AccountDetails() {
                       <HandCoins color="gold" size={40} />
                       <p className="text-gray-500 text-xl font-bold">
                         {`${pricePerLangauge(
-                          currentUser?.user.earns,
+                          currentUser?.user?.earns,
                           locale
                         )} ${t("currency")}`}
                       </p>
@@ -93,9 +93,9 @@ export default function AccountDetails() {
 
               <div className="flex flex-wrap -mx-2">
                 {[
-                  { label: t("fullname"), value: currentUser?.user.fullname },
-                  { label: t("email"), value: currentUser?.user.email },
-                  { label: t("phone"), value: currentUser?.user.phone },
+                  { label: t("fullname"), value: currentUser?.user?.fullname },
+                  { label: t("email"), value: currentUser?.user?.email },
+                  { label: t("phone"), value: currentUser?.user?.phone },
                   {
                     label: t("state"),
                     value:
@@ -104,13 +104,13 @@ export default function AccountDetails() {
                   },
                   {
                     label: t("yearsExperience"),
-                    value: currentUser?.user.yearsExperience,
+                    value: currentUser?.user?.yearsExperience,
                   },
                   {
                     label: t("country"),
                     value:
-                      currentUser?.user.country.name ||
-                      currentUser?.user.country.name_en,
+                      currentUser?.user?.country.name ||
+                      currentUser?.user?.country.name_en,
                   },
                 ].map((item, index) => (
                   <div key={index} className="w-full md:w-1/2 px-2 mb-4">

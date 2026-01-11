@@ -68,13 +68,13 @@ export default function UpdateAccount() {
   const form = useForm<UpdateFormValues>({
     resolver: zodResolver(updateAccountSchema),
     defaultValues: {
-      fullname: currentUser?.user.fullname || "",
-      email: currentUser?.user.email || "",
+      fullname: currentUser?.user?.fullname || "",
+      email: currentUser?.user?.email || "",
       city:
         currentUser?.user?.city?.name || currentUser?.user?.city?.name_en || "",
-      yearsExperience: currentUser?.user.yearsExperience || "",
+      yearsExperience: currentUser?.user?.yearsExperience || "",
       countryCode: selectedCountry?.countryCode ?? "+20",
-      phone: currentUser?.user.phone || "",
+      phone: currentUser?.user?.phone || "",
     },
   });
 
@@ -84,7 +84,7 @@ export default function UpdateAccount() {
       try {
         if (!currentUser) return;
 
-        const userId = currentUser?.user.id;
+        const userId = currentUser?.user?.id;
         const token = currentUser?.token;
         const lang = locale;
 

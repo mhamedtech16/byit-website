@@ -104,8 +104,8 @@ export const getUserDataApi = (user: AuthUser | null) => {
 export const updateAccountApi = async (
   values: UpdateAccountRequest,
   lang: string,
-  id: number,
-  token: string
+  id: number | undefined,
+  token: string | undefined
 ): Promise<LoginResponse> => {
   const data = {
     fullname: values.fullname,
@@ -129,7 +129,7 @@ export const updateAccountApi = async (
 export const updatePassowrdApi = async (
   values: UpdatePasswordRequest,
   lang: string,
-  token: string
+  token: string | undefined
 ): Promise<LoginResponse> => {
   const data = {
     currentPassword: values.oldPassword,
