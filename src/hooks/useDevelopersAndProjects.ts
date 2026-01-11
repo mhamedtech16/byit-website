@@ -1,8 +1,8 @@
+import { AxiosResponse } from "axios";
 import { useCallback, useState } from "react";
 
 import useGetApis from "@/Apis/useGetApis";
 import { Developer, Project } from "@/types/Properties";
-import { AxiosResponse } from "axios";
 
 export function useDevelopersAndProjects(propertyType?: string) {
   const { getAllDevelopersApi, getProjectsByDeveloperApi } = useGetApis();
@@ -46,6 +46,7 @@ export function useDevelopersAndProjects(propertyType?: string) {
       try {
         setProjectsLoading(true);
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let response: AxiosResponse<any, any>;
 
         if (developerId && developerId > 0) {
