@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 
 import useGetApis from "@/Apis/useGetApis";
 import { Meeting } from "@/types/Meetings";
-import { User } from "@/types/User";
+import { AuthUser } from "@/types/User";
 
 export default function useMeetings(
-  user: User | null,
+  user: AuthUser | null,
   startDate: string,
   endDate: string
 ) {
