@@ -4,9 +4,12 @@ import { useEffect, useState } from "react";
 
 import useGetApis from "@/Apis/useGetApis";
 import { Property } from "@/types/Properties";
-import { User } from "@/types/User";
+import { AuthUser } from "@/types/User";
 
-export default function usePropertiesDetails(user: User | null, id: number) {
+export default function usePropertiesDetails(
+  user: AuthUser | null,
+  id: number
+) {
   const { getPropertyDetailsApi } = useGetApis();
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState<boolean>(true);

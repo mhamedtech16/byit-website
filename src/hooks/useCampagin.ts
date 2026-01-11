@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 
 import useGetApis from "@/Apis/useGetApis";
 import { Campaign } from "@/types/Campaigns";
-import { User } from "@/types/User";
+import { AuthUser } from "@/types/User";
 
-export default function useCampaigns(user: User | null) {
+export default function useCampaigns(user: AuthUser | null) {
   const { getCampaignApi } = useGetApis();
   const [campaigns, setCampaigns] = useState<Campaign[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);

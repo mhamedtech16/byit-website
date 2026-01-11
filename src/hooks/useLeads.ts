@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 
 import useGetApis from "@/Apis/useGetApis";
 import { Leads } from "@/types/Campaigns";
-import { User } from "@/types/User";
+import { AuthUser } from "@/types/User";
 
 export default function useLeads(
-  user: User | null,
+  user: AuthUser | null,
   campaignId?: number | null
 ) {
   const { getLeadsApi } = useGetApis();

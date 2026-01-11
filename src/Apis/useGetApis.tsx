@@ -3,7 +3,7 @@ import { useLocale } from "next-intl";
 import { useCallback } from "react";
 
 import { Project, PropertiesResponse } from "@/types/Properties";
-import { AuthUser, User } from "@/types/User";
+import { AuthUser } from "@/types/User";
 
 import { api } from "./apiInstance";
 import { BASE_END_POINT } from "./config";
@@ -23,7 +23,7 @@ const useGetApis = () => {
     isFilter: boolean,
     page: number,
     propertyType: string,
-    user: User | null,
+    user: AuthUser | null,
     projectId: number
   ): Promise<PropertiesResponse> => {
     let paramsArray: string[] = [];
@@ -242,7 +242,7 @@ const useGetApis = () => {
   }, []);
 
   const getMeetingsApi = useCallback(
-    (user: User | null, startDate: string, endDate: string) => {
+    (user: AuthUser | null, startDate: string, endDate: string) => {
       return api.get(`meetings?startDate=${startDate}&endDate=${endDate}`, {
         headers: {
           "Content-Type": "application/json",
@@ -254,7 +254,7 @@ const useGetApis = () => {
   );
 
   const getPropertyDetailsApi = useCallback(
-    (user: User | null, id: number) => {
+    (user: AuthUser | null, id: number) => {
       return api.get(`properties/${id}`, {
         headers: {
           "Content-Type": "application/json",
@@ -267,7 +267,7 @@ const useGetApis = () => {
   );
 
   const getFeedbackApi = useCallback(
-    (user: User | null, id: number | undefined) => {
+    (user: AuthUser | null, id: number | undefined) => {
       return api.get(`leads/${id}/getLeadFeedBack`, {
         headers: {
           "Content-Type": "application/json",
