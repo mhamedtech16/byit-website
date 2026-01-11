@@ -1,37 +1,39 @@
 export interface User {
-  user: {
-    fullname: string;
-    type: string;
-    approved: boolean;
-    called: boolean;
-    deals: number;
-    verifyEmail: boolean;
-    verifyPhone: boolean;
-    block: boolean;
-    createdAt: string;
-    id: number;
-    email: string;
-    phone: string;
-    earns: number;
-    totalEarns: number;
-    invitationCode: string;
-    invitedUsers: number;
-    token: string[];
-    networkEarns: number;
-    totalNetworkEarns: number;
-    totalNetworkDeals: number;
-    totalMeetingsCount: number;
-    monthMeetingsCount: number;
-    meetingsEarns: number;
-    totalMeetingsEarns: number;
-    country: Country;
-    city: City;
-    yearsExperience: string;
-    enableMeetings: boolean;
-    enableByitATeam: boolean;
-    enableLeadGeneration: boolean;
-  };
-  token: string;
+  fullname: string;
+  type: string;
+  approved: boolean;
+  called: boolean;
+  deals: number;
+  verifyEmail: boolean;
+  verifyPhone: boolean;
+  block: boolean;
+  createdAt: string;
+  id: number;
+  email: string;
+  phone: string;
+  earns: number;
+  totalEarns: number;
+  invitationCode: string;
+  invitedUsers: number;
+  token: string[];
+  networkEarns: number;
+  totalNetworkEarns: number;
+  totalNetworkDeals: number;
+  totalMeetingsCount: number;
+  monthMeetingsCount: number;
+  meetingsEarns: number;
+  totalMeetingsEarns: number;
+  country: Country;
+  city: City;
+  yearsExperience: string;
+  enableMeetings: boolean;
+  enableByitATeam: boolean;
+  enableLeadGeneration: boolean;
+}
+
+export interface AuthUser {
+  user?: User; // ✅ optional
+  token?: string;
 }
 
 export interface Users {
@@ -291,5 +293,5 @@ export interface ClosignFormResponse {
 
 /////////.
 export interface LoginResponse {
-  data: User;
+  data: AuthUser;
 }

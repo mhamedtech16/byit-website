@@ -1,9 +1,9 @@
-import { User } from "@/types/User";
+import { AuthUser } from "@/types/User";
 
 import { api } from "./apiInstance";
 
 const usePostApis = () => {
-  const addFavouriteApi = (id: number, type: string, user: User) => {
+  const addFavouriteApi = (id: number, type: string, user: AuthUser) => {
     return api.post(`favourites/${id}/${type}`, [], {
       headers: {
         "Content-Type": "application/json",
@@ -12,7 +12,7 @@ const usePostApis = () => {
     });
   };
 
-  const removeFromFavoriteApi = (id: number, type: string, user: User) => {
+  const removeFromFavoriteApi = (id: number, type: string, user: AuthUser) => {
     return api.delete(`favourites/${id}/${type}`, {
       headers: {
         "Content-Type": "application/json",

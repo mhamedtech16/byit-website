@@ -1,14 +1,14 @@
-import { ClosignForm, SharesDealData, User } from "@/types/User";
+import { AuthUser, ClosignForm, SharesDealData, User } from "@/types/User";
 
 export interface UserState {
   // user: SignUp | null;
-  currentUser: User | null;
+  currentUser: AuthUser | null;
   signupUser: User | null;
   token: string;
   setToken: (token: string) => void;
   closingFormUser: ClosignForm | null;
   sharesDeal: SharesDealData | null;
-  setcurrentUser: (currentUser: User | null) => void;
+  setcurrentUser: (currentUser: AuthUser | null) => void;
   setSignupUser: (signupUser: User) => void;
   hasHydrated: boolean;
   setHasHydrated: () => void;

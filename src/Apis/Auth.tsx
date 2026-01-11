@@ -1,5 +1,6 @@
 import { useAuthStore } from "@/store/authStore";
 import {
+  AuthUser,
   ClosignFormRequest,
   ClosignFormResponse,
   ConfirmLoginCode,
@@ -13,7 +14,6 @@ import {
   SignUpRequest,
   UpdateAccountRequest,
   UpdatePasswordRequest,
-  User,
 } from "@/types/User";
 
 import { api } from "./apiInstance";
@@ -92,8 +92,8 @@ export const logoutApi = async (
   });
 };
 
-export const getUserDataApi = (user: User | null) => {
-  return api.get(`${user?.user.id}/getUser`, {
+export const getUserDataApi = (user: AuthUser | null) => {
+  return api.get(`${user?.user?.id}/getUser`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${user?.token}`,

@@ -20,7 +20,7 @@ function HomePage() {
   useEffect(() => {
     getUserDataApi(currentUser)
       .then((res) => {
-        if (res && res.data) {
+        if (res && res.data && res.data.data) {
           const currentUserData = { ...currentUser };
 
           currentUserData["user"] = res.data.data;

@@ -3,7 +3,7 @@ import { useLocale } from "next-intl";
 import { useCallback } from "react";
 
 import { Project, PropertiesResponse } from "@/types/Properties";
-import { User } from "@/types/User";
+import { AuthUser, User } from "@/types/User";
 
 import { api } from "./apiInstance";
 import { BASE_END_POINT } from "./config";
@@ -76,8 +76,9 @@ const useGetApis = () => {
 
     // لو موجود propertyType ضيفه
     if (propertyType) {
-      params = `type=${propertyType == "SEPARATED" ? propertyType : "COMPOUND"
-        }`;
+      params = `type=${
+        propertyType == "SEPARATED" ? propertyType : "COMPOUND"
+      }`;
     }
 
     if (search) {
@@ -119,7 +120,8 @@ const useGetApis = () => {
       params += `&search=${search}`;
     }
     return axios.get(
-      `${BASE_END_POINT}projects?page=${page}&type=${propertyType == "SEPARATED" ? propertyType : "COMPOUND"
+      `${BASE_END_POINT}projects?page=${page}&type=${
+        propertyType == "SEPARATED" ? propertyType : "COMPOUND"
       }${params}`,
       {
         headers: {
@@ -201,7 +203,7 @@ const useGetApis = () => {
 
   /////
   const getFavouritesApi = useCallback(
-    (page: number, type: string, user: User | null) => {
+    (page: number, type: string, user: AuthUser | null) => {
       return api.get(`favourites?type=${type}&page=${page}`, {
         headers: {
           "Content-Type": "application/json",
@@ -212,7 +214,7 @@ const useGetApis = () => {
     []
   );
 
-  const getDealsApi = useCallback((user: User | null) => {
+  const getDealsApi = useCallback((user: AuthUser | null) => {
     return api.get("deals", {
       headers: {
         "Content-Type": "application/json",
@@ -221,7 +223,7 @@ const useGetApis = () => {
     });
   }, []);
 
-  const getCampaignApi = useCallback((user: User | null) => {
+  const getCampaignApi = useCallback((user: AuthUser | null) => {
     return api.get("campaigns", {
       headers: {
         "Content-Type": "application/json",
@@ -230,7 +232,7 @@ const useGetApis = () => {
     });
   }, []);
 
-  const getLeadsApi = useCallback((user: User | null) => {
+  const getLeadsApi = useCallback((user: AuthUser | null) => {
     return api.get("leads", {
       headers: {
         "Content-Type": "application/json",

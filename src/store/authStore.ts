@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-import { ClosignForm, SharesDealData, User } from "@/types/User";
+import { AuthUser, ClosignForm, SharesDealData, User } from "@/types/User";
 
 import { UserState } from "./authStore.types";
 
@@ -17,7 +17,7 @@ const useAuthStore = create<UserState>()(
       hasHydrated: false,
       setHasHydrated: () => set({ hasHydrated: true }),
       setToken: (token: string) => set({ token }),
-      setcurrentUser: (currentUser: User | null) => set({ currentUser }),
+      setcurrentUser: (currentUser: AuthUser | null) => set({ currentUser }),
       setSignupUser: (signupUser: User) => set({ signupUser }),
       setClsosingFormUser: (closingFormUser: ClosignForm) =>
         set({ closingFormUser }),
