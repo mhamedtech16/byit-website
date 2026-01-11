@@ -18,7 +18,8 @@ const NewLaunches = () => {
         })
         .catch(() => {});
     },
-    [getAllNewLaunchesApi]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
   );
 
   useEffect(() => {
