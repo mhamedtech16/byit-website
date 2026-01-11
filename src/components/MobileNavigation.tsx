@@ -52,7 +52,7 @@ function MobileNavigation({
   const [openAlertDialogClosingForm, setOpenAlertDialogClosingForm] =
     useState(false);
   const { currentUser, hasHydrated, clearUser } = useAuthStore();
-  const isAuthenticated = currentUser?.user.approved;
+  const isAuthenticated = currentUser?.user?.approved;
   if (!hasHydrated) return null;
 
   const enableMeetings = currentUser?.user?.enableMeetings ?? false;
@@ -136,7 +136,7 @@ function MobileNavigation({
           <div className="flex flex-col gap-4 mt-1 px-3">
             {currentUser && (
               <h1 className="text-primary font-medium">
-                {`Welcome! ${currentUser?.user.fullname}`}
+                {`Welcome! ${currentUser?.user?.fullname}`}
               </h1>
             )}
 

@@ -147,8 +147,8 @@ export const updatePassowrdApi = async (
 
 export const deleteAccountApi = async (
   lang: string,
-  id: number,
-  token: string
+  id: number | undefined,
+  token: string | undefined
 ): Promise<LoginResponse> => {
   return api.delete(`${id}/delete`, {
     headers: {

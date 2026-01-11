@@ -80,7 +80,7 @@ export default function MobileNavigationSelect({
     try {
       if (!currentUser) return;
 
-      const id = currentUser.user.id;
+      const id = currentUser.user?.id;
       const token = currentUser.token;
 
       const res = await deleteAccountApi(locale, id, token);
