@@ -228,10 +228,10 @@ export default function NewMeetings() {
           <Label
             className={cn(
               "text-primary mb-2",
-              form.formState.errors.salesPhone && "text-red-500 mb-2"
+              form.formState.errors.clientPhone && "text-red-500 mb-2"
             )}
           >
-            {t("developerSalesNumber")}
+            {t("clientPhone")}
           </Label>
           <div className="flex">
             <CountryDropdown
@@ -246,7 +246,7 @@ export default function NewMeetings() {
             <FormTextInput
               form={form}
               name="clientPhone"
-              placeholder="developerSalesNumber"
+              placeholder="clientPhone"
               translate="ClosingForm"
               type="tel"
               className={cn(
