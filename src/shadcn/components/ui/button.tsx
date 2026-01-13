@@ -27,6 +27,8 @@ const buttonVariants = cva(
           "border bg-background shadow-xs hover:bg-primary hover:text-white dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
         iconENClose: "absolute top-6 right-8 text-gray-500 bg-white text-md",
         iconARClose: "absolute top-6 left-8 text-gray-500 bg-white text-md",
+        iconARTooltip: "absolute top-6 right-8 text-gray-500 bg-white text-md",
+        iconENTooltip: "absolute top-6 left-8 text-gray-500 bg-white text-md",
         linkUnderline:
           "text-primary hover:underline hover:translate-x-1 transition-transform duration-200",
         scrollUp: `bg-primary text-white border-2 border-white shadow-md transition duration-300 hover:bg-white hover:text-primary hover:border-primary hover:shadow-lg active:scale-95`,

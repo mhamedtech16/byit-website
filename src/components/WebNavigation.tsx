@@ -53,6 +53,9 @@ function WebNavigation({
     setOpenAlertDialog(false);
     onOpen("login");
   };
+  console.log(enableLeadGenration);
+
+  console.log(!enableByitATeam);
 
   return (
     <div className="lg:flex hidden">
@@ -304,7 +307,7 @@ function WebNavigation({
             isOpen={openByitTeamDialog}
             onClose={() => setOpenByitTeamDialog(false)}
           >
-            <div className="flex justify-center items-center p-16 space-x-6">
+            <div className="flex justify-center items-center p-12 space-x-6">
               <Button
                 onClick={() => {
                   router.push(routes.LeadGenration.Root);
@@ -324,10 +327,59 @@ function WebNavigation({
               >
                 Incentive By Meetings
               </Button>
-              {/* <Button onClick={() => router.push(routes.LeadGenration)}>
-                Close
-              </Button> */}
+
+              {/* <Button onClick={() => {}}>Close</Button> */}
             </div>
+            {/* <p>
+              ⭐ مميزات الـ Meetings تقدر تحجز وتسجّل ميتينجز حقيقية مع عملاء
+              مهتمين بالشراء. كل ميتينج بيتراجع ويتوثق علشان يضمن حقك. بعد إكمال
+              4 ميتينجز مختلفة، تقدر تحصل على حافز مالى قدره 5000 جنيه تتابع عدد
+              الميتينجز والأرباح الخاصة بيك بسهولة. 🚀 مميزات الـ Lead
+              Generation تقدر تشترك في حملات ليدز مخصصة على مشاريع مختارة.
+              اللِيدز بتوصلك ببيانات عملاء حقيقية وجاهزة للمتابعة. الحملات مصممة
+              تساعدك تقفل أسرع وتزود دخلك.
+            </p> */}
+            {enableLeadGenration && enableMeetings ? null : (
+              <>
+                <div className="text-right">
+                  <strong className="text-primary">
+                    Byit A-team من أول بيعة بتقفلها مع بايت، بتنضم ل
+                  </strong>
+                </div>
+
+                <div className="text-right flex flex-col space-y-2 mt-2">
+                  <strong> Meetings مميزات الـ </strong>
+                  <ul
+                    dir="rtl"
+                    className="mr-4 list-disc space-y-3 [&>li]:text-sm"
+                  >
+                    <li>
+                      تقدر تحجز وتسجّل ميتينجز حقيقية مع عملاء مهتمين بالشراء.
+                    </li>
+                    <li>كل ميتينج بيتراجع ويتوثق علشان يضمن حقك.</li>
+                    <li>
+                      بعد إكمال 4 ميتينجز مختلفة، تقدر تحصل على حافز مالى قدره
+                      5000 جنيه
+                    </li>
+                    <li>تتابع عدد الميتينجز والأرباح الخاصة بيك بسهولة.</li>
+                  </ul>
+                </div>
+                <div className="text-right flex flex-col space-y-2 mt-4">
+                  <strong> Lead Generation مميزات الـ </strong>
+                  <ul
+                    dir="rtl"
+                    className="mr-4 list-disc space-y-3 [&>li]:text-sm"
+                  >
+                    <li>تقدر تشترك في حملات ليدز مخصصة على مشاريع مختارة.</li>
+                    <li>كل ميتينج بيتراجع ويتوثق علشان يضمن حقك.</li>
+                    <li>
+                      اللِيدز بتوصلك ببيانات عملاء حقيقية وجاهزة للمتابعة.
+                    </li>
+                    <li>الحملات مصممة تساعدك تقفل أسرع وتزود دخلك.</li>
+                  </ul>
+                </div>
+              </>
+            )}
           </ModalDemo>
 
           {/* <NavigationMenuItem>

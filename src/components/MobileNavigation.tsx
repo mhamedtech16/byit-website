@@ -357,7 +357,7 @@ function MobileNavigation({
               router.push(routes.LeadGenration.Root);
               setOpenByitTeamDialog(false);
             }}
-            disabled={!enableLeadGenration || !enableByitATeam}
+            disabled={!enableLeadGenration}
           >
             Lead Generation
           </Button>
@@ -372,6 +372,40 @@ function MobileNavigation({
             Incentive By Meetings
           </Button>
         </div>
+
+        {enableLeadGenration && enableMeetings ? null : (
+          <>
+            <div className="text-right">
+              <strong className="text-primary">
+                Byit A-team من أول بيعة بتقفلها مع بايت، بتنضم ل
+              </strong>
+            </div>
+
+            <div className="text-right flex flex-col space-y-2 mt-2">
+              <strong> Meetings مميزات الـ </strong>
+              <ul dir="rtl" className="mr-4 list-disc space-y-3 [&>li]:text-sm">
+                <li>
+                  تقدر تحجز وتسجّل ميتينجز حقيقية مع عملاء مهتمين بالشراء.
+                </li>
+                <li>كل ميتينج بيتراجع ويتوثق علشان يضمن حقك.</li>
+                <li>
+                  بعد إكمال 4 ميتينجز مختلفة، تقدر تحصل على حافز مالى قدره 5000
+                  جنيه
+                </li>
+                <li>تتابع عدد الميتينجز والأرباح الخاصة بيك بسهولة.</li>
+              </ul>
+            </div>
+            <div className="text-right flex flex-col space-y-2 mt-4">
+              <strong> Lead Generation مميزات الـ </strong>
+              <ul dir="rtl" className="mr-4 list-disc space-y-3 [&>li]:text-sm">
+                <li>تقدر تشترك في حملات ليدز مخصصة على مشاريع مختارة.</li>
+                <li>كل ميتينج بيتراجع ويتوثق علشان يضمن حقك.</li>
+                <li>اللِيدز بتوصلك ببيانات عملاء حقيقية وجاهزة للمتابعة.</li>
+                <li>الحملات مصممة تساعدك تقفل أسرع وتزود دخلك.</li>
+              </ul>
+            </div>
+          </>
+        )}
       </ModalDemo>
     </>
   );
