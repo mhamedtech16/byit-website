@@ -11,6 +11,7 @@ import { useActiveLink } from "@/_utils/navigation";
 import { logoutApi } from "@/Apis/v1/Auth";
 import { colors } from "@/constants/colors";
 import { useAutoCloseDialog } from "@/hooks/useAutoCloseDialog";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useIsRTL } from "@/hooks/useRTL";
 import {
   NavigationMenuContent,
@@ -26,6 +27,7 @@ import { AlertDialogDemo } from "./Alret";
 
 export default function UserAccount() {
   const router = useRouter();
+  const { user } = useCurrentUser();
   const { currentUser, setcurrentUser } = useAuthStore();
   const [openAlertDialog, setOpenAlertDialog] = useState(false);
   const t = useTranslations("Header");
@@ -80,12 +82,12 @@ export default function UserAccount() {
             <div className="flex justify-center items-center">
               <div className="bg-primary w-16 h-16 rounded-4xl items-center justify-center flex">
                 <p className="text-gray-300 text-2xl text-center">
-                  {currentUser?.user.fullname.charAt(0) ?? ""}
+                  {user?.full_name.charAt(0) ?? ""}
                 </p>
               </div>
             </div>
             <p className="text-app-gray text-md text-center font-semibold my-3">
-              {currentUser?.user.fullname}
+              {user?.full_name}
             </p>
             <ul className="grid w-[300px] gap-4">
               <li>
@@ -152,12 +154,12 @@ export default function UserAccount() {
             <div className="flex justify-center items-center">
               <div className="bg-primary w-16 h-16 rounded-4xl items-center justify-center flex">
                 <p className="text-gray-300 text-2xl text-center">
-                  {currentUser?.user.fullname.charAt(0) ?? ""}
+                  {user?.full_name.charAt(0) ?? ""}
                 </p>
               </div>
             </div>
             <p className="text-app-gray text-md text-center font-semibold my-3">
-              {currentUser?.user.fullname}
+              {user?.full_name}
             </p>
             <ul className="grid w-[300px] gap-4">
               <li>

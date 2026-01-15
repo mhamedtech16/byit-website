@@ -23,19 +23,19 @@ import {
   TabsTrigger,
 } from "@/shadcn/components/ui/tabs";
 import { cn } from "@/shadcn/lib/utils";
-import { NewLaunch, Partners, Projects } from "@/types/PropertiesV2";
+import { NewLaunch, Partners, ProjectsUnit } from "@/types/PropertiesV2";
 
 import FormattedNumberInput from "./ui/CurrencyInput";
 
 type Props = {
-  item: Projects | NewLaunch;
-  type?: "projects" | "newLaunch";
+  item: ProjectsUnit | NewLaunch | undefined;
+  type?: "projectsUnit" | "newLaunch";
   setCalcOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const PropertyCalculator = ({
   item,
-  type = "projects",
+  type = "projectsUnit",
   setCalcOpen,
 }: Props) => {
   const t = useTranslations();
@@ -54,8 +54,8 @@ const PropertyCalculator = ({
 
   // اختار partners حسب النوع
   const partners: Partners[] | undefined =
-    type === "projects"
-      ? (item as Projects)?.partners
+    type === "projectsUnit"
+      ? (item as ProjectsUnit)?.project.partners
       : (item as NewLaunch)?.partners;
 
   // اختر أفضل partner تلقائياً لو موجودين

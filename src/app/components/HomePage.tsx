@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import React, { useRef } from "react";
 
 import EmblaCarousel from "@/components/EmblaCarousel";
+import HomeImagesCarousel from "@/components/HomeImagesCarousel";
 import { APP_STORE, GOOGLE_APP } from "@/constants/downloadApps";
 import { HOMEIMAGES } from "@/constants/imgs";
 import { OPTIONS } from "@/constants/options";
@@ -38,7 +39,7 @@ function HomePage() {
   return (
     <div className="text-white min-h-screen pb-12">
       {/* Section 1: Full Width Image */}
-      <motion.div
+      {/* <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 1.5, duration: 0.6, type: "spring" }}
@@ -52,7 +53,9 @@ function HomePage() {
           fill
           className="object-cover shadow-xl"
         />
-      </motion.div>
+      </motion.div> */}
+
+      <HomeImagesCarousel />
 
       {/* Section 2: Text + Image */}
       <div className="text-center py-16 bg-[#f3f2f1] h-[100vmin] overflow-hidden">

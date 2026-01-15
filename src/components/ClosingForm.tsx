@@ -11,11 +11,11 @@ import { z } from "zod";
 
 import { routes } from "@/_lib/routes";
 import { closingFormSchema } from "@/_utils/validation";
-import { closingFormApi } from "@/Apis/v1/Auth";
+import useGetApisV2 from "@/Apis/v2/useGetApis";
+import { dealsFormApi, uploadFile } from "@/Apis/v2/usePostApis";
 import { colors } from "@/constants/colors";
 import { useDevelopersAndProjects } from "@/hooks/useDevelopersAndProjects";
 import { useIsRTL } from "@/hooks/useRTL";
-import { useVendors } from "@/hooks/useVendors";
 import { Button } from "@/shadcn/components/ui/button";
 import {
   Form,
@@ -28,7 +28,8 @@ import { Input } from "@/shadcn/components/ui/input";
 import { Label } from "@/shadcn/components/ui/label";
 import { cn } from "@/shadcn/lib/utils";
 import { useAuthStore } from "@/store/authStore";
-import { ClosignFormRequest, DropdownCountry } from "@/types/User";
+import { Developers, Partners, Projects } from "@/types/PropertiesV2";
+import { DealsFormRequest, DropdownCountry } from "@/types/User";
 
 import { AlertDialogDemo } from "./Alret";
 import { CountryDropdown } from "./CountryCodeDropdown";
@@ -36,7 +37,19 @@ import { FormCurrencyInput } from "./form/FormCurrencyInput";
 import { FormDropdownInput } from "./form/FormDropdownInput";
 import { FormTextInput } from "./form/FormTextInput";
 
-type ClosingFormValues = z.infer<typeof closingFormSchema>;
+const OTHER_PROJECT = {
+  id: "Other",
+  en_name: "Other",
+  ar_name: "أخرى",
+};
+
+const OTHER_Vendor = {
+  id: "Other",
+  en_name: "Other",
+  ar_name: "أخرى",
+};
+
+type DealsFormValidation = z.infer<typeof closingFormSchema>;
 
 export default function ClosingForm() {
   const router = useRouter();
@@ -44,16 +57,48 @@ export default function ClosingForm() {
   const [selectedCountry, setSelectedCountry] =
     useState<DropdownCountry | null>(null);
 
-  const { vendors } = useVendors();
+  // const { vendors } = useVendors();
+  const [vendors, setVendors] = useState<
+    { id: string; en_name: string; ar_name: string }[]
+  >([]);
   const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
   const isRTL = useIsRTL();
   const locale = useLocale();
-
   const [openAlertDialog, setOpenAlertDialog] = useState(false);
   const { setClsosingFormUser } = useAuthStore();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  // const [developers, setDevelopers] = useState<Developers[]>([]);
+  // const [projects, setProjects] = useState<Projects[]>([]);
+  // const [allProjects, setAllProjects] = useState<Projects[]>([]);
+  const [uploadedFileUrl, setUploadedFileUrl] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+  // console.log(developers);
+  // console.log(vendors.map((el) => el));
 
+  // const fetchDev = useCallback(async () => {
+  //   try {
+  //     const res = await getDevelopersApi();
+  //     setDevelopers([...res.data.data, OTHER_DEVELOPER]);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // }, [getDevelopersApi]);
+
+  // const fetchProjects = useCallback(async () => {
+  //   try {
+  //     const res = await getProjectsApi();
+  //     setProjects(res.data.data);
+  //     setAllProjects(res.data.data);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // }, [getProjectsApi]);
+
+  // useEffect(() => {
+  //   fetchDev();
+  //   fetchProjects();
+  // }, [fetchDev, fetchProjects]);
   const {
     developers,
     devPage,
@@ -62,6 +107,7 @@ export default function ClosingForm() {
     fetchDevelopers,
 
     projects,
+    setProjects,
     projectPage,
     projectPages,
     projectsLoading,
@@ -69,66 +115,143 @@ export default function ClosingForm() {
     fetchProjects,
   } = useDevelopersAndProjects();
 
-  const form = useForm<ClosingFormValues>({
+  const form = useForm<DealsFormValidation>({
     resolver: zodResolver(closingFormSchema),
     defaultValues: {
+      developer_text: "",
+      project_text: "",
       developer: "",
       project: "",
-      vendor: "",
-      clientName: "",
-      unitCode: "",
-      developerSalesName: "",
-      developerSalesNumber: "",
-      dealValue: "",
-      countryCode: selectedCountry?.countryCode ?? "+20", // Default to Egypt
-      uploadFile: undefined,
+      partner: "",
+      client_name: "",
+      unit_code: "",
+      salesperson_name: "",
+      salesperson_phone: "",
+      price: "",
+      sales_country_code: selectedCountry?.countryCode ?? "+20",
+      salesperson_country: selectedCountry?.name ?? "Egypt", // Default to Egypt
+      image: "",
     },
   });
 
+  // useEffect(() => {
+  //   if (selectedCountry) {
+  //     setCountryCode(selectedCountry?.countryCode);
+  //   }
+  // }, [selectedCountry]);
+
+  const selectedProjectId = form.watch("project");
+  const proName = selectedProjectId === "Other";
+
+  useEffect(() => {
+    if (!selectedProjectId) {
+      setVendors([]);
+      return;
+    }
+
+    const project = projects.find((p) => p.id === selectedProjectId);
+
+    if (selectedProjectId === "Other") {
+      const allPartners: Partners[] = [];
+      projects.forEach((p) => {
+        if (p.partners) {
+          allPartners.push(...p.partners);
+        }
+      });
+
+      const mappedVendors = allPartners.map((partner) => ({
+        id: partner.id,
+        en_name: partner.en_name,
+        ar_name: partner.ar_name,
+      }));
+
+      setVendors(mappedVendors);
+    } else if (project && (project as Projects).partners) {
+      const mappedVendors = project.partners.map((partner: Partners) => ({
+        id: partner.id,
+        en_name: partner.en_name,
+        ar_name: partner.ar_name,
+      }));
+
+      setVendors(mappedVendors);
+    }
+
+    // reset partner field لما المشروع يتغير
+    form.setValue("partner", "");
+  }, [selectedProjectId, projects, form]);
+
+  const selectedDeveloperId = form.watch("developer");
+  const devName = selectedDeveloperId === "Other";
+  // console.log(allProjects);
+
   // ===== Effect to fetch projects when developer changes =====
   useEffect(() => {
-    const developerId = Number(form.watch("developer"));
-
-    form.setValue("project", "");
-
-    if (developerId) {
-      fetchProjects(developerId, 1, true);
-    } else {
-      fetchProjects(undefined, 1, true);
+    if (!selectedDeveloperId) {
+      setProjects([]);
+      setVendors([]);
+      form.setValue("project", "");
+      form.setValue("partner", "");
+      return;
     }
+
+    if (selectedDeveloperId === "Other") {
+      setProjects([OTHER_PROJECT]);
+      form.setValue("project", "");
+      form.setValue("partner", "");
+      setVendors([]);
+      return;
+    }
+
+    if (selectedDeveloperId && selectedDeveloperId !== "Other") {
+      fetchProjects(selectedDeveloperId, 1, true);
+      form.setValue("project", "");
+      form.setValue("partner", "");
+      setVendors([]);
+      return;
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [form.watch("developer")]);
+  }, [selectedDeveloperId]);
+
+  const addFile = useCallback(async (file: File | undefined) => {
+    if (!file) return;
+    try {
+      setUploading(true);
+      const res = await uploadFile(file);
+      setUploadedFileUrl(res.data.message.file_url);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setUploading(false);
+    }
+  }, []);
 
   const onSubmit = useCallback(
-    async (values: ClosingFormValues) => {
-      const payload: ClosignFormRequest = {
+    async (values: DealsFormValidation) => {
+      const payload: DealsFormRequest = {
         ...values,
-        type: "CONTRACTED",
-        developer:
-          typeof values.developer === "string"
-            ? Number(values.developer)
-            : values.developer,
-        project:
-          typeof values.project === "string"
-            ? Number(values.project)
-            : values.project,
-        vendor:
-          typeof values.vendor === "string"
-            ? Number(values.vendor)
-            : values.vendor,
-        dealValue:
-          typeof values.dealValue === "string"
-            ? Number(values.dealValue)
-            : values.dealValue,
-        salesCountry: selectedCountry?.id ?? 0,
-        clientCountry: 50,
-        uploadFile: values.uploadFile,
+        type: "Contracted",
+        developer_text:
+          values.developer === "Other" ? values.developer_text || "" : "",
+        project_text:
+          values.project === "Other" ? values.project_text || "" : "",
+        partner: values.partner,
+        project: values.project === "Other" ? "" : values.project || "",
+        developer: values.developer === "Other" ? "" : values.developer || "",
+        price:
+          typeof values.price === "string"
+            ? Number(values.price)
+            : values.price,
+        // salesCountry: selectedCountry?.id ?? 0,
+        salesperson_name: values.salesperson_name,
+        salesperson_phone: values.sales_country_code + values.salesperson_phone,
+        salesperson_country: values.salesperson_country || "+20",
+        image: uploadedFileUrl ?? undefined,
       };
-
       setLoading(true);
       setErrorMsg("");
       try {
-        const response = await closingFormApi(payload, locale);
+        const response = await dealsFormApi(payload, locale);
 
         if (!response?.data) {
           throw new Error("Invalid response from server");
@@ -137,15 +260,19 @@ export default function ClosingForm() {
         if (response?.data) {
           setClsosingFormUser(response.data);
           form.reset({
+            developer_text: "",
+            project_text: "",
             developer: "",
             project: "",
-            vendor: "",
-            clientName: "",
-            unitCode: "",
-            developerSalesName: "",
-            developerSalesNumber: "",
-            dealValue: "",
-            uploadFile: undefined,
+            partner: "",
+            client_name: "",
+            unit_code: "",
+            salesperson_name: "",
+            sales_country_code: "",
+            salesperson_phone: "",
+            salesperson_country: "",
+            price: "",
+            image: "",
           });
 
           if (fileInputRef.current) {
@@ -164,7 +291,7 @@ export default function ClosingForm() {
         setLoading(false);
       }
     },
-    [selectedCountry?.id, locale, setClsosingFormUser, form]
+    [uploadedFileUrl, locale, setClsosingFormUser, form]
   );
 
   return (
@@ -178,55 +305,81 @@ export default function ClosingForm() {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
           {/* Developer Dropdown */}
-          <FormDropdownInput
-            form={form}
-            name="developer"
-            label="developer"
-            title="selectDeveloper"
-            titleSearch="searchDeveloper"
-            titleLoading="developerLoading"
-            data={developers}
-            width="w-full"
-            translate="ClosingForm"
-            outlineSecoundry
-            className="text-white"
-            hasMore={devPages > devPage}
-            onLoadMore={(page) => fetchDevelopers(page, false)}
-            page={devPage}
-            loadingMore={devLoading}
-            onClick={() => fetchDevelopers(1, true)}
-          />
+          {devName ? (
+            <FormTextInput
+              form={form}
+              name="developer_text"
+              label="developer"
+              placeholder="developer"
+              translate="ClosingForm"
+              type="text"
+              className="text-white selection:bg-black"
+            />
+          ) : (
+            <FormDropdownInput
+              form={form}
+              name="developer"
+              label="developer"
+              title="selectDeveloper"
+              titleSearch="searchDeveloper"
+              titleLoading="developerLoading"
+              data={developers}
+              width="w-full"
+              translate="ClosingForm"
+              outlineSecoundry
+              className="text-white"
+              hasMore={devPages > devPage}
+              onLoadMore={(page) => fetchDevelopers(page, false, 10)}
+              page={devPage}
+              loadingMore={devLoading}
+              onClick={() => fetchDevelopers(1, true, 20)}
+            />
+          )}
 
           {/* Projects Dropdown (from API) */}
-          <FormDropdownInput
-            form={form}
-            name="project"
-            label="project"
-            title="selectProject"
-            titleSearch="searchProject"
-            titleLoading="projectLoading"
-            translate="ClosingForm"
-            className="text-white"
-            outlineSecoundry
-            data={projects}
-            width="w-full"
-            hasMore={projectPages > projectPage}
-            onLoadMore={(page) =>
-              fetchProjects(Number(form.watch("developer")), page, false)
-            }
-            page={projectPage}
-            loadingMore={projectsLoading}
-          />
+          {proName ? (
+            <FormTextInput
+              form={form}
+              name="project_text"
+              label="project"
+              placeholder="project"
+              translate="ClosingForm"
+              type="text"
+              className="text-white selection:bg-black"
+            />
+          ) : (
+            <FormDropdownInput
+              form={form}
+              name="project"
+              label="project"
+              title="selectProject"
+              titleSearch="searchProject"
+              titleLoading="projectLoading"
+              translate="ClosingForm"
+              className="text-white"
+              outlineSecoundry
+              data={projects}
+              disabled={!selectedDeveloperId}
+              width="w-full"
+              hasMore={projectPages > projectPage}
+              onLoadMore={(page) =>
+                fetchProjects(form.watch("developer"), page, false)
+              }
+              page={projectPage}
+              loadingMore={projectsLoading}
+            />
+          )}
 
           {/* Vendor Dropdown */}
           <FormDropdownInput
             form={form}
-            name="vendor"
+            name="partner"
             label="partner"
             title="selectPartner"
             titleSearch="searchPartner"
             titleLoading="partnerLoading"
             data={vendors}
+            disabled={!selectedProjectId}
             width="w-full"
             translate="ClosingForm"
             className="text-white"
@@ -236,16 +389,16 @@ export default function ClosingForm() {
           {/* Client Info */}
           <FormTextInput
             form={form}
-            name="clientName"
+            name="client_name"
             label="clientName"
             placeholder="clientName"
             translate="ClosingForm"
             type="text"
-            className="text-white"
+            className="text-white selection:bg-black"
           />
           <FormTextInput
             form={form}
-            name="unitCode"
+            name="unit_code"
             label="unitCode"
             placeholder="unitCode"
             translate="ClosingForm"
@@ -254,7 +407,7 @@ export default function ClosingForm() {
           />
           <FormTextInput
             form={form}
-            name="developerSalesName"
+            name="salesperson_name"
             label="developerSalesName"
             placeholder="developerSalesName"
             translate="ClosingForm"
@@ -266,7 +419,7 @@ export default function ClosingForm() {
           <Label
             className={cn(
               "text-white mb-2",
-              form.formState.errors.developerSalesNumber && "text-red-500 mb-2"
+              form.formState.errors.salesperson_phone && "text-red-500 mb-2"
             )}
           >
             {t("developerSalesNumber")}
@@ -275,6 +428,10 @@ export default function ClosingForm() {
             <CountryDropdown
               onChange={(country) => {
                 setSelectedCountry(country);
+                form.setValue("salesperson_country", country.countryCode, {
+                  shouldValidate: true,
+                  shouldDirty: true,
+                });
               }}
               slim={true}
               disabled={false}
@@ -282,7 +439,7 @@ export default function ClosingForm() {
             />
             <FormTextInput
               form={form}
-              name="developerSalesNumber"
+              name="salesperson_phone"
               placeholder="developerSalesNumber"
               translate="ClosingForm"
               type="tel"
@@ -296,7 +453,7 @@ export default function ClosingForm() {
           {/* Deal Value */}
           <FormCurrencyInput
             form={form}
-            name="dealValue"
+            name="price"
             placeholder="dealValue"
             decimalsLimit={2}
             label="dealValue"
@@ -306,7 +463,7 @@ export default function ClosingForm() {
           {/* File Upload */}
           <FormField
             control={form.control}
-            name="uploadFile"
+            name="image"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-white">
@@ -323,10 +480,12 @@ export default function ClosingForm() {
                     name={field.name}
                     className="text-white border-dashed"
                     placeholder="Upload File"
-                    onChange={(e) => field.onChange(e.target.files?.[0])}
+                    onChange={async (e) => addFile(e.target.files?.[0])}
                   />
                 </FormControl>
                 <p className="text-white">PDF JPG JPEG PNG</p>
+                {uploading && <p>Uplaoding...</p>}
+                {uploadedFileUrl && <p>{uploadedFileUrl}</p>}
               </FormItem>
             )}
           />

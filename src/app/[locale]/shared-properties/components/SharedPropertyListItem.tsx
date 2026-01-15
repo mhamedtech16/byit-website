@@ -9,11 +9,12 @@ import { useIsRTL } from "@/hooks/useRTL";
 import { pricePerLangauge } from "@/lib/PriceArray";
 import { cn } from "@/shadcn/lib/utils";
 import { SharedProperties } from "@/types/Properties";
+import { ShareUnit } from "@/types/ShareUnit";
 
 import SharedSalesContact from "./SharedSalesContact";
 
 type Props = {
-  item: SharedProperties;
+  item: ShareUnit;
 };
 const SharedPropertyListItem = ({ item }: Props) => {
   const t = useTranslations();
@@ -21,6 +22,7 @@ const SharedPropertyListItem = ({ item }: Props) => {
   const isMobile = useMobile();
   const currentLang = useLocale();
   const [isCalOpen, setCalcOpen] = useState(false);
+  console.log(item?.project_ar_name);
 
   return (
     <div
@@ -36,14 +38,14 @@ const SharedPropertyListItem = ({ item }: Props) => {
       <div className="relative w-[100%] h-[50vmin] overflow-hidden">
         <Image
           alt="property image"
-          src={item?.imgs?.[0]}
+          src={item?.images?.[0] ?? ""}
           fill
           className="object-cover rounded-xl"
         />
 
         {isMobile ? (
           <>
-            {(item?.minShares ?? 0) > 0 && (
+            {(item?.min_shares ?? 0) > 0 && (
               <div
                 className={cn(
                   "absolute top-6 bg-[var(--blue)] text-white w-60 py-1 rotate-45 rounded-lg",
@@ -53,14 +55,14 @@ const SharedPropertyListItem = ({ item }: Props) => {
                 )}
               >
                 <p className="whitespace-pre-line text-center font-semibold text-xl">
-                  {t("minimumShares", { count: item?.minShares || 0 })}
+                  {t("minimumShares", { count: item?.min_shares || 0 })}
                 </p>
               </div>
             )}
           </>
         ) : (
           <>
-            {(item?.minShares ?? 0) > 0 && (
+            {(item?.min_shares ?? 0) > 0 && (
               <div
                 className={cn(
                   "absolute top-10 bg-[var(--blue)] text-white w-80 py-2 rotate-45 rounded-lg",
@@ -70,7 +72,7 @@ const SharedPropertyListItem = ({ item }: Props) => {
                 )}
               >
                 <p className="whitespace-pre-line text-center font-semibold text-xl">
-                  {t("minimumShares", { count: item?.minShares || 0 })}
+                  {t("minimumShares", { count: item?.min_shares || 0 })}
                 </p>
               </div>
             )}
@@ -82,7 +84,7 @@ const SharedPropertyListItem = ({ item }: Props) => {
             <>
               <button
                 className=" h-[8vmin] w-[8vmin] bg-[var(--light-primary)] rounded-[3.5vmin] flex justify-center items-center cursor-pointer"
-                onClick={() => window.open(item?.pdf, "_blank")}
+                onClick={() => window.open(item?.brochure_pdf, "_blank")}
               >
                 <i className="fa-brands fa-readme text-white text-[5vmin]"></i>
               </button>
@@ -100,7 +102,7 @@ const SharedPropertyListItem = ({ item }: Props) => {
             <>
               <button
                 className=" w-[7vmin] h-[7vmin] bg-[var(--light-primary)] rounded-[3.5vmin] flex justify-center items-center cursor-pointer"
-                onClick={() => window.open(item?.pdf, "_blank")}
+                onClick={() => window.open(item?.brochure_pdf, "_blank")}
               >
                 <i className="fa-brands fa-readme text-white text-[5vmin]"></i>
               </button>
@@ -121,12 +123,12 @@ const SharedPropertyListItem = ({ item }: Props) => {
         <div className="flex flex-col w-[49%] gap-3">
           <div>
             {isRTL ? (
-              <p className="font-bold ">{item?.projectName_ar}</p>
+              <p className="font-bold ">{item?.project_ar_name}</p>
             ) : (
-              <p className="font-bold ">{item?.projectName_en}</p>
+              <p className="font-bold ">{item?.project_en_name}</p>
             )}
 
-            <p className="text-gray-400 ">{t(item?.location?.name)}</p>
+            <p className="text-gray-400 ">{item?.location}</p>
           </div>
 
           <div>
@@ -139,17 +141,19 @@ const SharedPropertyListItem = ({ item }: Props) => {
           <div>
             <p className="font-bold ">{t("sharePrice")}</p>
             <p className="text-gray-400 ">
-              {`${pricePerLangauge(item?.sharePrice, currentLang)} ${t("EGP")}`}
+              {`${pricePerLangauge(item?.share_price, currentLang)} ${t(
+                "EGP"
+              )}`}
             </p>
           </div>
 
-          {item.priceType === "INSTALLMENT" ? (
+          {item.pay_type === "Installment" ? (
             <>
               <div>
                 <p className="font-bold ">{t("Down Payment")}</p>
                 <p className="text-gray-400 ">
                   {`${pricePerLangauge(
-                    parseFloat(item.downPayment),
+                    parseFloat(String(item?.down_payment_)),
                     currentLang
                   )} ${t("EGP")}`}
                 </p>
@@ -158,30 +162,28 @@ const SharedPropertyListItem = ({ item }: Props) => {
               <div>
                 <p className="font-bold ">{t("Installments")}</p>
                 <p className="text-gray-400 ">
-                  {`${pricePerLangauge(
-                    item.installmentDuration,
-                    currentLang
-                  )} ${t("years")}`}
+                  {`${pricePerLangauge(item.number_of_years, currentLang)} ${t(
+                    "years"
+                  )}`}
                 </p>
                 <p className="text-gray-400 ">
-                  ({`${item?.monthlyInstallment} ${t("EGP")}`}/
-                  {t(item.durationType)})
+                  ({`${item?.price} ${t("EGP")}`}/{item.duration_type})
                 </p>
               </div>
             </>
           ) : (
             <>
               <div>
-                <p className="font-bold ">{t(item?.priceType)}</p>
+                <p className="font-bold ">{item?.pay_type}</p>
               </div>
             </>
           )}
 
           <div>
             <p className="font-bold ">{t("Delivery")}</p>
-            {item?.deliveryStatus?.map((item, index) => (
+            {item?.deliveries?.map((item, index) => (
               <p key={`delivery-${index}`} className="text-gray-400 ">
-                {t(item)}
+                {item}
               </p>
             ))}
           </div>
@@ -189,7 +191,7 @@ const SharedPropertyListItem = ({ item }: Props) => {
         <div className="flex flex-col w-[49%] gap-2">
           <Image
             alt="property image"
-            src={item?.companyLogo ?? ""}
+            src={item?.developer_logo ?? ""}
             // layout="responsive"
             className="rounded-xl border-[0.5px] border-gray-300"
             width={isMobile ? 100 : 200}
@@ -197,14 +199,14 @@ const SharedPropertyListItem = ({ item }: Props) => {
           />
           <div>
             <p className="font-bold ">{t("Type")}</p>
-            <p className="text-gray-400 ">{t(item?.category?.categoryName)}</p>
+            <p className="text-gray-400 ">{item?.category}</p>
           </div>
 
           <div>
             <p className="font-bold ">{t("Finishing")}</p>
-            {item?.finishingType?.map((item, index) => (
+            {item?.finishes?.map((item, index) => (
               <p className="text-gray-400" key={index}>
-                {t(item)}
+                {item}
               </p>
             ))}
           </div>

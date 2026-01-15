@@ -36,7 +36,7 @@ export function FavouriteSidebar({ onChoiceCallback, activeType }: Props) {
 
   // نخزن نسخة محلية من الـ activeType
   const [currentActive, setCurrentActive] = useState<string>(
-    activeType ?? "PROPERTY"
+    activeType ?? "Projects Unit"
   );
 
   // لو البروب اتغير من برة نعمل sync مع الستايت المحلي
@@ -63,11 +63,11 @@ export function FavouriteSidebar({ onChoiceCallback, activeType }: Props) {
       <motion.div className="flex flex-col space-y-4">
         <motion.div variants={linkVariants}>
           <Button
-            onClick={() => handleChoice(1, "PROPERTY")}
+            onClick={() => handleChoice(1, "Projects Unit")}
             variant="linkUnderline"
             size="linkUnderline"
             className={
-              currentActive === "PROPERTY"
+              currentActive === "Projects Unit"
                 ? "text-primary font-semibold underline"
                 : ""
             }
@@ -78,11 +78,11 @@ export function FavouriteSidebar({ onChoiceCallback, activeType }: Props) {
 
         <motion.div variants={linkVariants}>
           <Button
-            onClick={() => handleChoice(1, "NEW-LAUNCH")}
+            onClick={() => handleChoice(1, "New Launch")}
             variant="linkUnderline"
             size="linkUnderline"
             className={
-              currentActive === "NEW-LAUNCH"
+              currentActive === "New Launch"
                 ? "text-primary font-semibold underline"
                 : ""
             }

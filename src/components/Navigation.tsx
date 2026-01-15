@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import * as React from "react";
 
 import { routes } from "@/_lib/routes";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useMobile } from "@/hooks/useMobile";
 import { useIsRTL } from "@/hooks/useRTL";
 import { Button } from "@/shadcn/components/ui/button";
@@ -65,6 +66,7 @@ export function NavigationMenuDemo() {
     React.useState(false);
   const t = useTranslations("Header");
   const [mode, setMode] = React.useState<"login" | "signup">("login");
+  const { user } = useCurrentUser();
   const { currentUser, hasHydrated } = useAuthStore();
   const isAuthenticated = currentUser?.user.approved;
   const isMobile = useMobile();
@@ -88,7 +90,7 @@ export function NavigationMenuDemo() {
   };
 
   const isLoggedInDeals = () => {
-    if (!isAuthenticated) {
+    if (!user) {
       setOpenAlertDialog(true);
     } else {
       setOpenAlertDialogClosingForm(false);
@@ -97,7 +99,7 @@ export function NavigationMenuDemo() {
   };
 
   const isLoggedInSharesDeal = () => {
-    if (!isAuthenticated) {
+    if (!user) {
       setOpenAlertDialog(true);
     } else {
       setOpenAlertDialogClosingForm(false);

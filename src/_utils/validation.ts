@@ -58,6 +58,26 @@ export const validatePhoneNumber = (
 
 export const closingFormSchema = z
   .object({
+    developer_text: z.string().optional(),
+    developer: z.string().optional(),
+    project: z.string().optional(),
+    project_text: z.string().optional(),
+    partner: z.string().min(1, "Partner is required"),
+    client_name: z.string().min(1, "Client name is required"),
+    unit_code: z.string().min(1, "Unit code is required"),
+    salesperson_name: z.string().min(1, "Developer sales name is required"),
+    salesperson_phone: z.string().min(1, "Developer sales number is required"),
+    price: z.string().min(1, "Price value is required"),
+    image: z.string().optional(),
+    sales_country_code: z.string().min(1, "Invalid Phone Number"),
+    salesperson_country: z.string().min(1, "Country code is required"),
+  })
+  .superRefine((data, ctx) => {
+    validatePhoneNumber("salesperson_phone", "sales_country_code")(data, ctx);
+  });
+
+export const newMeetingsFormSchema = z
+  .object({
     developer: z
       .union([z.string(), z.number()])
       .refine((val) => val !== "" && val !== null && val !== undefined, {
@@ -69,54 +89,43 @@ export const closingFormSchema = z
       .refine((val) => val !== "" && val !== null && val !== undefined, {
         message: "Project is required",
       }),
-    vendor: z
-      .union([z.string(), z.number()])
-      .refine((val) => val !== "" && val !== null && val !== undefined, {
-        message: "Partner is required",
-      }),
     clientName: z.string().min(1, "Client name is required"),
-    unitCode: z.string().min(1, "Unit code is required"),
-    developerSalesName: z.string().min(1, "Developer sales name is required"),
-    developerSalesNumber: z
-      .string()
-      .min(1, "Developer sales number is required"),
-    dealValue: z.string().min(1, "Deal value is required"),
-    uploadFile: z.custom<File>((val) => val instanceof File && val.size > 0, {
-      message: "File is required",
-    }),
+    clientPhone: z.string().min(1, "Client phone number is required"),
+    salesName: z.string().min(1, "Developer sales name is required"),
+    salesPhone: z.string().min(1, "Developer sales number is required"),
+    uploadFile: z
+      .custom<File>((val) => val instanceof File && val.size > 0, {
+        message: "File is required",
+      })
+      .optional(),
     countryCode: z.string().min(1, "Country code is required"),
   })
   .superRefine((data, ctx) => {
-    validatePhoneNumber("developerSalesNumber", "countryCode")(data, ctx);
+    validatePhoneNumber("clientPhone", "countryCode")(data, ctx);
+  })
+  .superRefine((data, ctx) => {
+    validatePhoneNumber("salesPhone", "countryCode")(data, ctx);
   });
 
-export const sharesProperties = z
-  .object({
-    sharedProperty: z
-      .union([z.string(), z.number()])
-      .refine((val) => val !== "" && val !== null && val !== undefined, {
-        message: "Developer is required",
-      }),
+export const sharesPropertiesSchema = z
 
-    sharesCount: z
+  .object({
+    shared_unit: z.string().min(1, "Shared unit is required"),
+    shared_count: z
       .union([z.string(), z.number()])
       .refine((val) => val !== "" && val !== null && val !== undefined, {
         message: "Project is required",
       }),
-    clientName: z.string().min(1, "Client name is required"),
-    // sharesValue: z.number().min(1, "Unit code is required"),
-    developerSalesName: z.string().min(1, "Developer sales name is required"),
-    developerSalesNumber: z
-      .string()
-      .min(1, "Developer sales number is required"),
+    client_name: z.string().min(1, "Client name is required"),
+    salesperson_name: z.string().min(1, "Developer sales name is required"),
+    salesperson_phone: z.string().min(1, "Developer sales number is required"),
     value: z.number().min(1, "Deal value is required"),
-    uploadFile: z.custom<File>((val) => val instanceof File && val.size > 0, {
-      message: "File is required",
-    }),
-    countryCode: z.string().min(1, "Country code is required"),
+    image: z.string().optional(),
+    salesperson_country: z.string().min(1, "Country code is required"),
+    sales_country_code: z.string().min(1, "Country code is required"),
   })
   .superRefine((data, ctx) => {
-    validatePhoneNumber("developerSalesNumber", "countryCode")(data, ctx);
+    validatePhoneNumber("salesperson_phone", "sales_country_code")(data, ctx);
   });
 
 export const signupSchema = z

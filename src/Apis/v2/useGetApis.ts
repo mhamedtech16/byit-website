@@ -7,15 +7,32 @@ import { api } from "./apiInstance";
 const useGetApisV2 = () => {
   const currentLang = useLocale();
 
-  const getDevelopers = React.useCallback(async () => {
-    return api.get("method/brokerage.api.developer_api.list", {
+  const getCurrentUserApi = React.useCallback(async () => {
+    return api.get("method/brokerage.api.broker_api.get", {
       headers: {
         "Accept-Language": currentLang,
       },
     });
   }, [currentLang]);
 
-  const getCategories = React.useCallback(async () => {
+  const getDevelopersApi = React.useCallback(
+    async (page: number, limit: number, project_type?: string | undefined) => {
+      let url = "method/brokerage.api.developer_api.list";
+      if (page && limit) {
+        url += `?page=${page}&limit=${limit}`;
+      } else if (project_type) {
+        url += `?filters={"project_type":"${project_type}"}`;
+      }
+      return api.get(url, {
+        headers: {
+          "Accept-Language": currentLang,
+        },
+      });
+    },
+    [currentLang]
+  );
+
+  const getCategoriesApi = React.useCallback(async () => {
     return api.get("resource/Category", {
       headers: {
         "Accept-Language": currentLang,
@@ -23,7 +40,7 @@ const useGetApisV2 = () => {
     });
   }, [currentLang]);
 
-  const getLocations = React.useCallback(async () => {
+  const getLocationsApi = React.useCallback(async () => {
     return api.get("resource/RE Location", {
       headers: {
         "Accept-Language": currentLang,
@@ -31,7 +48,7 @@ const useGetApisV2 = () => {
     });
   }, [currentLang]);
 
-  const getProjects = React.useCallback(async () => {
+  const getProjectsApi = React.useCallback(async () => {
     return api.get("method/brokerage.api.re_project_api.list", {
       headers: {
         "Accept-Language": currentLang,
@@ -39,23 +56,94 @@ const useGetApisV2 = () => {
     });
   }, [currentLang]);
 
-  const getProjectsUnits = React.useCallback(async () => {
-    return api.get("method/brokerage.api.project_unit_api.list", {
-      headers: {
-        "Accept-Language": currentLang,
-      },
-    });
-  }, [currentLang]);
+  const getProjectsByDeveloperIdApi = React.useCallback(
+    async (developerID: string, page: number) => {
+      return api.get(
+        `method/brokerage.api.re_project_api.list?filters={"developer":"${developerID}"}&page=${page}`,
+        {
+          headers: {
+            "Accept-Language": currentLang,
+          },
+        }
+      );
+    },
+    [currentLang]
+  );
 
-  const getNewLaunch = React.useCallback(async () => {
-    return api.get("method/brokerage.api.new_launch_api.list", {
-      headers: {
-        "Accept-Language": currentLang,
-      },
-    });
-  }, [currentLang]);
+  const getProjectsByIdApi = React.useCallback(
+    async (id: string) => {
+      return api.get(`method/brokerage.api.re_project_api.list?id=${id}`, {
+        headers: {
+          "Accept-Language": currentLang,
+        },
+      });
+    },
+    [currentLang]
+  );
 
-  const getCountires = React.useCallback(async () => {
+  const getProjectsUnitsApi = React.useCallback(
+    async (project_type?: string, is_favorite?: boolean) => {
+      let url = "method/brokerage.api.project_category_api.list";
+
+      if (is_favorite === true) {
+        url += `?filters={"is_favorite": true}`;
+      } else if (project_type) {
+        const currentPropertyType =
+          project_type === "COMPOUND" ? "Compound" : "Separated";
+
+        url += `?filters={"project_type": "${currentPropertyType}"}`;
+      }
+
+      return api.get(url, {
+        headers: {
+          "Accept-Language": currentLang,
+        },
+      });
+    },
+    [currentLang]
+  );
+
+  const getProjectsUnitsByIdApi = React.useCallback(
+    async (id: string) => {
+      return api.get(`method/brokerage.api.project_category_api.get?id=${id}`, {
+        headers: {
+          "Accept-Language": currentLang,
+        },
+      });
+    },
+    [currentLang]
+  );
+
+  const getNewLaunchApi = React.useCallback(
+    async (is_favorite?: boolean) => {
+      let url = "method/brokerage.api.new_launch_api.list";
+      if (is_favorite === true) {
+        url += `?filters={"is_favorite": true}`;
+      }
+      return api.get(url, {
+        headers: {
+          "Accept-Language": currentLang,
+        },
+      });
+    },
+    [currentLang]
+  );
+
+  const getNewLaunchByIdApi = React.useCallback(
+    async (id: string) => {
+      return api.get(`method/brokerage.api.new_launch_api.get`, {
+        params: {
+          id,
+        },
+        headers: {
+          "Accept-Language": currentLang,
+        },
+      });
+    },
+    [currentLang]
+  );
+
+  const getCountiresApi = React.useCallback(async () => {
     return api.get("method/brokerage.api.re_country_api.list", {
       headers: {
         "Accept-Language": currentLang,
@@ -63,7 +151,7 @@ const useGetApisV2 = () => {
     });
   }, [currentLang]);
 
-  const getCities = React.useCallback(async () => {
+  const getCitiesApi = React.useCallback(async () => {
     return api.get("resource/City", {
       headers: {
         "Accept-Language": currentLang,
@@ -71,7 +159,7 @@ const useGetApisV2 = () => {
     });
   }, [currentLang]);
 
-  const getVideoGallary = React.useCallback(async () => {
+  const getVideoGallaryApi = React.useCallback(async () => {
     return api.get("resource/Video Gallery", {
       headers: {
         "Accept-Language": currentLang,
@@ -79,7 +167,7 @@ const useGetApisV2 = () => {
     });
   }, [currentLang]);
 
-  const getDevliveries = React.useCallback(async () => {
+  const getDevliveriesApi = React.useCallback(async () => {
     return api.get("resource/Delivery", {
       headers: {
         "Accept-Language": currentLang,
@@ -87,7 +175,7 @@ const useGetApisV2 = () => {
     });
   }, [currentLang]);
 
-  const getFinishing = React.useCallback(async () => {
+  const getFinishingApi = React.useCallback(async () => {
     return api.get("resource/Finishing", {
       headers: {
         "Accept-Language": currentLang,
@@ -95,7 +183,7 @@ const useGetApisV2 = () => {
     });
   }, [currentLang]);
 
-  const getUnitType = React.useCallback(async () => {
+  const getUnitTypeApi = React.useCallback(async () => {
     return api.get("resource/Unit Type", {
       headers: {
         "Accept-Language": currentLang,
@@ -103,7 +191,7 @@ const useGetApisV2 = () => {
     });
   }, [currentLang]);
 
-  const getDeals = React.useCallback(async () => {
+  const getDealsApi = React.useCallback(async () => {
     return api.get("method/brokerage.api.deal_api.create", {
       headers: {
         "Accept-Language": currentLang,
@@ -111,8 +199,32 @@ const useGetApisV2 = () => {
     });
   }, [currentLang]);
 
-  const getAboutUs = React.useCallback(async () => {
-    return api.get("resource/Byit Settings/Byit Settings", {
+  const getAboutUsApi = React.useCallback(async () => {
+    return api.get("method/brokerage.api.settings_api.get", {
+      headers: {
+        "Accept-Language": currentLang,
+      },
+    });
+  }, [currentLang]);
+
+  const getSharedUnitApi = React.useCallback(async () => {
+    return api.get("resource/Shared Unit", {
+      headers: {
+        "Accept-Language": currentLang,
+      },
+    });
+  }, [currentLang]);
+
+  const getPrizeApi = React.useCallback(async () => {
+    return api.get("resource/Prize", {
+      headers: {
+        "Accept-Language": currentLang,
+      },
+    });
+  }, [currentLang]);
+
+  const getHomeImagesApi = React.useCallback(async () => {
+    return api.get("method/brokerage.api.home_images_api.get", {
       headers: {
         "Accept-Language": currentLang,
       },
@@ -120,20 +232,28 @@ const useGetApisV2 = () => {
   }, [currentLang]);
 
   return {
-    getDevelopers,
-    getCategories,
-    getLocations,
-    getProjects,
-    getProjectsUnits,
-    getNewLaunch,
-    getCountires,
-    getCities,
-    getVideoGallary,
-    getDevliveries,
-    getFinishing,
-    getUnitType,
-    getDeals,
-    getAboutUs,
+    getCurrentUserApi,
+    getDevelopersApi,
+    getCategoriesApi,
+    getLocationsApi,
+    getProjectsApi,
+    getProjectsUnitsApi,
+    getNewLaunchApi,
+    getCountiresApi,
+    getCitiesApi,
+    getVideoGallaryApi,
+    getDevliveriesApi,
+    getFinishingApi,
+    getUnitTypeApi,
+    getDealsApi,
+    getAboutUsApi,
+    getSharedUnitApi,
+    getPrizeApi,
+    getProjectsUnitsByIdApi,
+    getNewLaunchByIdApi,
+    getProjectsByIdApi,
+    getHomeImagesApi,
+    getProjectsByDeveloperIdApi,
   };
 };
 

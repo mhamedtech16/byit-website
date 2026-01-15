@@ -2,24 +2,31 @@
 
 import { useEffect, useState } from "react";
 
-import useGetApis from "@/Apis/v1/useGetApis";
-import { DropdownVendors } from "@/types/User";
+import useGetApisV2 from "@/Apis/v2/useGetApis";
+import { Projects } from "@/types/PropertiesV2";
+
+type Partners = {
+  id: string;
+  en_name: string;
+  ar_name: string;
+};
 
 export const useVendors = () => {
-  const [vendors, setVendors] = useState<DropdownVendors[]>([]);
-  const { getVendorsApi } = useGetApis();
+  const [vendors, setVendors] = useState<Partners[]>([]);
+  const { getProjectsApi } = useGetApisV2();
 
   useEffect(() => {
     const fetchCities = async () => {
       try {
-        const res = await getVendorsApi();
-        const vendorsList: DropdownVendors[] =
-          res.data?.data.map((vendor: DropdownVendors) => ({
-            id: String(vendor.id),
-            name: vendor.name,
-            name_en: vendor.name_en,
-            name_ar: vendor.name_ar,
-          })) || [];
+        const res = await getProjectsApi();
+        const vendorsList: Projects[] =
+          res.data?.data?.map((pro: Projects) =>
+            pro.partners.map((partner: Partners) => ({
+              id: partner.id,
+              ar_name: partner.ar_name,
+              en_name: partner.en_name,
+            }))
+          ) || [];
 
         setVendors(vendorsList);
       } catch (error) {
@@ -28,7 +35,7 @@ export const useVendors = () => {
     };
 
     fetchCities();
-  }, [getVendorsApi]);
+  }, [getProjectsApi]);
 
   return { vendors };
 };

@@ -1,19 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 
-import usePostApis from "@/Apis/v1/usePostApis";
+import { addFavouriteApi } from "@/Apis/v2/usePostApis";
 import { useMobile } from "@/hooks/useMobile";
 import { cn } from "@/shadcn/lib/utils";
 import { useAuthStore } from "@/store/authStore";
 import { useFavouritesStore } from "@/store/favourites";
-import { NewLaunch, Property } from "@/types/Properties";
+import { NewLaunch, ProjectsUnit } from "@/types/PropertiesV2";
 
 type Props = {
-  item: Property | NewLaunch;
+  item: ProjectsUnit | NewLaunch | undefined;
   favoriteType: string;
-  isItemFavorite: boolean;
 };
 
-const FavouriteButton = ({ item, favoriteType, isItemFavorite }: Props) => {
+const FavouriteButton = ({ item, favoriteType }: Props) => {
   const isMobile = useMobile();
 
   const currentUser = useAuthStore((state) => state.currentUser);
@@ -23,52 +22,40 @@ const FavouriteButton = ({ item, favoriteType, isItemFavorite }: Props) => {
   const favNewLaunches = useFavouritesStore(
     (state) => state.favouritesNewLaunches
   );
+
   const { setFavouritesProperties, setFavouritesNewlaunches } =
     useFavouritesStore();
-  const { addFavouriteApi, removeFromFavoriteApi } = usePostApis();
-  const [isFavorite, setIsFavorite] = useState(isItemFavorite);
 
-  const addFavorite = () => {
+  const isProjectUnit = favoriteType === "Project Units";
+
+  const isFavorite = isProjectUnit
+    ? favProperties.some((i) => i.id === item?.id)
+    : favNewLaunches.some((i) => i.id === item?.id);
+
+  const addAndRemoveFavorite = () => {
     if (!currentUser) return;
+
+    const nextValue = !isFavorite;
+
     addFavouriteApi(
       item?.id,
-      favoriteType == "Property" ? "addProperty" : "addNewLaunch",
-      currentUser
+      isProjectUnit ? "Project Units" : "New Launch",
+      nextValue
     )
       .then(() => {
-        setIsFavorite(true);
-        if (favoriteType == "Property") {
-          if (
-            "type" in item &&
-            "priceType" in item &&
-            "price" in item &&
-            "downPayment" in item
-          ) {
-            setFavouritesProperties([item as Property, ...favProperties]);
-          }
-        } else {
-          setFavouritesNewlaunches([item as NewLaunch, ...favNewLaunches]);
-        }
-      })
-      .catch(console.error);
-  };
-
-  const removeFavorite = () => {
-    if (!currentUser) return;
-    removeFromFavoriteApi(
-      item?.id,
-      favoriteType == "Property" ? "removeProperty" : "removeNewLaunch",
-      currentUser
-    )
-      .then(() => {
-        if (favoriteType == "Property") {
-          setFavouritesProperties(favProperties.filter((i) => i.id != item.id));
+        if (isProjectUnit) {
+          setFavouritesProperties(
+            nextValue
+              ? [item as ProjectsUnit, ...favProperties] // Add Fav
+              : favProperties.filter((i) => i.id !== item?.id) // Remove Fav
+          );
         } else {
           setFavouritesNewlaunches(
-            favNewLaunches.filter((i) => i.id != item.id)
+            nextValue
+              ? [item as NewLaunch, ...favNewLaunches]
+              : favNewLaunches.filter((i) => i.id !== item?.id)
           );
         }
-        setIsFavorite(false);
       })
       .catch(console.error);
   };
@@ -79,15 +66,7 @@ const FavouriteButton = ({ item, favoriteType, isItemFavorite }: Props) => {
         "rounded-full bg-[var(--primary)] flex justify-center items-center shadow-md",
         isMobile ? "w-[8vmin] h-[8vmin]" : "w-[5vmin] h-[5vmin]"
       )}
-      onClick={() =>
-        favoriteType == "Property"
-          ? favProperties.some((i) => i.id == item?.id)
-            ? removeFavorite()
-            : addFavorite()
-          : favNewLaunches.some((i) => i.id == item?.id)
-          ? removeFavorite()
-          : addFavorite()
-      }
+      onClick={addAndRemoveFavorite}
     >
       {isFavorite ? (
         <i

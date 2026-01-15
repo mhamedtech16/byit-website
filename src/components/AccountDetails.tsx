@@ -7,6 +7,7 @@ import { useLocale, useTranslations } from "next-intl";
 
 import { routes } from "@/_lib/routes";
 import { Sidebar } from "@/components/ui/Sidebar";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { pricePerLangauge } from "@/lib/PriceArray";
 import {
   Avatar,
@@ -21,10 +22,12 @@ import { useAuthStore } from "@/store/authStore";
 
 export default function AccountDetails() {
   const t = useTranslations("Settings");
+  const { user } = useCurrentUser();
   const { currentUser } = useAuthStore();
   const locale = useLocale();
   const router = useRouter();
-  const user = {
+
+  const userAvatar = {
     avatarUrl: "/placeholder-profile.jpg",
   };
 
@@ -43,17 +46,15 @@ export default function AccountDetails() {
               <div className="relative">
                 <div className="absolute -top-24 left-1/2 transform -translate-x-1/2">
                   <Avatar className="w-28 h-28 border-4 border-white shadow-md bg-primary">
-                    <AvatarImage src={user.avatarUrl} alt="User" />
+                    <AvatarImage src={userAvatar.avatarUrl} alt="User" />
                     <AvatarFallback className="bg-primary text-white text-center text-3xl">
-                      {currentUser?.user.fullname?.[0]}
+                      {user?.full_name?.[0]}
                     </AvatarFallback>
                   </Avatar>
                 </div>
 
                 <div className="pt-6 text-center">
-                  <h2 className="text-2xl font-semibold">
-                    {currentUser?.user.fullname}
-                  </h2>
+                  <h2 className="text-2xl font-semibold">{user?.full_name}</h2>
                 </div>
 
                 <div className="flex flex-row justify-between items-center w-[95%]">
@@ -64,10 +65,9 @@ export default function AccountDetails() {
                     <div className="flex  items-center space-x-3">
                       <HandCoins color="gold" size={40} />
                       <p className="text-gray-500 text-xl font-bold">
-                        {`${pricePerLangauge(
-                          currentUser?.user.earns,
-                          locale
-                        )} ${t("currency")}`}
+                        {`${pricePerLangauge(user?.total_earned, locale)} ${t(
+                          "currency"
+                        )}`}
                       </p>
                     </div>
                     <p className="text-gray-500 text-sm font-bold">
@@ -88,24 +88,27 @@ export default function AccountDetails() {
 
               <div className="flex flex-wrap -mx-2">
                 {[
-                  { label: t("fullname"), value: currentUser?.user.fullname },
-                  { label: t("email"), value: currentUser?.user.email },
-                  { label: t("phone"), value: currentUser?.user.phone },
+                  { label: t("fullname"), value: user?.full_name },
+                  { label: t("email"), value: user?.email },
+                  { label: t("phone"), value: user?.phone_number },
                   {
                     label: t("state"),
-                    value:
-                      currentUser?.user?.city?.name ||
-                      currentUser?.user?.city?.name_en,
+                    value: user?.country || user?.country,
                   },
                   {
                     label: t("yearsExperience"),
-                    value: currentUser?.user.yearsExperience,
+
+                    value: user?.years_of_experience,
                   },
                   {
                     label: t("country"),
                     value:
-                      currentUser?.user.country.name ||
-                      currentUser?.user.country.name_en,
+                      currentUser?.user?.country.name ||
+                      currentUser?.user?.country.name_en,
+                  },
+                  {
+                    label: t("country"),
+                    value: user?.country || user?.country,
                   },
                 ].map((item, index) => (
                   <div key={index} className="w-full md:w-1/2 px-2 mb-4">

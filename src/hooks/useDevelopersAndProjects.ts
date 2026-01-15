@@ -1,31 +1,41 @@
 import { useCallback, useState } from "react";
 
-import useGetApis from "@/Apis/v1/useGetApis";
-import { Developer, Project } from "@/types/Properties";
+import useGetApisV2 from "@/Apis/v2/useGetApis";
+import { Developers, Projects } from "@/types/PropertiesV2";
+
+const OTHER_DEVELOPER: Developers = {
+  id: "Other",
+  en_name: "Other",
+  ar_name: "أخرى",
+  logo: "/files/dddb314c-9329-4b6a-90b3-ce059ed8fa40.png",
+  project_type: "Compound",
+};
 
 export function useDevelopersAndProjects(propertyType?: string) {
-  const { getAllDevelopersApi, getProjectsByDeveloperApi } = useGetApis();
+  const { getDevelopersApi, getProjectsByDeveloperIdApi } = useGetApisV2();
 
-  const [developers, setDevelopers] = useState<Developer[]>([]);
+  const [developers, setDevelopers] = useState<Developers[]>([]);
   const [devPage, setDevPage] = useState(1);
   const [devPages, setDevPages] = useState(0);
   const [devLoading, setDevLoading] = useState(false);
 
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [projects, setProjects] = useState<Projects[]>([]);
   const [projectPage, setProjectPage] = useState(1);
   const [projectPages, setProjectPages] = useState(0);
   const [projectsLoading, setProjectsLoading] = useState(false);
 
   // ===== Fetch Developers with pagination =====
   const fetchDevelopers = useCallback(
-    async (page: number = 1, refresh: boolean = true, search: string = "") => {
+    async (page: number = 1, refresh: boolean = true, limit?: number) => {
       try {
         setDevLoading(true);
-        const response = await getAllDevelopersApi(page, search, propertyType);
+        const response = await getDevelopersApi(page, limit || 20);
 
         if (response?.data?.data) {
           setDevelopers((prev) =>
-            refresh ? response.data.data : [...prev, ...response.data.data]
+            refresh
+              ? [...response.data.data, OTHER_DEVELOPER]
+              : [...prev, ...response.data.data]
           );
           setDevPage(response.data.page);
           setDevPages(response.data.pageCount);
@@ -36,22 +46,19 @@ export function useDevelopersAndProjects(propertyType?: string) {
         setDevLoading(false);
       }
     },
-    [getAllDevelopersApi, propertyType]
+    [getDevelopersApi]
   );
 
   // ===== Fetch Projects (all or by developer) with pagination =====
   const fetchProjects = useCallback(
-    async (developerId?: number, page: number = 1, refresh: boolean = true) => {
+    async (developerId?: string, page: number = 1, refresh: boolean = true) => {
       try {
         setProjectsLoading(true);
 
-        let response;
-
-        if (developerId && developerId > 0) {
-          response = await getProjectsByDeveloperApi(developerId, page);
-        } else {
-          response = await getProjectsByDeveloperApi(developerId || 0, page);
-        }
+        const response = await getProjectsByDeveloperIdApi(
+          developerId || "",
+          page
+        );
 
         if (response?.data?.data) {
           setProjects((prev) =>
@@ -68,7 +75,7 @@ export function useDevelopersAndProjects(propertyType?: string) {
         setProjectsLoading(false);
       }
     },
-    [getProjectsByDeveloperApi]
+    [getProjectsByDeveloperIdApi]
   );
 
   return {
@@ -79,6 +86,7 @@ export function useDevelopersAndProjects(propertyType?: string) {
     fetchDevelopers,
 
     projects,
+    setProjects,
     projectPage,
     projectPages,
     projectsLoading,

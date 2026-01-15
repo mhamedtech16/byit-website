@@ -28,13 +28,12 @@ type Props = {
   titleLoading?: string;
   data: {
     id: string | number;
-    name: string;
-    name_ar: string;
-    name_en: string;
+    en_name: string;
+    ar_name: string;
   }[];
   width?: string;
   value?: number;
-  onChange: (value: string | number) => void;
+  onChange?: (value: string | number) => void;
   onClick?: () => void;
   className?: ClassNameValue;
   outlineSecoundry?: boolean;
@@ -43,6 +42,7 @@ type Props = {
   page?: number;
   loadingMore?: boolean;
   translate?: string;
+  disabled?: boolean;
 };
 export function DropdownInput({
   title,
@@ -60,6 +60,7 @@ export function DropdownInput({
   onLoadMore,
   page,
   loadingMore,
+  disabled,
 }: Props) {
   const t = useTranslations(translate);
   const [open, setOpen] = React.useState(false);
@@ -83,6 +84,7 @@ export function DropdownInput({
       <PopoverTrigger asChild>
         <Button
           ref={buttonRef}
+          disabled={disabled}
           variant={outlineSecoundry ? "outlineSecoundry" : "outline"}
           role="combobox"
           aria-expanded={open}
@@ -96,13 +98,12 @@ export function DropdownInput({
                 const selected = data.find(
                   (framework: {
                     id: string | number;
-                    name: string;
-                    name_ar: string;
-                    name_en: string;
+                    en_name: string;
+                    ar_name: string;
                   }) => framework.id === value
                 );
                 if (!selected) return "";
-                return isRTL ? selected.name_ar : selected.name_en;
+                return isRTL ? selected.ar_name : selected.en_name;
               })()
             : title && t(title)}
           <ChevronsUpDown className="opacity-50" />
@@ -123,21 +124,20 @@ export function DropdownInput({
               {data.map(
                 (framework: {
                   id: string | number;
-                  name: string;
-                  name_ar: string;
-                  name_en: string;
+                  en_name: string;
+                  ar_name: string;
                 }) => (
                   <CommandItem
                     key={framework.id}
-                    value={framework.name}
+                    value={framework.id}
                     onSelect={() => {
                       onChange(framework.id);
                       setOpen(false);
                     }}
                   >
                     {isRTL
-                      ? framework.name_ar
-                      : framework.name_en || framework.name}
+                      ? framework.ar_name
+                      : framework.en_name || framework.id}
                     <Check
                       className={cn(
                         "ml-auto",

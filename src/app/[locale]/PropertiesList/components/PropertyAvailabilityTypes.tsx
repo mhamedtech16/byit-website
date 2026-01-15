@@ -4,9 +4,10 @@ import { useMobile } from "@/hooks/useMobile";
 import { Property } from "@/types/Properties";
 
 import { AvailabilityPopoverButton } from "./AvailabilityPopoverButton";
+import { ProjectsUnit } from "@/types/PropertiesV2";
 
 type Props = {
-  item: Property;
+  item: ProjectsUnit;
 };
 const PropertyAvailabilityTypes = ({ item }: Props) => {
   const t = useTranslations();
@@ -16,13 +17,13 @@ const PropertyAvailabilityTypes = ({ item }: Props) => {
       {isMobile ? (
         <div
           className={`flex flex-row px-[5%] ${
-            item.type != "SEPARATED" ? "justify-between" : "justify-center"
+            item.project_type != "Separated" ? "justify-between" : "justify-center"
           } border-t-1 border-t-gray-300 py-[2vmin]`}
         >
           <div className="items-center flex flex-col">
             <AvailabilityPopoverButton
               type="Apartment"
-              item={item.project.apartments}
+              item={item.project.}
               className="w-[12vmin] h-[12vmin] rounded-full hover:bg-primary/5 cursor-pointer shadow-md"
             >
               <i className="fa-solid fa-city text-primary text-1xl"></i>

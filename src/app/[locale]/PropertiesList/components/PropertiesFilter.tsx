@@ -14,7 +14,8 @@ import { Category } from "@/types/Category";
 import { Deliveries } from "@/types/Deliveries";
 import { Finishes } from "@/types/Finishes";
 import { Locations } from "@/types/Locations";
-import { Developer, Project } from "@/types/Properties";
+import { Developer, Location, Project } from "@/types/Properties";
+import { Developers, Projects } from "@/types/PropertiesV2";
 import { UnitType } from "@/types/UnitType";
 
 type Props = {
@@ -41,15 +42,19 @@ const PropertiesFilter = ({ propertyType, onFilterPress }: Props) => {
     getAllCategoriesApi,
     getAllLocationsApi,
   } = useGetApis();
+
   const {
-    getCategories,
-    getUnitType,
-    getLocations,
-    getDevliveries,
-    getFinishing,
+    getDevelopersApi,
+    getProjectsApi,
+    getCategoriesApi,
+    getUnitTypeApi,
+    getLocationsApi,
+    getDevliveriesApi,
+    getFinishingApi,
   } = useGetApisV2();
+
   const [projectsLoading, setProjectsLoading] = useState(true);
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [projects, setProjects] = useState<Projects[]>([]);
   const [, setProjectsSearched] = useState<Project[]>([]);
   const [selectedBedroom, setSelectedBedroom] = useState<string[]>([]);
   const [selectedFinishingTypes, setSelectedFinishingTypes] = useState<
@@ -70,12 +75,12 @@ const PropertiesFilter = ({ propertyType, onFilterPress }: Props) => {
   const [, setLoadMore] = useState(false);
 
   const [devLoading, setDevLoading] = useState(false);
-  const [developers, setDevelopers] = useState<Developer[]>([]);
+  const [developers, setDevelopers] = useState<Developers[]>([]);
   const [devPages, setDevPages] = useState(1);
   const [devPage, setDevPage] = useState(1);
 
   const [selectedDeveloper, setSelectedDeveloper] = useState<Developer>();
-  const [selectedProject, setSelectedProject] = useState<Project>();
+  const [selectedProject, setSelectedProject] = useState<Projects>();
   const [fromPrice, setFromPrice] = useState(0);
   const [toPrice, setToPrice] = useState(0);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -84,19 +89,39 @@ const PropertiesFilter = ({ propertyType, onFilterPress }: Props) => {
   const [finishing, setFinishing] = useState<Finishes[]>([]);
   const [unitTypes, setUnitTypes] = useState<UnitType[]>([]);
 
-  const getAllDevelopers = async (
-    page: number,
-    refresh: boolean,
-    search: string
-  ) => {
+  // const getAllDevelopers = async (
+  //   page: number,
+  //   refresh: boolean,
+  //   search: string
+  // ) => {
+  //   try {
+  //     const response = await getAllDevelopersApi(page, search, propertyType);
+
+  //     setDevPages(response.data.pageCount);
+  //     setDevPage(response.data.page);
+  //     setDevelopers((prev) =>
+  //       refresh ? response.data.data : [...prev, ...response.data.data]
+  //     );
+
+  //     // لو حبيت تفعل البحث لاحقًا
+  //     // setDevelopersSearched((prev) =>
+  //     //   refresh ? response.data.data : [...prev, ...response.data.data]
+  //     // );
+  //   } catch (error) {
+  //     console.log("Error", error);
+  //   } finally {
+  //     setDevLoading(false);
+  //     setLoadMore(false);
+  //   }
+  // };
+
+  const getAllDevelopers = async () => {
     try {
-      const response = await getAllDevelopersApi(page, search, propertyType);
+      const response = await getDevelopersApi();
 
       setDevPages(response.data.pageCount);
       setDevPage(response.data.page);
-      setDevelopers((prev) =>
-        refresh ? response.data.data : [...prev, ...response.data.data]
-      );
+      setDevelopers(() => response.data.data);
 
       // لو حبيت تفعل البحث لاحقًا
       // setDevelopersSearched((prev) =>
@@ -110,23 +135,46 @@ const PropertiesFilter = ({ propertyType, onFilterPress }: Props) => {
     }
   };
 
-  const getProjects = (page: number, refresh: boolean, search: string) => {
+  // const getProjects = (page: number, refresh: boolean, search: string) => {
+  //   // setProjectsLoading(true);
+
+  //   getAllProjectsApi(page, search, propertyType, selectedDeveloper?.id || 0)
+  //     .then((response) => {
+  //       setProjectPages(response.data.pageCount);
+  //       setProjectPage(response.data.page);
+  //       if (propertyType !== "SEPARATED") {
+  //         getNewLaunches(page, search, refresh, response.data.data);
+  //         return;
+  //       }
+  //       setProjects((prev) =>
+  //         refresh ? response.data.data : [...prev, ...response.data.data]
+  //       );
+  //       setProjectsSearched((prev) =>
+  //         refresh ? response.data.data : [...prev, ...response.data.data]
+  //       );
+  //       setLoadMore(false);
+  //       setLoadingSearch(false);
+  //       setProjectsLoading(false);
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //       setLoadMore(false);
+  //       setLoadingSearch(false);
+  //       setProjectsLoading(false);
+  //     })
+  //     .finally(() => {
+  //       //  setLoadMore(false)
+  //       // setLoadingSearch(false)
+  //       //  setProjectsLoading(false)
+  //     });
+  // };
+
+  const getProjects = () => {
     // setProjectsLoading(true);
 
-    getAllProjectsApi(page, search, propertyType, selectedDeveloper?.id || 0)
+    getProjectsApi()
       .then((response) => {
-        setProjectPages(response.data.pageCount);
-        setProjectPage(response.data.page);
-        if (propertyType !== "SEPARATED") {
-          getNewLaunches(page, search, refresh, response.data.data);
-          return;
-        }
-        setProjects((prev) =>
-          refresh ? response.data.data : [...prev, ...response.data.data]
-        );
-        setProjectsSearched((prev) =>
-          refresh ? response.data.data : [...prev, ...response.data.data]
-        );
+        setProjects(response.data.data);
         setLoadMore(false);
         setLoadingSearch(false);
         setProjectsLoading(false);
@@ -176,7 +224,7 @@ const PropertiesFilter = ({ propertyType, onFilterPress }: Props) => {
   ///////// Get Categories
   const getAllCategories = async () => {
     try {
-      const response = await getCategories();
+      const response = await getCategoriesApi();
       setCategories(response.data.data);
     } catch (error) {
       console.log("Error", error);
@@ -185,7 +233,7 @@ const PropertiesFilter = ({ propertyType, onFilterPress }: Props) => {
   ///////////// get locations
   const getAllLocations = async () => {
     try {
-      const response = await getLocations();
+      const response = await getLocationsApi();
       setLocations(response.data.data);
     } catch (error) {
       console.log("Error", error);
@@ -194,7 +242,7 @@ const PropertiesFilter = ({ propertyType, onFilterPress }: Props) => {
 
   const getAllDeliveries = async () => {
     try {
-      const response = await getDevliveries();
+      const response = await getDevliveriesApi();
       setDeliveries(response.data.data);
     } catch (error) {
       console.log("Error", error);
@@ -203,7 +251,7 @@ const PropertiesFilter = ({ propertyType, onFilterPress }: Props) => {
 
   const getAllFinishes = async () => {
     try {
-      const response = await getFinishing();
+      const response = await getFinishingApi();
       setFinishing(response.data.data);
     } catch (error) {
       console.log("Error", error);
@@ -212,7 +260,7 @@ const PropertiesFilter = ({ propertyType, onFilterPress }: Props) => {
 
   const getAllUnitTypes = async () => {
     try {
-      const response = await getUnitType();
+      const response = await getUnitTypeApi();
       setUnitTypes(response.data.data);
     } catch (error) {
       console.log("Error", error);
@@ -280,7 +328,8 @@ const PropertiesFilter = ({ propertyType, onFilterPress }: Props) => {
     setToPrice(0);
   };
   useEffect(() => {
-    getAllDevelopers(1, false, "");
+    getAllDevelopers();
+
     getAllCategories();
     getAllLocations();
     getAllDeliveries();
@@ -296,13 +345,13 @@ const PropertiesFilter = ({ propertyType, onFilterPress }: Props) => {
         titleSearch={"searchDeveloper"}
         titleLoading={"developerLoading"}
         data={developers}
-        value={selectedDeveloper?.id || parseInt("0")}
+        // value={selectedDeveloper?.id || parseInt("0")}
         width="w-full"
-        onChange={(val) => {
-          const selected = developers.find((dev) => dev.id === val);
-          setSelectedProject(undefined);
-          setSelectedDeveloper(selected);
-        }}
+        // onChange={(val) => {
+        //   const selected = developers.find((dev) => dev.id === val);
+        //   setSelectedProject(undefined);
+        //   setSelectedDeveloper(selected);
+        // }}
         hasMore={devPages > devPage}
         onLoadMore={getAllDevelopers}
         page={devPage}
@@ -315,16 +364,16 @@ const PropertiesFilter = ({ propertyType, onFilterPress }: Props) => {
         titleSearch={"searchProject"}
         titleLoading={"projectLoading"}
         data={projects}
-        value={selectedProject?.id}
+        // value={selectedProject?.id}
         width="w-full"
-        onChange={(val) => {
-          const selected = projects.find((project) => project.id === val);
-          setSelectedProject(selected);
-        }}
-        onClick={() => {
-          setProjects([]);
-          getProjects(1, true, "");
-        }}
+        // onChange={(val) => {
+        //   const selected = projects.find((project) => project.id === val);
+        //   setSelectedProject(selected);
+        // }}
+        // onClick={() => {
+        //   setProjects([]);
+        //   getProjects(1, true, "");
+        // }}
         hasMore={projectPages > projectPage}
         onLoadMore={getProjects}
         page={projectPage}

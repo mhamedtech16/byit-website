@@ -5,7 +5,7 @@ import { Building, Building2, Filter } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
-import useGetApis from "@/Apis/v1/useGetApis";
+import useGetApisV2 from "@/Apis/v2/useGetApis";
 import ModalDemo from "@/components/Modal";
 import NoData from "@/components/NoData";
 import { SkeletonLoading } from "@/components/SkeletonComponent";
@@ -14,84 +14,146 @@ import { useMobile } from "@/hooks/useMobile";
 import { useIsRTL } from "@/hooks/useRTL";
 import { Button } from "@/shadcn/components/ui/button";
 import { cn } from "@/shadcn/lib/utils";
-import { useAuthStore } from "@/store/authStore";
-import { Project, Property } from "@/types/Properties";
+import { ProjectsUnit } from "@/types/PropertiesV2";
 
 import PropertiesFilter from "./PropertiesFilter";
 import PropertyListItem from "./PropertyListItem";
 
 const PropertiesList = () => {
-  const currentUser = useAuthStore((state) => state.currentUser);
+  // const currentUser = useAuthStore((state) => state.currentUser);
   const isMobile = useMobile();
   const isRTL = useIsRTL();
   const searchParams = useSearchParams();
-  const { getPropertiesApi } = useGetApis();
+  // const { getPropertiesApi } = useGetApis();
+  const { getProjectsUnitsApi } = useGetApisV2();
   const propertyType = searchParams.get("propertyType") || "";
   // console.log(propertyType);
 
   const [loadingPg, setLoadingPg] = useState(true);
 
   const [filterVisible, setFilterVisible] = useState<boolean>(false);
-  const [properties, setProperties] = useState<Property[]>([]);
+  // const [properties, setProperties] = useState<Property[]>([]);
+  const [projectUnits, setProjectUnits] = useState<ProjectsUnit[]>([]);
 
-  const fetchProperties = useCallback(
-    (
-      page: number,
-      refresh: boolean,
-      isFilterP: boolean,
-      selectedLocationIds: number[] = [],
-      selectedTypeIds: number[] = [],
-      selectedDeliveryTypes: string[] = [],
-      selectedFinishingTypes: string[] = [],
-      selectedBedroom: string[] = [],
-      fromPrice: number = 0,
-      toPrice: number = 0,
-      selectedProject?: Project
-    ) => {
+  const fetchProjectUnits = useCallback(async () => {
+    try {
       setLoadingPg(true);
+      const res = await getProjectsUnitsApi(propertyType);
+      setProjectUnits(res.data?.data || []);
+    } catch (err: unknown) {
+      const error = err as AxiosError;
+      console.error("Failed to fetch project units:", error);
+    } finally {
+      setLoadingPg(false);
+    }
+  }, [getProjectsUnitsApi, propertyType]);
 
-      getPropertiesApi(
-        selectedLocationIds,
-        selectedTypeIds,
-        selectedDeliveryTypes,
-        selectedFinishingTypes,
-        selectedBedroom,
-        selectedProject || null,
-        fromPrice,
-        toPrice,
-        isFilterP,
-        page,
-        propertyType,
-        currentUser
-      )
-        .then((res) => {
-          setProperties((prev) => {
-            const combined =
-              isFilterP || refresh
-                ? res.data.data
-                : [...prev, ...res.data.data];
+  // const projectToFetch =
+  //   projectIdFromQuery && !selectedProject
+  //     ? ({ id: projectIdFromQuery } as Project)
+  //     : selectedProject;
 
-            const unique = Array.from(
-              new Map(combined.map((item) => [item.id, item])).values()
-            );
+  //     getPropertiesApi(
+  //       selectedLocationIds,
+  //       selectedTypeIds,
+  //       selectedDeliveryTypes,
+  //       selectedFinishingTypes,
+  //       selectedBedroom,
+  //       selectedProject || null,
+  //       fromPrice,
+  //       toPrice,
+  //       isFilterP,
+  //       page,
+  //       propertyType,
+  //       currentUser
+  //     )
+  //       .then((res) => {
+  //         setProperties((prev) => {
+  //           const combined =
+  //             isFilterP || refresh
+  //               ? res.data.data
+  //               : [...prev, ...res.data.data];
 
-            return unique;
-          });
-        })
-        .catch((err: unknown) => {
-          const error = err as AxiosError;
-          console.error("Failed to fetch properties:", error);
-        })
-        .finally(() => {
-          setLoadingPg(false);
-        });
-    },
-    [currentUser, getPropertiesApi, propertyType]
-  );
+  //           const unique = Array.from(
+  //             new Map(combined.map((item) => [item.id, item])).values()
+  //           );
+
+  //           return unique;
+  //         });
+  //       })
+  //       .catch((err: unknown) => {
+  //         const error = err as AxiosError;
+  //         console.error("Failed to fetch properties:", error);
+  //       })
+  //       .finally(() => {
+  //         setLoadingPg(false);
+  //       });
+  //   },
+  //   [currentUser, getPropertiesApi, propertyType]
+  // );
+
   useEffect(() => {
-    fetchProperties(1, true, false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [propertyType]);
+    fetchProjectUnits();
+  }, [fetchProjectUnits]);
+
+  // const fetchProperties = useCallback(
+  //   (
+  //     page: number,
+  //     refresh: boolean,
+  //     isFilterP: boolean,
+  //     selectedLocationIds: number[] = [],
+  //     selectedTypeIds: number[] = [],
+  //     selectedDeliveryTypes: string[] = [],
+  //     selectedFinishingTypes: string[] = [],
+  //     selectedBedroom: string[] = [],
+  //     fromPrice: number = 0,
+  //     toPrice: number = 0,
+  //     selectedProject?: Project
+  //   ) => {
+  //     setLoadingPg(true);
+
+  //     getPropertiesApi(
+  //       selectedLocationIds,
+  //       selectedTypeIds,
+  //       selectedDeliveryTypes,
+  //       selectedFinishingTypes,
+  //       selectedBedroom,
+  //       selectedProject || null,
+  //       fromPrice,
+  //       toPrice,
+  //       isFilterP,
+  //       page,
+  //       propertyType,
+  //       currentUser
+  //     )
+  //       .then((res) => {
+  //         setProperties((prev) => {
+  //           const combined =
+  //             isFilterP || refresh
+  //               ? res.data.data
+  //               : [...prev, ...res.data.data];
+
+  //           const unique = Array.from(
+  //             new Map(combined.map((item) => [item.id, item])).values()
+  //           );
+
+  //           return unique;
+  //         });
+  //       })
+  //       .catch((err: unknown) => {
+  //         const error = err as AxiosError;
+  //         console.error("Failed to fetch properties:", error);
+  //       })
+  //       .finally(() => {
+  //         setLoadingPg(false);
+  //       });
+  //   },
+  //   [currentUser, getPropertiesApi, propertyType]
+  // );
+  // useEffect(() => {
+  //   fetchProperties(1, true, false);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [propertyType]);
 
   if (loadingPg) {
     return <SkeletonLoading />;
@@ -101,7 +163,7 @@ const PropertiesList = () => {
     <div className="flex flex-col flex-1 w-full mx-auto bg-primary pb-5">
       <div className="flex justify-between w-[90%] mx-auto pt-4 bg-primary">
         <div className={cn("flex flex-col", isMobile ? "w-full" : "w-[70%]")}>
-          {properties.length === 0 ? (
+          {projectUnits.length === 0 ? (
             <NoData
               message="noResultFound"
               imageSrc={
@@ -113,7 +175,7 @@ const PropertiesList = () => {
               }
             />
           ) : (
-            properties.map((item, index) =>
+            projectUnits?.map((item, index) =>
               index === 0 ? (
                 <PropertyListItem key={item.id} item={item} />
               ) : (
@@ -143,29 +205,30 @@ const PropertiesList = () => {
             >
               <PropertiesFilter
                 propertyType={propertyType}
-                onFilterPress={(
-                  selectedLocationIds,
-                  selectedTypeIds,
-                  selectedDeliveryTypes,
-                  selectedFinishingTypes,
-                  selectedBedroom,
-                  selectedCompound,
-                  fromPrice,
-                  toPrice
-                ) =>
-                  fetchProperties(
-                    1,
-                    true,
-                    true,
+                onFilterPress={
+                  (
                     selectedLocationIds,
                     selectedTypeIds,
                     selectedDeliveryTypes,
                     selectedFinishingTypes,
                     selectedBedroom,
+                    selectedCompound,
                     fromPrice,
-                    toPrice,
-                    selectedCompound
-                  )
+                    toPrice
+                  ) => {}
+                  // fetchProperties(
+                  //   1,
+                  //   true,
+                  //   true,
+                  //   selectedLocationIds,
+                  //   selectedTypeIds,
+                  //   selectedDeliveryTypes,
+                  //   selectedFinishingTypes,
+                  //   selectedBedroom,
+                  //   fromPrice,
+                  //   toPrice,
+                  //   selectedCompound
+                  // )
                 }
               />
             </ModalDemo>
@@ -179,29 +242,30 @@ const PropertiesList = () => {
           >
             <PropertiesFilter
               propertyType={propertyType}
-              onFilterPress={(
-                selectedLocationIds,
-                selectedTypeIds,
-                selectedDeliveryTypes,
-                selectedFinishingTypes,
-                selectedBedroom,
-                selectedCompound,
-                fromPrice,
-                toPrice
-              ) =>
-                fetchProperties(
-                  1,
-                  true,
-                  true,
+              onFilterPress={
+                (
                   selectedLocationIds,
                   selectedTypeIds,
                   selectedDeliveryTypes,
                   selectedFinishingTypes,
                   selectedBedroom,
+                  selectedCompound,
                   fromPrice,
-                  toPrice,
-                  selectedCompound
-                )
+                  toPrice
+                ) => {}
+                // fetchProperties(
+                //   1,
+                //   true,
+                //   true,
+                //   selectedLocationIds,
+                //   selectedTypeIds,
+                //   selectedDeliveryTypes,
+                //   selectedFinishingTypes,
+                //   selectedBedroom,
+                //   fromPrice,
+                //   toPrice,
+                //   selectedCompound
+                // )
               }
             />
           </div>

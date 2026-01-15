@@ -1,20 +1,21 @@
 export interface PrizesData {
   targetPoints: TargetPoint[];
-  targetAchievementLogo: string;
-  targetAchievementInfo: string;
+  target_logo: string;
+  target_info: string;
 }
 
-export interface Contests {
-  name: string;
-  name_en: string;
-  name_ar: string;
+export interface Prize {
+  points: number;
+  en_title: string;
+  ar_title: string;
   img: string;
   id: number;
 }
 
 export interface TargetPoint {
   prize: {
-    name: string;
+    ar_title: string;
+    en_title: string;
     img: string;
     id: number;
   };

@@ -1,8 +1,8 @@
-import { NewLaunch, Property } from "@/types/Properties";
+import { NewLaunch, ProjectsUnit } from "@/types/PropertiesV2";
 
 export interface UserState {
-  favouritesProperties: Property[];
+  favouritesProperties: ProjectsUnit[];
   favouritesNewLaunches: NewLaunch[];
-  setFavouritesProperties: (property: Property[]) => void;
+  setFavouritesProperties: (property: ProjectsUnit[]) => void;
   setFavouritesNewlaunches: (newlaunches: NewLaunch[]) => void;
 }

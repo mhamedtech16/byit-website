@@ -5,19 +5,19 @@ import { AboutUsResponse } from "@/types/AboutUs";
 
 export function useAboutUs() {
   const [data, setData] = useState<AboutUsResponse | null>(null);
-  const { getAboutUs } = useGetApisV2();
+  const { getAboutUsApi } = useGetApisV2();
 
   useEffect(() => {
     const fetchAboutUs = async () => {
       try {
-        const res = await getAboutUs();
+        const res = await getAboutUsApi();
         setData(res.data);
       } catch (err: unknown) {
         console.error(err);
       }
     };
     fetchAboutUs();
-  }, [getAboutUs]);
+  }, [getAboutUsApi]);
 
   return { data };
 }

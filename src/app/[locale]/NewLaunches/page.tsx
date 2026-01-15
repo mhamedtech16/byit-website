@@ -7,16 +7,16 @@ import { NewLaunch } from "@/types/PropertiesV2";
 import NewLaunchItem from "./components/NewLaunchItem";
 
 const NewLaunches = () => {
-  const { getNewLaunch } = useGetApisV2();
+  const { getNewLaunchApi } = useGetApisV2();
   const [newLaunches, setNewLaunches] = useState<NewLaunch[]>();
 
-  const getNewLaunches = React.useCallback(() => {
-    getNewLaunch()
+  const getNewLaunches = React.useCallback(async () => {
+    getNewLaunchApi()
       .then((res) => {
         setNewLaunches(res.data.data);
       })
       .catch(() => {});
-  }, [getNewLaunch]);
+  }, [getNewLaunchApi]);
 
   useEffect(() => {
     getNewLaunches();

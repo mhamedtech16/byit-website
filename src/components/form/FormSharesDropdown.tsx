@@ -15,10 +15,9 @@ import { cn } from "@/shadcn/lib/utils";
 import { SharesPropertiesDropDown } from "../SharesPropertiesDropDown";
 
 type Option = {
-  id: string | number;
-  projectName: string;
-  projectName_ar: string;
-  projectName_en: string;
+  id: string;
+  project_en_name: string;
+  project_ar_name: string;
 };
 
 type FormDropdownInputProps<T extends FieldValues> = {

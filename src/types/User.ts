@@ -27,6 +27,18 @@ export interface User {
   token: string;
 }
 
+export interface CurrentUser {
+  id: string;
+  phone_number: string;
+  email: string;
+  years_of_experience: number;
+  country: string;
+  total_earned: number;
+  remaining_balances: number;
+  total_deals: number;
+  full_name: string;
+}
+
 export interface Users {
   fullname: string;
   type: string;
@@ -98,6 +110,26 @@ export type SharesDealData = {
   user: User;
   clientCountry: Country;
   salesCountry: Country;
+};
+
+export type SharesUnitData = {
+  idx: number;
+  name?: string;
+  owner: string;
+  creation: string;
+  modified?: string;
+  modified_by?: string;
+  docstatus?: number;
+  broker?: string;
+  image?: string;
+  client_name: string;
+  salesperson?: string; // JWT or session token
+  unit_code?: number; // Country code for phone number validation
+  shared_unit: string;
+  unit_type: string;
+  status: string;
+  shares_count: number;
+  doctype: string;
 };
 export interface Country {
   name: string;
@@ -239,6 +271,65 @@ export interface ClosignFormRequest {
   type: string;
 }
 
+export interface NewMeetingsRequest {
+  salesName?: string;
+  salesPhone?: string;
+  salesCountry?: number; // Country code for phone number validation
+  developer: number;
+  project: number;
+  clientName?: string;
+  clientPhone?: string;
+  clientCountry?: number;
+  uploadFile?: File; // File object for the uploaded document
+}
+export interface DealsFormRequest {
+  type: string;
+  client_name: string;
+  salesperson_name: string;
+  salesperson_phone: string;
+  salesperson_country: string;
+  developer_text: string;
+  project_text: string;
+  project: string;
+  developer: string;
+  unit_code: string;
+  price: number;
+  image: string | undefined;
+  partner: string;
+}
+
+export interface Deals {
+  idx: number;
+  name?: string;
+  owner: string;
+  creation: string;
+  modified?: string;
+  modified_by?: string;
+  docstatus?: number;
+  eoi: string;
+  broker?: string;
+  salesperson?: string; // JWT or session token
+  unit_code?: number; // Country code for phone number validation
+  category: string;
+  unit_type: string;
+  status: string;
+  is_on_spot: number;
+  rejection_reason: null;
+  ref_id: string;
+  is_other_developer: number;
+  developer: string;
+  developer_text: string;
+  project_type: string;
+  project: string;
+  project_text: string;
+  partner: string;
+  project_unit: string;
+  doctype: string;
+  contract_image: string;
+  payment_from_developer: [];
+  payment_to_broker: [];
+}
+
 export interface SharesDealRequest {
   salesName?: string;
   clientName?: string;
@@ -253,12 +344,30 @@ export interface SharesDealRequest {
   type: string;
 }
 
+export interface SharesUnitRequest {
+  client_name: string;
+  salesperson_name: string;
+  salesperson_phone: string;
+  shared_unit: string;
+  shared_count: number;
+  salesperson_country: string; // Country code for phone number validation
+  image: string; // File object for the uploaded document
+}
+
 export interface SharesDealResponse {
   data: SharesDealData;
 }
 
+export interface SharesUnitResponse {
+  data: SharesUnitData;
+}
+
 export interface ClosignFormResponse {
   data: ClosignForm;
+}
+
+export interface DealsFormResponse {
+  data: Deals;
 }
 
 /////////.

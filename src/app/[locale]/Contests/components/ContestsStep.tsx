@@ -3,7 +3,7 @@ import { useLocale, useTranslations } from "next-intl";
 import React from "react";
 
 import { pricePerLangauge } from "@/lib/PriceArray";
-import { TargetPoint } from "@/types/Contests";
+import { Prize, TargetPoint } from "@/types/Contests";
 
 type Props = {
   targetPointsItem: TargetPoint;
@@ -29,7 +29,9 @@ export const ContestsStep = ({
           className="object-cover rounded-xl"
         />
       </div>
-      <p className="text-[2vmin] h-[3vmin]">{targetPointsItem.prize.name}</p>
+      <p className="text-[2vmin] h-[3vmin]">
+        {targetPointsItem.prize.ar_title}
+      </p>
       <div className="flex flex-row justify-center items-center">
         <div className="flex w-[4vmin] h-[4vmin] rounded-[2vmin] border-primary border-2 justify-center items-center">
           {isChecked && (

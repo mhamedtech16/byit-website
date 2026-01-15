@@ -8,41 +8,44 @@ import ModalDemo from "@/components/Modal";
 import VoicePlayer from "@/components/VoicePlayer";
 import { useIsRTL } from "@/hooks/useRTL";
 import { cn } from "@/shadcn/lib/utils";
-import { Projects, NewLaunch } from "@/types/PropertiesV2";
+import { ProjectsUnit, NewLaunch } from "@/types/PropertiesV2";
 
 type Props = {
-  item: Projects | NewLaunch;
-  type?: "projects" | "newLaunch";
+  item: ProjectsUnit | NewLaunch | undefined;
+  type?: "projectsUnit" | "newLaunch";
 };
 
-const SalesContact = ({ item, type = "projects" }: Props) => {
+const SalesContact = ({ item, type = "projectsUnit" }: Props) => {
   const t = useTranslations();
   const [isOpen, setOpen] = useState<boolean>(false);
   const isRTL = useIsRTL();
 
   const voiceNote =
-    type === "projects" ? (item as Projects).voice_orientation : undefined;
+    type === "projectsUnit"
+      ? (item as ProjectsUnit)?.voice_orientation
+      : undefined;
 
   const projectName =
-    type === "projects"
+    type === "projectsUnit"
       ? isRTL
-        ? (item as Projects).ar_name
-        : (item as Projects).en_name
+        ? (item as ProjectsUnit)?.project.ar_name
+        : (item as ProjectsUnit)?.project.en_name
       : isRTL
-      ? (item as NewLaunch).name_ar
-      : (item as NewLaunch).name_en;
+      ? (item as NewLaunch)?.name_ar
+      : (item as NewLaunch)?.name_en;
 
   // partners سواء في projects أو newLaunch
   const partners =
-    type === "projects"
-      ? (item as Projects)?.partners
+    type === "projectsUnit"
+      ? (item as ProjectsUnit)?.project?.partners
       : (item as NewLaunch)?.partners;
 
   return (
     <div
       className={cn(
         "flex flex-row w-full justify-between items-center border-t border-t-gray-300 py-4",
-        type === "projects" && "pl-[8%] pr-[4%]"
+
+        type === "projectsUnit" && "pl-[8%] pr-[4%]"
       )}
     >
       <div className="items-center">

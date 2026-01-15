@@ -5,9 +5,16 @@ export const routes = {
   About: "/about",
   Contact: "/contact",
   Profile: "/profile",
-  PropertiesList: "/PropertiesList",
+  // PropertiesList: "/PropertiesList",
+  PropertiesList: {
+    Root: "/PropertiesList",
+    slug: (slug: string) => `/PropertiesList/${slug}`,
+  },
   PropertyDetails: "/PropertyDetails",
-  NewLaunches: "/NewLaunches",
+  NewLaunches: {
+    Root: "/NewLaunches",
+    id: (id: string) => `/NewLaunches/${id}`,
+  },
   SharedProperties: "/shared-properties",
   Contests: "/Contests",
   AboutUs: "/AboutUs",

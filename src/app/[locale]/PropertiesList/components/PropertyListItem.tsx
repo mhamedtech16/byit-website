@@ -11,12 +11,13 @@ import { useIsRTL } from "@/hooks/useRTL";
 import { pricePerLangauge } from "@/lib/PriceArray";
 import { cn } from "@/shadcn/lib/utils";
 import { Property } from "@/types/Properties";
+import { ProjectsUnit } from "@/types/PropertiesV2";
 
 import PropertyAvailabilityTypes from "./PropertyAvailabilityTypes";
 import SalesContact from "./SalesContact";
 
 type Props = {
-  item: Property;
+  item: ProjectsUnit | undefined;
 };
 const PropertyListItem = ({ item }: Props) => {
   const t = useTranslations();
@@ -29,7 +30,7 @@ const PropertyListItem = ({ item }: Props) => {
   return (
     <div
       className="w-[100%] p-2 rounded-xl shadow-md bg-white"
-      key={item.id}
+      key={item?.id}
       //onClick={() => router.push('PropertyDetails')}
     >
       {/* <Image alt="property image" src={'/images/intro1.jpg'}
@@ -38,12 +39,14 @@ const PropertyListItem = ({ item }: Props) => {
                 width={500}
                 height={500} /> */}
       <div className="relative w-[100%] h-[50vmin]">
-        <Image
-          alt="property image"
-          src={item?.imgs?.[0]}
-          fill
-          className="object-cover rounded-xl"
-        />
+        {item?.images && (
+          <Image
+            alt="property image"
+            src={item?.images?.[0] || ""}
+            fill
+            className="object-cover rounded-xl"
+          />
+        )}
 
         <div className="absolute top-[12vmin] mx-[2vmin] flex flex-col justify-between h-[40%]">
           <button className=" w-[7vmin] h-[7vmin] bg-[var(--light-primary)] rounded-[3.5vmin] flex justify-center items-center cursor-pointer">
@@ -67,11 +70,7 @@ const PropertyListItem = ({ item }: Props) => {
             isRTL ? "left-0" : "right-0"
           )}
         >
-          <FavouriteButton
-            item={item}
-            favoriteType={"Property"}
-            isItemFavorite={item.isFavourite}
-          />
+          <FavouriteButton item={item} favoriteType={"Project Units"} />
         </div>
       </div>
       <div
@@ -82,80 +81,98 @@ const PropertyListItem = ({ item }: Props) => {
       >
         <div className={cn("flex flex-col gap-3", isMobile && "w-[49%]")}>
           <div>
-            <p className="font-bold text-xl">{item?.company?.name}</p>
+            <p className="font-bold text-xl">
+              {isRTL ? item?.developer?.ar_name : item?.developer?.en_name}
+            </p>
           </div>
 
           <div>
-            <p className="font-bold ">{item?.project?.name}</p>
-            <p className="text-gray-400 ">{item?.location?.name}</p>
+            <p className="font-bold ">
+              {isRTL ? item?.project?.ar_name : item?.project?.en_name}
+            </p>
+            <p className="text-gray-400 ">
+              {isRTL ? item?.ar_location : item?.en_location}
+            </p>
           </div>
 
           <div>
             <p className="font-bold ">{t("Starting Price")}</p>
             <p className="text-gray-400 ">
-              {item.project.startingPrice > 0
-                ? `${pricePerLangauge(
-                    item.project.startingPrice,
-                    currentLang
-                  )} ${t("EGP")}`
-                : t("onHold")}
+              {item?.project && (
+                <>
+                  {item.project.starting_price > 0
+                    ? `${pricePerLangauge(
+                        item?.project.starting_price,
+                        currentLang
+                      )} ${t("EGP")}`
+                    : t("onHold")}
+                </>
+              )}
             </p>
           </div>
 
           <div>
             <p className="font-bold ">{t("Down Payment")}</p>
             <p className="text-gray-400 ">
-              {pricePerLangauge(parseFloat(item.downPayment), currentLang)}
+              {pricePerLangauge(
+                parseFloat(String(item?.down_payment_percent)),
+                currentLang
+              )}
             </p>
           </div>
 
           <div>
             <p className="font-bold ">{t("Installments")}</p>
             <p className="text-gray-400 ">
-              {pricePerLangauge(item.installmentDuration, currentLang)}
-              {item.durationType}
+              {pricePerLangauge(item?.number_of_years, currentLang)}
+              {item?.duration_type}
             </p>
           </div>
 
           <div>
             <p className="font-bold ">{t("Delivery")}</p>
-            {item?.deliveryStatus?.map((item, index) => (
+            {item?.deliveries?.map((item, index) => (
               <p key={`delivery-${index}`} className="text-gray-400 ">
-                {t(item)}
+                {item}
               </p>
             ))}
           </div>
         </div>
         <div className={cn("flex flex-col  gap-3", isMobile && "w-[49%]")}>
-          <Image
-            alt="property image"
-            src={item.company?.logo}
-            // layout="responsive"
-            className="rounded-xl border-[0.5px] border-gray-300"
-            width={200}
-            height={200}
-          />
+          {item?.developer && (
+            <Image
+              alt="property image"
+              src={item.developer.logo || ""}
+              // layout="responsive"
+              className="rounded-xl border-[0.5px] border-gray-300"
+              width={200}
+              height={200}
+            />
+          )}
+
           <div>
             <p className="font-bold ">{t("Type")}</p>
-            <p className="text-gray-400 ">{item?.category?.categoryName}</p>
+            <p className="text-gray-400 ">
+              {isRTL ? item?.ar_category : item?.en_category}
+            </p>
           </div>
 
           <div>
             <p className="font-bold ">{t("Finishing")}</p>
-            {item?.finishingType?.map((item, index) => (
+            {item?.finishes?.map((item, index) => (
               <p className="text-gray-400" key={index}>
-                {t(item)}
+                {item}
               </p>
             ))}
           </div>
         </div>
       </div>
 
-      <SalesContact item={item} type="property" />
-      <PropertyAvailabilityTypes item={item} />
+      <SalesContact item={item} type="projectsUnit" />
+      {/* <PropertyAvailabilityTypes item={item} /> */}
       <ModalDemo isOpen={isCalOpen} onClose={() => setCalcOpen(false)}>
         <PropertyCalculator
-          type={"property"}
+          type={"projectsUnit"}
           item={item}
           setCalcOpen={setCalcOpen}
         />

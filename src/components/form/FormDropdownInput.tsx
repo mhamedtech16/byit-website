@@ -17,10 +17,9 @@ import { DropdownInput } from "../DropdownInput";
 import { YearsDropdown } from "../YearsDropdown";
 
 type Option = {
-  id: string | number;
-  name: string;
-  name_en: string;
-  name_ar: string;
+  id: string;
+  en_name: string;
+  ar_name: string;
 };
 
 type FormDropdownInputProps<T extends FieldValues> = {
@@ -43,6 +42,7 @@ type FormDropdownInputProps<T extends FieldValues> = {
   onLoadMore?: (page: number, refresh: boolean, search: "") => void;
   page?: number;
   loadingMore?: boolean;
+  disabled?: boolean;
 };
 
 export function FormDropdownInput<T extends FieldValues>({
@@ -65,6 +65,7 @@ export function FormDropdownInput<T extends FieldValues>({
   onLoadMore,
   page,
   loadingMore,
+  disabled,
 }: FormDropdownInputProps<T>) {
   const t = useTranslations(translate);
 
@@ -122,6 +123,7 @@ export function FormDropdownInput<T extends FieldValues>({
             <FormLabel className={className}>{t(label)}</FormLabel>
             <FormControl>
               <DropdownInput
+                disabled={disabled}
                 title={title}
                 titleSearch={titleSearch}
                 titleLoading={titleLoading}

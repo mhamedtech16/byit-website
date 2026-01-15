@@ -149,7 +149,7 @@ function MobileNavigation({
               }}
               className={cn(
                 "flex items-center justify-between font-normal text-foreground px-2",
-                linkClass(routes.PropertiesList ?? routes.PropertyDetails)
+                linkClass(routes.PropertiesList.Root ?? routes.PropertyDetails)
               )}
             >
               {t("properties")}
@@ -165,11 +165,11 @@ function MobileNavigation({
               <div className="flex flex-col gap-2">
                 <Link
                   href={{
-                    pathname: routes.PropertiesList,
+                    pathname: routes.PropertiesList.Root,
                     query: { propertyType: "COMPOUND" },
                   }}
                   onClick={onCloseSheet}
-                  className={linkClass(routes.PropertiesList)}
+                  className={linkClass(routes.PropertiesList.Root)}
                 >
                   <Dot size={30} />
                   {t("searchCompounds")}
@@ -177,7 +177,7 @@ function MobileNavigation({
                 <Link
                   onClick={onCloseSheet}
                   href={{
-                    pathname: routes.PropertiesList,
+                    pathname: routes.PropertiesList.Root,
                     query: { propertyType: "SEPARATED" },
                   }}
                   className={linkClass(routes.PropertyDetails)}
@@ -188,9 +188,9 @@ function MobileNavigation({
               </div>
             )}
             <Link
-              href={routes.NewLaunches}
+              href={routes.NewLaunches.Root}
               onClick={onCloseSheet}
-              className={linkClass(routes.NewLaunches)}
+              className={linkClass(routes.NewLaunches.Root)}
             >
               {t("newLaunches")}
             </Link>

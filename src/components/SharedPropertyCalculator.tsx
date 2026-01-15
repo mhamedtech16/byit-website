@@ -7,12 +7,13 @@ import React, { useEffect, useState } from "react";
 import { pricePerLangauge } from "@/lib/PriceArray";
 import { Label } from "@/shadcn/components/ui/label";
 import { SharedProperties } from "@/types/Properties";
+import { ShareUnit } from "@/types/ShareUnit";
 
 import { SharedDropdownInput } from "./SharedCountDropdown";
 import SharedFormattedNumberInput from "./ui/SharedCurrencyInput";
 
 type Props = {
-  item: SharedProperties;
+  item: ShareUnit;
 };
 const SharedPropertyCalculator = ({ item }: Props) => {
   const t = useTranslations();
@@ -24,19 +25,19 @@ const SharedPropertyCalculator = ({ item }: Props) => {
   const [sharePrices, setSharePrices] = useState<number>(0);
 
   const availableShares = Array.from(
-    { length: item.availableShares || 50 },
+    { length: item.available_shares || 50 },
     (_, i) => i + 1
   );
 
   useEffect(() => {
-    const totalPrice = (item?.sharePrice ?? 0) * selectedShare;
+    const totalPrice = (item?.share_price ?? 0) * selectedShare;
 
-    const grossComm = totalPrice * ((item?.ratio ?? 0) / 100);
+    const grossComm = totalPrice * ((item?.actual_commission ?? 0) / 100);
 
     const txs = grossComm * (36 / 100);
     const netComm = grossComm - txs;
 
-    const currentEarning = netComm * ((item?.netRatio ?? 0) / 100);
+    const currentEarning = netComm * ((item?.on_spot_commission ?? 0) / 100);
 
     setGrossCommission(grossComm);
     setTaxes(txs);
@@ -79,7 +80,7 @@ const SharedPropertyCalculator = ({ item }: Props) => {
         <Label className="text-lg font-bold text-black">
           {t("Commission Percentage")}:
         </Label>
-        {pricePerLangauge(item?.ratio, i18next.language)}%
+        {pricePerLangauge(item?.actual_commission, i18next.language)}%
       </Label>
 
       <Label className="text-center text-lg font-bold mt-[1vmin] text-[var(--app-gray)]">
@@ -110,7 +111,7 @@ const SharedPropertyCalculator = ({ item }: Props) => {
         </Label>
         {pricePerLangauge(earnings, i18next.language)} {t("LE")}
         <Label className="text-center text-[var(--orangeApp)] text-lg font-bold">
-          ({pricePerLangauge(item?.netRatio, i18next.language)}
+          ({pricePerLangauge(item?.on_spot_commission, i18next.language)}
           %)
         </Label>
       </Label>

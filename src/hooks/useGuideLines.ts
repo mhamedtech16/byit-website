@@ -3,20 +3,19 @@
 import { useState, useEffect, useCallback } from "react";
 
 import useGetApisV2 from "@/Apis/v2/useGetApis";
-import { GuideLines } from "@/types/GuideLines";
+import { VideoGallery } from "@/types/GuideLines";
 
 export const useGuideLines = () => {
-  const [guideLines, setGuideLines] = useState<GuideLines[]>([]);
+  const [guideLines, setGuideLines] = useState<VideoGallery[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const { getVideoGallary } = useGetApisV2();
+  const { getVideoGallaryApi } = useGetApisV2();
 
   const fetchGuideLines = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await getVideoGallary();
+      const res = await getVideoGallaryApi();
       setGuideLines(res.data?.data || null);
     } catch (err) {
       console.error("Failed to fetch guidelines:", err);
@@ -24,7 +23,7 @@ export const useGuideLines = () => {
     } finally {
       setLoading(false);
     }
-  }, [getVideoGallary]);
+  }, [getVideoGallaryApi]);
 
   useEffect(() => {
     fetchGuideLines();

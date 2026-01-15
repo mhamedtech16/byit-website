@@ -8,6 +8,7 @@ export interface NewLaunch {
   broker_commission: number;
   on_spot_broker_commission: number;
   location: string;
+  is_favorite: boolean;
   units: { price: number; booking_price: number; unit_type: string }[];
   developer: Developers;
   partners: Partners[];
@@ -56,6 +57,12 @@ export interface Projects {
   partners: Partners[];
 }
 
+export interface Project {
+  id: string;
+  ar_name: string;
+  en_name: string;
+}
+
 export interface ProjectsUnit {
   id: string;
   en_unit_type: string;
@@ -76,5 +83,16 @@ export interface ProjectsUnit {
   deliveries: string[];
   finishes: string[];
   developer: Developers;
-  project: Projects;
+  project: {
+    id: string;
+    en_name: string;
+    ar_name: string;
+    brochure_pdf: string;
+    starting_price: number;
+    communicated_commission: number;
+    on_spot_commission: number;
+    broker_commission: number;
+    on_spot_broker_commission: number;
+    partners: Partners[];
+  };
 }

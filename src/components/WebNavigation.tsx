@@ -10,6 +10,7 @@ import { useState } from "react";
 import { routes } from "@/_lib/routes";
 import { useActiveLink } from "@/_utils/navigation";
 import { imgs } from "@/assets";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -37,6 +38,7 @@ function WebNavigation({
   const router = useRouter();
   const [openAlertDialog, setOpenAlertDialog] = useState(false);
   const isRTL = locale === "ar";
+  const { user } = useCurrentUser();
   const { currentUser, hasHydrated } = useAuthStore();
   const isAuthenticated = currentUser?.user.approved;
   if (!hasHydrated) return null;
@@ -52,7 +54,9 @@ function WebNavigation({
        className={`flex items-center justify-between w-full px-1 py-2 ${isRTL ? "flex-row-reverse" : "flex-row"}`}
   > */}
       <NavigationMenu viewport={false} key="main-nav" className="z-[200]">
-        <NavigationMenuList className={isRTL ? "flex-row-reverse gap-3" : "flex-row gap-3"}>
+        <NavigationMenuList
+          className={isRTL ? "flex-row-reverse gap-3" : "flex-row gap-3"}
+        >
           <button
             className="relative flex-shrink-0 w-[120px] h-[60px] cursor-pointer"
             onClick={() => router.push(routes.Home)}
@@ -80,7 +84,7 @@ function WebNavigation({
           <NavigationMenuItem>
             <NavigationMenuTrigger
               className={cn(
-                linkClass(routes.PropertiesList ?? routes.PropertyDetails),
+                linkClass(routes.PropertiesList.Root ?? routes.PropertyDetails),
                 "cursor-pointer"
               )}
               onPointerMove={(e) => e.preventDefault()}
@@ -96,13 +100,13 @@ function WebNavigation({
                       <Link
                         //onClick={() => router.push({ pathname: routes.PropertiesList, query: { propertyType: 'RELATED-TO-COMPOUND' } } as any)}
                         href={{
-                          pathname: routes.PropertiesList,
+                          pathname: routes.PropertiesList.Root,
                           query: { propertyType: "COMPOUND" },
                         }}
                         className={cn(
-                          linkClass(routes.PropertiesList, "COMPOUND"),
+                          linkClass(routes.PropertiesList.Root, "COMPOUND"),
                           isRTL &&
-                          "text-right flex-row items-center justify-end gap-3"
+                            "text-right flex-row items-center justify-end gap-3"
                         )}
                       >
                         {t("searchCompounds")}
@@ -116,13 +120,13 @@ function WebNavigation({
                       <Link
                         // onClick={() => router.push({ pathname: routes.PropertiesList, query: { propertyType: 'SEPARATED' } } as any)}
                         href={{
-                          pathname: routes.PropertiesList,
+                          pathname: routes.PropertiesList.Root,
                           query: { propertyType: "SEPARATED" },
                         }}
                         className={cn(
-                          linkClass(routes.PropertiesList, "SEPARATED"),
+                          linkClass(routes.PropertiesList.Root, "SEPARATED"),
                           isRTL &&
-                          "text-right flex-row items-center justify-end gap-3"
+                            "text-right flex-row items-center justify-end gap-3"
                         )}
                       >
                         {t("searchSeparates")}
@@ -138,11 +142,11 @@ function WebNavigation({
                       <Link
                         //onClick={() => router.push({ pathname: routes.PropertiesList, query: { propertyType: 'RELATED-TO-COMPOUND' } } as any)}
                         href={{
-                          pathname: routes.PropertiesList,
+                          pathname: routes.PropertiesList.Root,
                           query: { propertyType: "COMPOUND" },
                         }}
                         className={cn(
-                          linkClass(routes.PropertiesList, "COMPOUND"),
+                          linkClass(routes.PropertiesList.Root, "COMPOUND"),
                           isRTL
                             ? "text-right flex-row items-center justify-end gap-3"
                             : "text-left flex-row items-center justify-start gap-3"
@@ -159,11 +163,11 @@ function WebNavigation({
                       <Link
                         // onClick={() => router.push({ pathname: routes.PropertiesList, query: { propertyType: 'SEPARATED' } } as any)}
                         href={{
-                          pathname: routes.PropertiesList,
+                          pathname: routes.PropertiesList.Root,
                           query: { propertyType: "SEPARATED" },
                         }}
                         className={cn(
-                          linkClass(routes.PropertiesList, "SEPARATED"),
+                          linkClass(routes.PropertiesList.Root, "SEPARATED"),
                           isRTL
                             ? "text-right flex-row items-center justify-end gap-3"
                             : "text-left flex-row items-center justify-start gap-3"
@@ -185,8 +189,8 @@ function WebNavigation({
               className={navigationMenuTriggerStyle()}
             >
               <Link
-                href={routes.NewLaunches}
-                className={linkClass(routes.NewLaunches)}
+                href={routes.NewLaunches.Root}
+                className={linkClass(routes.NewLaunches.Root)}
               >
                 {t("newLaunches")}
               </Link>
@@ -247,7 +251,8 @@ function WebNavigation({
             </NavigationMenuLink>
           </NavigationMenuItem>
 
-          {isAuthenticated && <UserAccount />}
+          {/* {isAuthenticated && <UserAccount />} */}
+          {user && <UserAccount />}
 
           {openAlertDialog && (
             <AlertDialogDemo
@@ -328,7 +333,6 @@ function WebNavigation({
 
           {/* <LocaleSwitcher /> */}
         </NavigationMenuList>
-
       </NavigationMenu>
     </div>
   );

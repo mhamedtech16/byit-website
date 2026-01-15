@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-import { NewLaunch, Property } from "@/types/Properties";
+import { NewLaunch, ProjectsUnit } from "@/types/PropertiesV2";
 
 import { UserState } from "./types/favourites.types";
 
@@ -10,7 +10,7 @@ const useFavouritesStore = create<UserState>()(
     (set) => ({
       favouritesProperties: [],
       favouritesNewLaunches: [],
-      setFavouritesProperties: (properties: Property[]) =>
+      setFavouritesProperties: (properties: ProjectsUnit[]) =>
         set({ favouritesProperties: properties }),
 
       setFavouritesNewlaunches: (newlaunches: NewLaunch[]) =>

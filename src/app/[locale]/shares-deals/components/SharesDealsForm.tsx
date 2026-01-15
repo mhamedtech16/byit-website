@@ -10,8 +10,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { routes } from "@/_lib/routes";
-import { sharesProperties } from "@/_utils/validation";
-import { sharesDealFormApi } from "@/Apis/v1/Auth";
+import { sharesPropertiesSchema } from "@/_utils/validation";
+import { sharesUnitFormApi, uploadFile } from "@/Apis/v2/usePostApis";
 import { AlertDialogDemo } from "@/components/Alret";
 import { CountryDropdown } from "@/components/CountryCodeDropdown";
 import { FormDropdownInputNumbers } from "@/components/form/FormDropdownInputNumbers";
@@ -19,7 +19,7 @@ import { FormSharesDropdown } from "@/components/form/FormSharesDropdown";
 import { FormTextInput } from "@/components/form/FormTextInput";
 import { colors } from "@/constants/colors";
 import { useIsRTL } from "@/hooks/useRTL";
-import { useSharedProperties } from "@/hooks/useSharedProperties";
+import { useShareUnit } from "@/hooks/useShareUnit";
 import { pricePerLangauge } from "@/lib/PriceArray";
 import { Button } from "@/shadcn/components/ui/button";
 import {
@@ -33,16 +33,16 @@ import { Input } from "@/shadcn/components/ui/input";
 import { Label } from "@/shadcn/components/ui/label";
 import { cn } from "@/shadcn/lib/utils";
 import { useAuthStore } from "@/store/authStore";
-import { DropdownCountry, SharesDealRequest } from "@/types/User";
+import { DropdownCountry, SharesUnitRequest } from "@/types/User";
 
-type SharesPropertiesValues = z.infer<typeof sharesProperties>;
+type SharesUnitValidation = z.infer<typeof sharesPropertiesSchema>;
 
 export default function SharesDealsForm() {
   const router = useRouter();
   const t = useTranslations("ClosingForm");
   const [selectedCountry, setSelectedCountry] =
     useState<DropdownCountry | null>(null);
-  const { vendors } = useSharedProperties();
+  const { shareUnit } = useShareUnit();
   const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
   const isRTL = useIsRTL();
@@ -53,35 +53,37 @@ export default function SharesDealsForm() {
   const [shareOptions, setShareOptions] = useState<
     { id: number; name: string }[]
   >([]);
+  const [uploadedFileUrl, setUploadedFileUrl] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
 
-  const form = useForm<SharesPropertiesValues>({
-    resolver: zodResolver(sharesProperties),
+  const form = useForm<SharesUnitValidation>({
+    resolver: zodResolver(sharesPropertiesSchema),
     defaultValues: {
-      sharedProperty: "",
-      sharesCount: "",
-      clientName: "",
-      //   sharesValue: 0,
-      developerSalesName: "",
-      developerSalesNumber: "",
+      shared_unit: "",
+      shared_count: "",
+      client_name: "",
+      salesperson_name: "",
+      salesperson_phone: "",
+      sales_country_code: selectedCountry?.countryCode ?? "+20",
       value: 0,
-      countryCode: selectedCountry?.countryCode ?? "+20", // Default to Egypt
-      uploadFile: undefined, // File input will be handled separately
+      salesperson_country: selectedCountry?.name ?? "Egypt", // Default to Egypt
+      image: "",
     },
   });
 
-  const selectedProjectId = form.watch("sharedProperty");
-  const selectedSharesCount = form.watch("sharesCount");
+  const selectedProjectId = form.watch("shared_unit");
+  const selectedSharesCount = form.watch("shared_count");
 
   useEffect(() => {
-    if (!selectedProjectId || !vendors) return;
+    if (!selectedProjectId || !shareUnit) return;
 
-    const selectedProject = vendors.find(
-      (item) => item.id === Number(selectedProjectId)
+    const selectedProject = shareUnit.find(
+      (item) => item.id === selectedProjectId
     );
 
     if (selectedProject) {
       const options = Array.from(
-        { length: selectedProject.availableShares },
+        { length: selectedProject.available_shares },
         (_, i) => ({
           id: i + 1,
           name: String(i + 1),
@@ -89,61 +91,68 @@ export default function SharesDealsForm() {
       );
       setShareOptions(options);
 
-      const count = Number(form.getValues("sharesCount"));
+      const count = Number(form.getValues("shared_count"));
       if (count) {
-        const total = count * selectedProject.sharePrice;
+        const total = count * selectedProject.share_price;
         form.setValue("value", total);
       }
     } else {
       setShareOptions([]);
       form.setValue("value", 0);
     }
-  }, [selectedProjectId, vendors, form]);
+  }, [selectedProjectId, shareUnit, form]);
 
   useEffect(() => {
-    if (!selectedProjectId || !vendors) return;
+    if (!selectedProjectId || !shareUnit) return;
 
-    const selectedProject = vendors.find(
-      (item) => item.id === Number(selectedProjectId)
+    const selectedProject = shareUnit.find(
+      (item) => item.id === selectedProjectId
     );
 
     if (selectedProject) {
       const count = Number(selectedSharesCount);
       if (count) {
-        const total = count * selectedProject.sharePrice;
+        const total = count * selectedProject.share_price;
         form.setValue("value", total);
       } else {
         form.setValue("value", 0);
       }
     }
-  }, [selectedSharesCount, selectedProjectId, vendors, form]);
+  }, [selectedSharesCount, selectedProjectId, shareUnit, form]);
+
+  const addFile = useCallback(async (file: File | undefined) => {
+    if (!file) return;
+    try {
+      setUploading(true);
+      const res = await uploadFile(file);
+      setUploadedFileUrl(res.data.message.file_url);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setUploading(false);
+    }
+  }, []);
 
   const onSubmit = useCallback(
-    async (values: SharesPropertiesValues) => {
-      const payload: SharesDealRequest = {
+    async (values: SharesUnitValidation) => {
+      const payload: SharesUnitRequest = {
         ...values,
-        type: "SHARING",
-        sharesCount:
-          typeof values.sharesCount === "string"
-            ? Number(values.sharesCount)
-            : values.sharesCount,
-        sharedProperty:
-          typeof values.sharedProperty === "string"
-            ? Number(values.sharedProperty)
-            : values.sharedProperty,
-        value:
-          typeof values.value === "string"
-            ? Number(values.value)
-            : values.value,
-        salesCountry: selectedCountry?.id ?? 0,
-        clientCountry: 50,
-        uploadFile: values.uploadFile,
+        client_name: values.client_name,
+        shared_count:
+          typeof values.shared_count === "string"
+            ? Number(values.shared_count)
+            : values.shared_count,
+        shared_unit: values.shared_unit,
+        salesperson_name: values.salesperson_name,
+        salesperson_phone: values.sales_country_code + values.salesperson_phone,
+        salesperson_country: values.salesperson_country,
+        image: uploadedFileUrl || "",
       };
 
       setLoading(true);
       setErrorMsg("");
       try {
-        const response = await sharesDealFormApi(payload, locale);
+        const response = await sharesUnitFormApi(payload);
 
         if (!response?.data) {
           throw new Error("Invalid response from server");
@@ -152,21 +161,21 @@ export default function SharesDealsForm() {
         if (response?.data) {
           setSharesDeal(response.data);
           form.reset({
-            sharedProperty: "",
-            sharesCount: "",
-            clientName: "",
-            // sharesValue: 0,
-            developerSalesName: "",
-            developerSalesNumber: "",
+            shared_unit: "",
+            shared_count: "",
+            client_name: "",
+            salesperson_name: "",
+            salesperson_phone: "",
+            salesperson_country: "",
+            sales_country_code: "",
             value: 0,
-            uploadFile: undefined,
+            image: "",
           });
 
           if (fileInputRef.current) {
             fileInputRef.current.value = "";
           }
         }
-        console.log(response.data);
 
         setOpenAlertDialog(true);
       } catch (err) {
@@ -180,7 +189,7 @@ export default function SharesDealsForm() {
         setLoading(false);
       }
     },
-    [selectedCountry?.id, locale, setSharesDeal, form]
+    [uploadedFileUrl, setSharesDeal, form]
   );
 
   return (
@@ -195,12 +204,12 @@ export default function SharesDealsForm() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
           <FormSharesDropdown
             form={form}
-            name="sharedProperty"
+            name="shared_unit"
             label="shareProperties"
             title="selectShareProperties"
             titleSearch="searchShareProperties"
             titleLoading="loadingShareProperties"
-            data={vendors}
+            data={shareUnit}
             width="w-full"
             translate="ClosingForm"
             outlineSecoundry
@@ -208,7 +217,7 @@ export default function SharesDealsForm() {
           />
           <FormDropdownInputNumbers
             form={form}
-            name="sharesCount"
+            name="shared_count"
             label="sharesCount"
             title="sharesCount"
             data={shareOptions}
@@ -231,7 +240,7 @@ export default function SharesDealsForm() {
           />
           <FormTextInput
             form={form}
-            name="clientName"
+            name="client_name"
             label="clientName"
             placeholder="clientName"
             translate="ClosingForm"
@@ -241,18 +250,18 @@ export default function SharesDealsForm() {
 
           <FormTextInput
             form={form}
-            name="developerSalesName"
+            name="salesperson_name"
             label="developerSalesName"
             placeholder="developerSalesName"
             translate="ClosingForm"
             type="text"
             className="text-white"
           />
-          {/* Merged Country Code + Sales Number */}
+          {/* Sales Number + Country Code */}
           <Label
             className={cn(
               "text-white mb-2",
-              form.formState.errors.developerSalesNumber && "text-red-500 mb-2"
+              form.formState.errors.salesperson_phone && "text-red-500 mb-2"
             )}
           >
             {t("developerSalesNumber")}
@@ -266,14 +275,12 @@ export default function SharesDealsForm() {
               disabled={false}
               placeholder="Code"
             />
-
             <FormTextInput
               form={form}
-              name="developerSalesNumber"
+              name="salesperson_phone"
               placeholder="developerSalesNumber"
               translate="ClosingForm"
               type="tel"
-              onChange
               className={cn(
                 "text-white",
                 isRTL ? "text-right rounded-r-none" : "text-left rounded-l-none"
@@ -283,7 +290,7 @@ export default function SharesDealsForm() {
 
           <FormField
             control={form.control}
-            name="uploadFile"
+            name="image"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-white">
@@ -292,19 +299,20 @@ export default function SharesDealsForm() {
                 <FormControl>
                   <Input
                     ref={(el) => {
-                      field.ref(el); // still register with RHF
-                      fileInputRef.current = el; // store in your ref
+                      field.ref(el);
+                      fileInputRef.current = el;
                     }}
                     type="file"
                     accept=".pdf,.jpg,.jpeg,.png"
                     name={field.name}
                     className="text-white border-dashed"
                     placeholder="Upload File"
-                    aria-placeholder="Upload File"
-                    onChange={(e) => field.onChange(e.target.files?.[0])}
+                    onChange={async (e) => addFile(e.target.files?.[0])}
                   />
                 </FormControl>
                 <p className="text-white">PDF JPG JPEG PNG</p>
+                {uploading && <p>Uplaoding...</p>}
+                {uploadedFileUrl && <p>{uploadedFileUrl}</p>}
               </FormItem>
             )}
           />

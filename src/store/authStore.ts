@@ -1,14 +1,14 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-import { ClosignForm, SharesDealData, User } from "@/types/User";
+import { CurrentUser, Deals, SharesUnitData, User } from "@/types/User";
 
 import { UserState } from "./authStore.types";
 
 const useAuthStore = create<UserState>()(
   persist(
     (set) => ({
-      // user: null,
+      user: null,
       closingFormUser: null,
       sharesDeal: null,
       currentUser: null,
@@ -19,10 +19,9 @@ const useAuthStore = create<UserState>()(
       setToken: (token: string) => set({ token }),
       setcurrentUser: (currentUser: User | null) => set({ currentUser }),
       setSignupUser: (signupUser: User) => set({ signupUser }),
-      setClsosingFormUser: (closingFormUser: ClosignForm) =>
-        set({ closingFormUser }),
-      setSharesDeal: (sharesDeal: SharesDealData) => set({ sharesDeal }),
-      // setUser: (currentUser: SignUp) => set({ user }),
+      setClsosingFormUser: (closingFormUser: Deals) => set({ closingFormUser }),
+      setSharesDeal: (sharesDeal: SharesUnitData) => set({ sharesDeal }),
+      setUser: (user: CurrentUser) => set({ user }),
       clearUser: () => set({ currentUser: null }),
       // get isAuthenticated() {
       //   return get().currentUser !== null;

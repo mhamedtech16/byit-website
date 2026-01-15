@@ -38,7 +38,6 @@ export function DropdownInputNumbers({
   className,
   outlineSecoundry,
 }: Props) {
-  const t = useTranslations();
   const [open, setOpen] = React.useState(false);
   const buttonRef = React.useRef<HTMLButtonElement>(null);
   const [popoverWidth, setPopoverWidth] = React.useState<number | null>(null);
@@ -62,7 +61,7 @@ export function DropdownInputNumbers({
             className
           )}
         >
-          {value ? data.find((item) => item.id === value)?.name : t(title)}
+          {value ? data.find((item) => item.id === value)?.name : title}
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>

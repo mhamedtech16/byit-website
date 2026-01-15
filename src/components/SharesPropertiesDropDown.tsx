@@ -27,13 +27,12 @@ type Props = {
   titleSearch?: string;
   titleLoading?: string;
   data: {
-    id: string | number;
-    projectName: string;
-    projectName_ar: string;
-    projectName_en: string;
+    id: string;
+    project_en_name: string;
+    project_ar_name: string;
   }[];
   width?: string;
-  value?: number;
+  value?: string;
   onChange: (value: string | number) => void;
   onClick?: () => void;
   className?: ClassNameValue;
@@ -94,12 +93,11 @@ export function SharesPropertiesDropDown({
           {value
             ? data.find(
                 (framework: {
-                  id: string | number;
-                  projectName: string;
-                  projectName_ar: string;
-                  projectName_en: string;
+                  id: string;
+                  project_en_name: string;
+                  project_ar_name: string;
                 }) => framework.id === value
-              )?.[isRTL ? "projectName_ar" : "projectName_en"]
+              )?.id
             : title && t(title)}
           <ChevronsUpDown className="opacity-50" />
         </Button>
@@ -118,22 +116,21 @@ export function SharesPropertiesDropDown({
             <CommandGroup>
               {data.map(
                 (framework: {
-                  id: string | number;
-                  projectName: string;
-                  projectName_ar: string;
-                  projectName_en: string;
+                  id: string;
+                  project_en_name: string;
+                  project_ar_name: string;
                 }) => (
                   <CommandItem
                     key={framework.id}
-                    value={framework.projectName}
+                    value={framework.id}
                     onSelect={() => {
                       onChange(framework.id);
                       setOpen(false);
                     }}
                   >
                     {isRTL
-                      ? framework.projectName_ar
-                      : framework.projectName_en || framework.projectName}
+                      ? framework.project_ar_name
+                      : framework.project_en_name || framework.id}
                     <Check
                       className={cn(
                         "ml-auto",

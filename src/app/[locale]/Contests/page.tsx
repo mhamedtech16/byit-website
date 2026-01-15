@@ -5,6 +5,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import { getUserDataApi } from "@/Apis/v1/Auth";
 import useGetApis from "@/Apis/v1/useGetApis";
+import useGetApisV2 from "@/Apis/v2/useGetApis";
 import { useMobile } from "@/hooks/useMobile";
 import { cn } from "@/shadcn/lib/utils";
 import { useAuthStore } from "@/store/authStore";
@@ -16,6 +17,7 @@ const Contests = () => {
   const isMobile = useMobile();
   const currentUser = useAuthStore((state) => state.currentUser);
   const { getAppSettingApi } = useGetApis();
+  const { getAboutUsApi } = useGetApisV2();
   const [prizesData, setPrizesData] = useState<PrizesData>();
   const [userTargetAchievement, setUserTargetAchievement] = useState<number>(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -39,14 +41,14 @@ const Contests = () => {
   );
 
   const getAppSetting = useCallback(() => {
-    getAppSettingApi()
+    getAboutUsApi()
       .then((response) => {
         setPrizesData(response.data.data);
       })
       .catch((error) => {
         console.error(error);
       });
-  }, [getAppSettingApi]);
+  }, [getAboutUsApi]);
 
   const getUserData = useCallback(() => {
     getUserDataApi(currentUser)
@@ -96,11 +98,11 @@ const Contests = () => {
   return (
     <div>
       {/* الصورة الأولى */}
-      {prizesData?.targetAchievementLogo && (
+      {prizesData?.target_logo && (
         <div className="relative w-[85%] h-[45vmin] mx-auto">
           <Image
             alt="property image"
-            src={prizesData.targetAchievementLogo}
+            src={prizesData.target_logo}
             fill
             className="object-contain rounded-xl"
           />
@@ -146,11 +148,11 @@ const Contests = () => {
 
       {/* الصورة الأخيرة */}
 
-      {prizesData?.targetAchievementInfo && (
+      {prizesData?.target_info && (
         <div className="relative w-[85%] h-[45vmin] mx-auto">
           <Image
             alt="property image"
-            src={prizesData.targetAchievementInfo}
+            src={prizesData.target_info}
             fill
             className="object-contain rounded-xl"
           />

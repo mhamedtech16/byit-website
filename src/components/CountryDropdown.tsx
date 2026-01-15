@@ -27,10 +27,9 @@ type Props = {
   titleSearch?: string;
   titleLoading?: string;
   data: {
-    id: string | number;
-    name: string;
-    name_en: string;
-    name_ar: string;
+    id: string;
+    en_name: string;
+    ar_name: string;
   }[];
   width?: string;
   value?: string | number; // <-- change here
@@ -83,37 +82,21 @@ export function CountryDropdown({
         >
           {value
             ? data.find(
-                (framework: {
-                  id: string | number;
-                  name: string;
-                  name_en: string;
-                  name_ar: string;
-                }) => framework.name === value
-              )?.name ||
+                (framework: { id: string; en_name: string; ar_name: string }) =>
+                  framework.id === value
+              )?.id ||
               data.find(
-                (framework: {
-                  id: string | number;
-                  name: string;
-                  name_en: string;
-                  name_ar: string;
-                }) => framework.name_ar === value
-              )?.name_ar ||
+                (framework: { id: string; en_name: string; ar_name: string }) =>
+                  framework.ar_name === value
+              )?.en_name ||
               data.find(
-                (framework: {
-                  id: string | number;
-                  name: string;
-                  name_en: string;
-                  name_ar: string;
-                }) => framework.name_en === value
-              )?.name_en ||
+                (framework: { id: string; en_name: string; ar_name: string }) =>
+                  framework.en_name === value
+              )?.en_name ||
               data.find(
-                (framework: {
-                  id: string | number;
-                  name: string;
-                  name_en: string;
-                  name_ar: string;
-                }) => framework.id === value
-              )?.name
+                (framework: { id: string; en_name: string; ar_name: string }) =>
+                  framework.id === value
+              )?.id
             : title && t(title)}
           <ChevronsUpDown className="opacity-50" />
         </Button>
@@ -132,22 +115,21 @@ export function CountryDropdown({
             <CommandGroup>
               {data.map(
                 (framework: {
-                  id: string | number;
-                  name: string;
-                  name_en: string;
-                  name_ar: string;
+                  id: string;
+                  en_name: string;
+                  ar_name: string;
                 }) => (
                   <CommandItem
                     key={framework.id}
-                    value={framework.name}
+                    value={framework.id}
                     onSelect={() => {
                       onChange(framework.id);
                       setOpen(false);
                     }}
                   >
                     {isRTL
-                      ? framework.name_ar
-                      : framework.name_en || framework.name || framework.id}
+                      ? framework.ar_name
+                      : framework.en_name || framework.id}
                     <Check
                       className={cn(
                         "ml-auto",
