@@ -34,19 +34,17 @@ type UpdateFormValues = z.infer<typeof updateAccountSchema>;
 
 const yearsExperienceOptions = [
   {
-    id: 1,
-    name: "0 - 6 Months",
-    name_en: "0 - 6 Months",
-    name_ar: "٠ - ٦ شهور",
+    id: "1",
+    en_name: "0 - 6 Months",
+    ar_name: "٠ - ٦ شهور",
   },
-  { id: 2, name: "1 Years", name_en: "1 Year", name_ar: "سنة واحدة" },
-  { id: 3, name: "2 Years", name_en: "2 Years", name_ar: "سنتان" },
-  { id: 4, name: "3 Years", name_en: "3 Years", name_ar: "ثلاث سنوات" },
+  { id: "2", en_name: "1 Year", ar_name: "سنة واحدة" },
+  { id: "3", en_name: "2 Years", ar_name: "سنتان" },
+  { id: "4", en_name: "3 Years", ar_name: "ثلاث سنوات" },
   {
-    id: 5,
-    name: "4+ Years",
-    name_en: "4+ Years",
-    name_ar: "أكثر من أربع سنوات",
+    id: "5",
+    en_name: "4+ Years",
+    ar_name: "أكثر من أربع سنوات",
   },
 ];
 
@@ -70,9 +68,11 @@ export default function UpdateAccount() {
       fullname: currentUser?.user.fullname || "",
       email: currentUser?.user.email || "",
       city:
-        currentUser?.user?.city?.name || currentUser?.user?.city?.name_en || "",
+        currentUser?.user?.city?.country ||
+        currentUser?.user?.city?.en_name ||
+        "",
       yearsExperience: currentUser?.user.yearsExperience || "",
-      countryCode: selectedCountry?.countryCode ?? "+20",
+      countryCode: selectedCountry?.phone_code ?? "+20",
       phone: currentUser?.user.phone || "",
     },
   });
@@ -92,7 +92,7 @@ export default function UpdateAccount() {
           fullname: values.fullname ?? "",
           email: values.email ?? "",
           yearsExperience: values.yearsExperience ?? "",
-          country: selectedCountry?.id ?? 0,
+          country: selectedCountry?.id ?? "",
           type: "ISP",
         };
 

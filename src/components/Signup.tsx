@@ -80,7 +80,7 @@ export default function SignUpPage({
       yearsExperience: "",
       city: "",
       phone: "",
-      countryCode: selectedCountry?.countryCode ?? "+20", // Default to Egypt
+      countryCode: selectedCountry?.phone_code ?? "+20", // Default to Egypt
     },
     mode: "onBlur",
   });

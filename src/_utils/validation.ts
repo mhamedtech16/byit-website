@@ -120,7 +120,6 @@ export const sharesPropertiesSchema = z
     salesperson_phone: z.string().min(1, "Developer sales number is required"),
     value: z.number().min(1, "Deal value is required"),
     image: z.string().optional(),
-    salesperson_country: z.string().min(1, "Country code is required"),
     sales_country_code: z.string().min(1, "Country code is required"),
   })
   .superRefine((data, ctx) => {

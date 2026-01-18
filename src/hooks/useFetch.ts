@@ -39,9 +39,9 @@ const useFetch = () => {
         setCities(
           cityRes.data?.data?.map((city: DropdownCity) => ({
             id: String(city.id),
-            name: city.name,
-            name_ar: city.name_ar,
-            name_en: city.name_en,
+            name: city.country,
+            name_ar: city.ar_name,
+            name_en: city.en_name,
           })) || []
         );
         setDevelopers(developerRes.data?.data || []);

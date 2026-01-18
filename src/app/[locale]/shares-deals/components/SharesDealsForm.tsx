@@ -64,9 +64,8 @@ export default function SharesDealsForm() {
       client_name: "",
       salesperson_name: "",
       salesperson_phone: "",
-      sales_country_code: selectedCountry?.countryCode ?? "+20",
+      sales_country_code: selectedCountry?.phone_code ?? "+20",
       value: 0,
-      salesperson_country: selectedCountry?.name ?? "Egypt", // Default to Egypt
       image: "",
     },
   });
@@ -145,7 +144,6 @@ export default function SharesDealsForm() {
         shared_unit: values.shared_unit,
         salesperson_name: values.salesperson_name,
         salesperson_phone: values.sales_country_code + values.salesperson_phone,
-        salesperson_country: values.salesperson_country,
         image: uploadedFileUrl || "",
       };
 
@@ -166,7 +164,6 @@ export default function SharesDealsForm() {
             client_name: "",
             salesperson_name: "",
             salesperson_phone: "",
-            salesperson_country: "",
             sales_country_code: "",
             value: 0,
             image: "",

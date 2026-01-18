@@ -1,6 +1,7 @@
 "use client";
 
 import { CheckIcon, ChevronDown, Globe } from "lucide-react";
+import Image from "next/image";
 import React, { forwardRef, useCallback, useEffect, useState } from "react";
 import { CircleFlag } from "react-circle-flags";
 
@@ -48,7 +49,7 @@ const CountryDropdownComponent = (
 
   useEffect(() => {
     if (!selectedCountry && countries.length) {
-      const defaultCountry = countries.find((c) => c.isoCode === "EGY");
+      const defaultCountry = countries.find((c) => c.country_code === "eg");
 
       if (defaultCountry) {
         setSelectedCountry(defaultCountry);
@@ -83,21 +84,22 @@ const CountryDropdownComponent = (
         {selectedCountry ? (
           <div className="flex items-center justify-center flex-grow w-0 gap-2">
             <div className="flex items-center justify-center w-5 h-5 shrink-0 gap-1">
-              {selectedCountry.isoCode && (
-                <CircleFlag
-                  countryCode={selectedCountry.isoCode
-                    .slice(0, -1)
-                    .toLowerCase()}
-                  height={20}
+              {selectedCountry.image && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={selectedCountry.image}
+                  alt={
+                    isRTL ? selectedCountry.ar_name : selectedCountry.en_name
+                  }
                 />
               )}
               <span className="text-gray-400 whitespace-nowrap">
-                {selectedCountry.countryCode}
+                {selectedCountry.phone_code}
               </span>
             </div>
             {!slim && (
               <span className="overflow-hidden text-ellipsis whitespace-nowrap">
-                {selectedCountry.name}
+                {isRTL ? selectedCountry.ar_name : selectedCountry.en_name}
               </span>
             )}
           </div>
@@ -135,20 +137,19 @@ const CountryDropdownComponent = (
                 >
                   <div className="flex flex-grow w-0 space-x-2 overflow-hidden">
                     <div className="inline-flex items-center justify-center w-5 h-5 shrink-0 overflow-hidden rounded-full">
-                      {option.isoCode && (
-                        <CircleFlag
-                          countryCode={option.isoCode
-                            .slice(0, -1)
-                            .toLowerCase()}
-                          height={20}
+                      {option.image && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={option.image}
+                          alt={isRTL ? option.ar_name : option.en_name}
                         />
                       )}
                     </div>
                     <span className="overflow-hidden text-ellipsis whitespace-nowrap">
-                      {isRTL ? option.name_ar : option.name_en}
+                      {isRTL ? option.ar_name : option.en_name}
                     </span>
                     <span className="overflow-hidden text-gray-400 whitespace-nowrap">
-                      ({option.countryCode})
+                      ({option.phone_code})
                     </span>
                   </div>
                   <CheckIcon

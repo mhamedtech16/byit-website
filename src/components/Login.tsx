@@ -51,7 +51,7 @@ export default function LoginPage({ toggleMode, CloseModal }: Props) {
     defaultValues: {
       phone: "",
       password: "",
-      countryCode: selectedCountry?.countryCode || "+20", // Default to Egypt
+      countryCode: selectedCountry?.phone_code || "+20", // Default to Egypt
     },
   });
 

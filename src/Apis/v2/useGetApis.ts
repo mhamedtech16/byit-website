@@ -2,12 +2,9 @@
 import { useLocale } from "next-intl";
 import React from "react";
 
-import { useIsRTL } from "@/hooks/useRTL";
-
 import { api } from "./apiInstance";
 
 const useGetApisV2 = () => {
-  const isRTL = useIsRTL();
   const currentLang = useLocale();
 
   const getCurrentUserApi = React.useCallback(async () => {

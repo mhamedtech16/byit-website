@@ -141,10 +141,10 @@ export interface Country {
 }
 
 export interface City {
-  name: string;
-  name_en: string;
-  name_ar: string;
-  id: number;
+  country: string;
+  en_name: string;
+  ar_name: string;
+  id: string;
 }
 
 export interface DropdownDeveloper {
@@ -184,10 +184,10 @@ export interface DropdownProject {
 }
 
 export interface DropdownCity {
-  name_en: string;
-  name_ar: string;
-  name: string;
-  id: number;
+  en_name: string;
+  ar_name: string;
+  country: string;
+  id: string;
 }
 
 export interface DropdownVendors {
@@ -198,16 +198,14 @@ export interface DropdownVendors {
 }
 
 export interface DropdownCountry {
-  name: string;
-  name_ar: string;
-  name_en: string;
-  countryCode: string;
-  isoCode: string;
-  numbersCount: number;
-  hint: string;
-  img: string;
-  id: number;
+  ar_name: string;
+  en_name: string;
+  country_code: string;
+  phone_code: string;
+  image: string;
+  id: string;
 }
+
 export interface SignUpRequest {
   fullname: string;
   email: string;
@@ -228,7 +226,7 @@ export interface UpdateAccountRequest {
   city?: string;
   type?: string;
   yearsExperience?: string;
-  country: number;
+  country: string;
 }
 
 export interface UpdatePasswordRequest {
@@ -349,7 +347,6 @@ export interface SharesUnitRequest {
   salesperson_phone: string;
   shared_unit: string;
   shared_count: number;
-  salesperson_country: string; // Country code for phone number validation
   image: string; // File object for the uploaded document
 }
 

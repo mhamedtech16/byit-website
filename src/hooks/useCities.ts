@@ -2,21 +2,23 @@
 
 import { useEffect, useState } from "react";
 
-import useGetApis from "@/Apis/v1/useGetApis";
+import useGetApisV2 from "@/Apis/v2/useGetApis";
 import { DropdownCity } from "@/types/User";
 
 export const useCities = () => {
   const [cities, setCities] = useState<DropdownCity[]>([]);
-  const { getAllCitiessApi } = useGetApis();
+  const { getCitiesApi } = useGetApisV2();
 
   useEffect(() => {
     const fetchCities = async () => {
       try {
-        const res = await getAllCitiessApi();
+        const res = await getCitiesApi();
         const cityList: DropdownCity[] =
           res.data?.data.map((city: DropdownCity) => ({
             id: String(city.id),
-            name: city.name,
+            name: city.country,
+            ar_name: city.ar_name,
+            en_name: city.en_name,
           })) || [];
 
         setCities(cityList);
@@ -26,7 +28,7 @@ export const useCities = () => {
     };
 
     fetchCities();
-  }, [getAllCitiessApi]);
+  }, [getCitiesApi]);
 
   return { cities };
 };

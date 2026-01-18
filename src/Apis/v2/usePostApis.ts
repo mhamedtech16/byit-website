@@ -61,7 +61,6 @@ export const sharesUnitFormApi = async (
     shares_count: values.shared_count,
     client_name: values.client_name,
     salesperson_name: values.salesperson_name,
-    sales_country: values.salesperson_country,
     salesperson_phone: values.salesperson_phone,
     image: values.image,
   };

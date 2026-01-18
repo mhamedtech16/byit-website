@@ -105,8 +105,8 @@ export default function AccountDetailsMobile() {
                   {
                     label: t("state"),
                     value:
-                      currentUser?.user?.city?.name ||
-                      currentUser?.user?.city?.name_en,
+                      currentUser?.user?.city?.country ||
+                      currentUser?.user?.city?.en_name,
                   },
                   {
                     label: t("yearsExperience"),

@@ -98,7 +98,7 @@ export default function ClosingForm() {
       salesperson_name: "",
       salesperson_phone: "",
       price: "",
-      sales_country_code: selectedCountry?.countryCode ?? "+20",
+      sales_country_code: selectedCountry?.phone_code ?? "+20",
       image: "",
     },
   });

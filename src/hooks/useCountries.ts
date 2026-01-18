@@ -3,17 +3,17 @@
 
 import { useEffect, useState } from "react";
 
-import useGetApis from "@/Apis/v1/useGetApis";
+import useGetApisV2 from "@/Apis/v2/useGetApis";
 import { DropdownCountry } from "@/types/User";
 
 export const useCountries = () => {
   const [countries, setCountries] = useState<DropdownCountry[]>([]);
-  const { getAllCountriesApi } = useGetApis();
+  const { getCountiresApi } = useGetApisV2();
 
   useEffect(() => {
     const fetchCountries = async () => {
       try {
-        const res = await getAllCountriesApi();
+        const res = await getCountiresApi();
         setCountries(res.data?.data || []);
       } catch (error) {
         console.error("Failed to fetch countries:", error);
@@ -21,7 +21,7 @@ export const useCountries = () => {
     };
 
     fetchCountries();
-  }, [getAllCountriesApi]);
+  }, [getCountiresApi]);
 
   return { countries };
 };
