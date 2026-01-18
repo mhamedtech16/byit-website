@@ -287,7 +287,6 @@ export interface DealsFormRequest {
   client_name: string;
   salesperson_name: string;
   salesperson_phone: string;
-  salesperson_country: string;
   developer_text: string;
   project_text: string;
   project: string;

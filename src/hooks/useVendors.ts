@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import useGetApisV2 from "@/Apis/v2/useGetApis";
-import { Projects } from "@/types/PropertiesV2";
 
 type Partners = {
   id: string;
@@ -12,30 +11,39 @@ type Partners = {
 };
 
 export const useVendors = () => {
-  const [vendors, setVendors] = useState<Partners[]>([]);
-  const { getProjectsApi } = useGetApisV2();
+  const [partners, setPartners] = useState<Partners[]>([]);
+  const [partnerPage, setPartnerPage] = useState(1);
+  const [partnerPages, setPartnerPages] = useState(0);
 
-  useEffect(() => {
-    const fetchCities = async () => {
+  const [partnerLoading, setPartnerLoading] = useState(false);
+  const { getPartnerApi } = useGetApisV2();
+
+  const fetchPartners = useCallback(
+    async (page: number = 1, limit?: number) => {
       try {
-        const res = await getProjectsApi();
-        const vendorsList: Projects[] =
-          res.data?.data?.map((pro: Projects) =>
-            pro.partners.map((partner: Partners) => ({
-              id: partner.id,
-              ar_name: partner.ar_name,
-              en_name: partner.en_name,
-            }))
-          ) || [];
+        setPartnerLoading(true);
+        const response = await getPartnerApi(page, limit || 20);
 
-        setVendors(vendorsList);
+        if (response?.data?.data) {
+          setPartners(response?.data?.data);
+          setPartnerPage(response.data.current_page);
+          setPartnerPages(response.data.total_pages);
+        }
       } catch (error) {
-        console.error("Failed to fetch cities:", error);
+        console.error("Error fetching developers:", error);
+      } finally {
+        setPartnerLoading(false);
       }
-    };
+    },
+    [getPartnerApi]
+  );
 
-    fetchCities();
-  }, [getProjectsApi]);
-
-  return { vendors };
+  return {
+    partners,
+    setPartners,
+    fetchPartners,
+    partnerLoading,
+    partnerPage,
+    partnerPages,
+  };
 };

@@ -70,7 +70,6 @@ export const closingFormSchema = z
     price: z.string().min(1, "Price value is required"),
     image: z.string().optional(),
     sales_country_code: z.string().min(1, "Invalid Phone Number"),
-    salesperson_country: z.string().min(1, "Country code is required"),
   })
   .superRefine((data, ctx) => {
     validatePhoneNumber("salesperson_phone", "sales_country_code")(data, ctx);

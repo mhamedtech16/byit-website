@@ -2,9 +2,12 @@
 import { useLocale } from "next-intl";
 import React from "react";
 
+import { useIsRTL } from "@/hooks/useRTL";
+
 import { api } from "./apiInstance";
 
 const useGetApisV2 = () => {
+  const isRTL = useIsRTL();
   const currentLang = useLocale();
 
   const getCurrentUserApi = React.useCallback(async () => {
@@ -231,6 +234,25 @@ const useGetApisV2 = () => {
     });
   }, [currentLang]);
 
+  const getPartnerApi = React.useCallback(
+    async (page?: number, limit?: number) => {
+      let url = "method/brokerage.api.partner_api.list";
+      if (page) {
+        url += `?page=${page}`;
+      } else if (limit) {
+        url += `?limit=${limit}`;
+      } else if (limit && page) {
+        url += `?limit=${limit}&page=${page}`;
+      }
+      return api.get(url, {
+        headers: {
+          "Accept-Language": currentLang,
+        },
+      });
+    },
+    [currentLang]
+  );
+
   return {
     getCurrentUserApi,
     getDevelopersApi,
@@ -254,6 +276,7 @@ const useGetApisV2 = () => {
     getProjectsByIdApi,
     getHomeImagesApi,
     getProjectsByDeveloperIdApi,
+    getPartnerApi,
   };
 };
 

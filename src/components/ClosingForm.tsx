@@ -11,11 +11,11 @@ import { z } from "zod";
 
 import { routes } from "@/_lib/routes";
 import { closingFormSchema } from "@/_utils/validation";
-import useGetApisV2 from "@/Apis/v2/useGetApis";
 import { dealsFormApi, uploadFile } from "@/Apis/v2/usePostApis";
 import { colors } from "@/constants/colors";
 import { useDevelopersAndProjects } from "@/hooks/useDevelopersAndProjects";
 import { useIsRTL } from "@/hooks/useRTL";
+import { useVendors } from "@/hooks/useVendors";
 import { Button } from "@/shadcn/components/ui/button";
 import {
   Form,
@@ -28,7 +28,7 @@ import { Input } from "@/shadcn/components/ui/input";
 import { Label } from "@/shadcn/components/ui/label";
 import { cn } from "@/shadcn/lib/utils";
 import { useAuthStore } from "@/store/authStore";
-import { Developers, Partners, Projects } from "@/types/PropertiesV2";
+import { Partners, Projects } from "@/types/PropertiesV2";
 import { DealsFormRequest, DropdownCountry } from "@/types/User";
 
 import { AlertDialogDemo } from "./Alret";
@@ -43,12 +43,6 @@ const OTHER_PROJECT = {
   ar_name: "أخرى",
 };
 
-const OTHER_Vendor = {
-  id: "Other",
-  en_name: "Other",
-  ar_name: "أخرى",
-};
-
 type DealsFormValidation = z.infer<typeof closingFormSchema>;
 
 export default function ClosingForm() {
@@ -57,10 +51,14 @@ export default function ClosingForm() {
   const [selectedCountry, setSelectedCountry] =
     useState<DropdownCountry | null>(null);
 
-  // const { vendors } = useVendors();
-  const [vendors, setVendors] = useState<
-    { id: string; en_name: string; ar_name: string }[]
-  >([]);
+  const {
+    partners,
+    setPartners,
+    partnerLoading,
+    partnerPage,
+    partnerPages,
+    fetchPartners,
+  } = useVendors();
   const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
   const isRTL = useIsRTL();
@@ -68,37 +66,9 @@ export default function ClosingForm() {
   const [openAlertDialog, setOpenAlertDialog] = useState(false);
   const { setClsosingFormUser } = useAuthStore();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  // const [developers, setDevelopers] = useState<Developers[]>([]);
-  // const [projects, setProjects] = useState<Projects[]>([]);
-  // const [allProjects, setAllProjects] = useState<Projects[]>([]);
   const [uploadedFileUrl, setUploadedFileUrl] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
-  // console.log(developers);
-  // console.log(vendors.map((el) => el));
 
-  // const fetchDev = useCallback(async () => {
-  //   try {
-  //     const res = await getDevelopersApi();
-  //     setDevelopers([...res.data.data, OTHER_DEVELOPER]);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }, [getDevelopersApi]);
-
-  // const fetchProjects = useCallback(async () => {
-  //   try {
-  //     const res = await getProjectsApi();
-  //     setProjects(res.data.data);
-  //     setAllProjects(res.data.data);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }, [getProjectsApi]);
-
-  // useEffect(() => {
-  //   fetchDev();
-  //   fetchProjects();
-  // }, [fetchDev, fetchProjects]);
   const {
     developers,
     devPage,
@@ -129,43 +99,24 @@ export default function ClosingForm() {
       salesperson_phone: "",
       price: "",
       sales_country_code: selectedCountry?.countryCode ?? "+20",
-      salesperson_country: selectedCountry?.name ?? "Egypt", // Default to Egypt
       image: "",
     },
   });
-
-  // useEffect(() => {
-  //   if (selectedCountry) {
-  //     setCountryCode(selectedCountry?.countryCode);
-  //   }
-  // }, [selectedCountry]);
 
   const selectedProjectId = form.watch("project");
   const proName = selectedProjectId === "Other";
 
   useEffect(() => {
     if (!selectedProjectId) {
-      setVendors([]);
+      setPartners([]);
       return;
     }
 
     const project = projects.find((p) => p.id === selectedProjectId);
 
     if (selectedProjectId === "Other") {
-      const allPartners: Partners[] = [];
-      projects.forEach((p) => {
-        if (p.partners) {
-          allPartners.push(...p.partners);
-        }
-      });
-
-      const mappedVendors = allPartners.map((partner) => ({
-        id: partner.id,
-        en_name: partner.en_name,
-        ar_name: partner.ar_name,
-      }));
-
-      setVendors(mappedVendors);
+      // fetchPartners(1, true, 10);
+      setPartners(partners);
     } else if (project && (project as Projects).partners) {
       const mappedVendors = project.partners.map((partner: Partners) => ({
         id: partner.id,
@@ -173,22 +124,21 @@ export default function ClosingForm() {
         ar_name: partner.ar_name,
       }));
 
-      setVendors(mappedVendors);
+      setPartners(mappedVendors);
     }
 
-    // reset partner field لما المشروع يتغير
     form.setValue("partner", "");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedProjectId, projects, form]);
 
   const selectedDeveloperId = form.watch("developer");
   const devName = selectedDeveloperId === "Other";
-  // console.log(allProjects);
 
   // ===== Effect to fetch projects when developer changes =====
   useEffect(() => {
     if (!selectedDeveloperId) {
       setProjects([]);
-      setVendors([]);
+      setPartners([]);
       form.setValue("project", "");
       form.setValue("partner", "");
       return;
@@ -198,7 +148,7 @@ export default function ClosingForm() {
       setProjects([OTHER_PROJECT]);
       form.setValue("project", "");
       form.setValue("partner", "");
-      setVendors([]);
+      setPartners([]);
       return;
     }
 
@@ -206,7 +156,7 @@ export default function ClosingForm() {
       fetchProjects(selectedDeveloperId, 1, true);
       form.setValue("project", "");
       form.setValue("partner", "");
-      setVendors([]);
+      setPartners([]);
       return;
     }
 
@@ -242,10 +192,8 @@ export default function ClosingForm() {
           typeof values.price === "string"
             ? Number(values.price)
             : values.price,
-        // salesCountry: selectedCountry?.id ?? 0,
         salesperson_name: values.salesperson_name,
         salesperson_phone: values.sales_country_code + values.salesperson_phone,
-        salesperson_country: values.salesperson_country || "+20",
         image: uploadedFileUrl ?? undefined,
       };
       setLoading(true);
@@ -270,7 +218,6 @@ export default function ClosingForm() {
             salesperson_name: "",
             sales_country_code: "",
             salesperson_phone: "",
-            salesperson_country: "",
             price: "",
             image: "",
           });
@@ -378,12 +325,19 @@ export default function ClosingForm() {
             title="selectPartner"
             titleSearch="searchPartner"
             titleLoading="partnerLoading"
-            data={vendors}
+            data={partners}
             disabled={!selectedProjectId}
             width="w-full"
             translate="ClosingForm"
             className="text-white"
             outlineSecoundry
+            hasMore={
+              selectedProjectId !== "Other" && partnerPages > partnerPage
+            }
+            onLoadMore={(page) => fetchPartners(page, 10)}
+            page={partnerPage}
+            loadingMore={partnerLoading}
+            onClick={() => fetchPartners(1, 10)}
           />
 
           {/* Client Info */}
@@ -428,10 +382,6 @@ export default function ClosingForm() {
             <CountryDropdown
               onChange={(country) => {
                 setSelectedCountry(country);
-                form.setValue("salesperson_country", country.countryCode, {
-                  shouldValidate: true,
-                  shouldDirty: true,
-                });
               }}
               slim={true}
               disabled={false}

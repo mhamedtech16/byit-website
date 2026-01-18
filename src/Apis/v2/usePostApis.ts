@@ -37,7 +37,6 @@ export const dealsFormApi = async (
     client_name: values.client_name || "",
     unit_code: values.unit_code,
     salesperson_name: values.salesperson_name || "",
-    salesCountry: values.salesperson_country ?? "",
     salesperson_phone: values.salesperson_phone || "",
     price: Number(values.price ?? 0),
     type: values.type ?? "Contracted",
