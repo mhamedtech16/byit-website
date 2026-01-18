@@ -1,9 +1,7 @@
 "use client";
 
 import { CheckIcon, ChevronDown, Globe } from "lucide-react";
-import Image from "next/image";
 import React, { forwardRef, useCallback, useEffect, useState } from "react";
-import { CircleFlag } from "react-circle-flags";
 
 import { useCountries } from "@/hooks/useCountries"; // ✅ NEW
 import { useIsRTL } from "@/hooks/useRTL";

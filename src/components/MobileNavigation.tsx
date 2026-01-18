@@ -19,6 +19,7 @@ import { routes } from "@/_lib/routes";
 import { useActiveLink } from "@/_utils/navigation";
 import { logoutApi } from "@/Apis/v1/Auth";
 import { imgs } from "@/assets";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useIsRTL } from "@/hooks/useRTL";
 import { Button } from "@/shadcn/components/ui/button";
 import {
@@ -46,6 +47,7 @@ function MobileNavigation({
   const { linkClass } = useActiveLink();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const isRTL = useIsRTL();
+  const { user } = useCurrentUser();
   const locale = useLocale();
   const [openAlertDialog, setOpenAlertDialog] = useState(false);
   const [openAlertDialogClosingForm, setOpenAlertDialogClosingForm] =
@@ -244,7 +246,7 @@ function MobileNavigation({
               {t("about")}
             </Link>
 
-            {isAuthenticated ? (
+            {user ? (
               <>
                 <Link
                   href={routes.AccountDetails}

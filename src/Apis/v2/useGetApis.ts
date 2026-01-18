@@ -191,13 +191,21 @@ const useGetApisV2 = () => {
     });
   }, [currentLang]);
 
-  const getDealsApi = React.useCallback(async () => {
-    return api.get("method/brokerage.api.deal_api.create", {
-      headers: {
-        "Accept-Language": currentLang,
-      },
-    });
-  }, [currentLang]);
+  const getDealsApi = React.useCallback(
+    async (deal_type: string) => {
+      let url = "method/brokerage.api.deal_api.list";
+
+      if (deal_type) {
+        url += `?deal_type=${deal_type}`;
+      }
+      return api.get(url, {
+        headers: {
+          "Accept-Language": currentLang,
+        },
+      });
+    },
+    [currentLang]
+  );
 
   const getAboutUsApi = React.useCallback(async () => {
     return api.get("method/brokerage.api.settings_api.get", {

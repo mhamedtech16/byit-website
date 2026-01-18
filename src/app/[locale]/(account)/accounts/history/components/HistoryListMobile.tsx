@@ -3,6 +3,7 @@
 import { motion, Variants } from "framer-motion";
 import { History } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
 
 import { imgs } from "@/assets";
 import BackgroundImage from "@/components/BackgroundImage";
@@ -13,10 +14,15 @@ import useHistory from "@/hooks/useHistory";
 import { formatDate } from "@/lib/formateDate";
 import { pricePerLangauge } from "@/lib/PriceArray";
 import { Card, CardContent } from "@/shadcn/components/ui/card";
+import { Tabs, TabsList, TabsTrigger } from "@/shadcn/components/ui/tabs";
+import { cn } from "@/shadcn/lib/utils";
 
 export default function HistoryListMobile() {
   const t = useTranslations("History");
-  const { history, loading } = useHistory();
+  const { history, loading, dealType, refetch } = useHistory();
+  const [activeType, setActiveType] = useState<string>(
+    dealType ?? "contracted"
+  );
   const locale = useLocale();
 
   const totalValue = history.reduce((sum, item) => sum + item.value, 0);
@@ -36,6 +42,17 @@ export default function HistoryListMobile() {
         ease: "easeInOut",
       },
     }),
+  };
+
+  useEffect(() => {
+    if (activeType) {
+      setActiveType(activeType);
+    }
+  }, [activeType]);
+
+  const handleChoice = (page: number, type: string) => {
+    setActiveType(type);
+    refetch(page, type);
   };
 
   if (loading) {
@@ -99,62 +116,80 @@ export default function HistoryListMobile() {
         />
       ) : (
         <div className="flex flex-col px-4">
-          {history.map((item, index) => (
-            <Card key={index} className="shadow-lg mb-4">
-              <CardContent>
-                <div className="space-y-2">
-                  {/*  Client Name */}
-                  <div className="flex space-x-2">
-                    <span className="text-black font-bold">
-                      {`${t("clientName")}:`}
-                    </span>
-                    <span className="font-medium text-app-gray">
-                      {item.clientName}
-                    </span>
-                  </div>
+          <Tabs defaultValue={activeType}>
+            <TabsList className={cn("w-full h-16")}>
+              <TabsTrigger
+                value={"contracted"}
+                onClick={() => handleChoice(1, "contracted")}
+              >
+                Closed deal
+              </TabsTrigger>
+              <TabsTrigger
+                value={"shared deal"}
+                onClick={() => handleChoice(1, "shared deal")}
+              >
+                Shared deal
+              </TabsTrigger>
+            </TabsList>
+            <div className="mt-5">
+              {history.map((item, index) => (
+                <Card key={index} className="shadow-lg mb-4">
+                  <CardContent>
+                    <div className="space-y-2">
+                      {/*  Client Name */}
+                      <div className="flex space-x-2">
+                        <span className="text-black font-bold">
+                          {`${t("clientName")}:`}
+                        </span>
+                        <span className="font-medium text-app-gray">
+                          {item.client_name}
+                        </span>
+                      </div>
 
-                  {/* Date */}
-                  <div className="flex  space-x-2">
-                    <span className="text-black font-bold">
-                      {`${t("createdAt")}:`}
-                    </span>
-                    <span className="font-medium text-app-gray">
-                      {formatDate(item.createdAt, locale)}
-                    </span>
-                  </div>
+                      {/* Date */}
+                      <div className="flex  space-x-2">
+                        <span className="text-black font-bold">
+                          {`${t("createdAt")}:`}
+                        </span>
+                        <span className="font-medium text-app-gray">
+                          {formatDate(item.created_at, locale)}
+                        </span>
+                      </div>
 
-                  {/*  Deal Value */}
-                  <div className="flex  space-x-2">
-                    <span className="font-bold text-green-500">
-                      {`${t("dealValue")}:`}
-                    </span>
-                    <span className="font-medium text-green-500">
-                      {pricePerLangauge(item.value || 0, locale)}
-                    </span>
-                    <span className="font-medium text-green-500">
-                      {t("EGP")}
-                    </span>
-                  </div>
+                      {/*  Deal Value */}
+                      <div className="flex  space-x-2">
+                        <span className="font-bold text-green-500">
+                          {`${t("dealValue")}:`}
+                        </span>
+                        <span className="font-medium text-green-500">
+                          {pricePerLangauge(item.value || 0, locale)}
+                        </span>
+                        <span className="font-medium text-green-500">
+                          {t("EGP")}
+                        </span>
+                      </div>
 
-                  {/* Status */}
-                  <div className="flex justify-between items-center">
-                    <span className="text-slate-950 font-medium text-xl">
-                      {`${t("status")}:`}
-                    </span>
-                    <span
-                      className={`font-semibold ${
-                        item.status === "ACCEPTED"
-                          ? "text-white bg-green-500 p-2 rounded-xl"
-                          : "text-white bg-orangeApp p-2 rounded-xl"
-                      }`}
-                    >
-                      {item.status}
-                    </span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                      {/* Status */}
+                      <div className="flex justify-between items-center">
+                        <span className="text-slate-950 font-medium text-xl">
+                          {`${t("status")}:`}
+                        </span>
+                        <span
+                          className={`font-semibold ${
+                            item.status === "ACCEPTED"
+                              ? "text-white bg-green-500 p-2 rounded-xl"
+                              : "text-white bg-orangeApp p-2 rounded-xl"
+                          }`}
+                        >
+                          {item.status}
+                        </span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </Tabs>
         </div>
       )}
     </div>

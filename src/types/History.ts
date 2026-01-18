@@ -1,8 +1,8 @@
 type Status = "PENDING" | "ACCEPTED";
 
-export interface History {
-  clientName: string;
-  createdAt: string;
+export interface Historys {
+  client_name: string;
+  created_at: string;
   value: number;
   userCommission: number;
   status: Status;
