@@ -50,11 +50,16 @@ function MobileNavigation({
   const { user } = useCurrentUser();
   const locale = useLocale();
   const [openAlertDialog, setOpenAlertDialog] = useState(false);
+  const [openByitTeamDialog, setOpenByitTeamDialog] = useState(false);
   const [openAlertDialogClosingForm, setOpenAlertDialogClosingForm] =
     useState(false);
   const { currentUser, hasHydrated, clearUser } = useAuthStore();
   const isAuthenticated = currentUser?.user.approved;
   if (!hasHydrated) return null;
+
+  const enableMeetings = currentUser?.user?.enableMeetings ?? false;
+  const enableLeadGenration = currentUser?.user?.enableLeadGeneration ?? false;
+  const enableByitATeam = currentUser?.user?.enableByitATeam ?? false;
 
   const handleLogout = async () => {
     try {
@@ -120,7 +125,7 @@ function MobileNavigation({
             )}
           >
             <Image
-              src={"/images/logo.jpg"}
+              src={"/images/logo.png"}
               alt="Logo"
               // fill
               width={100}
@@ -182,7 +187,7 @@ function MobileNavigation({
                     pathname: routes.PropertiesList.Root,
                     query: { propertyType: "SEPARATED" },
                   }}
-                  className={linkClass(routes.PropertyDetails)}
+                  className={linkClass(routes.PropertiesList)}
                 >
                   <Dot size={30} />
                   {t("searchSeparates")}
@@ -196,6 +201,21 @@ function MobileNavigation({
             >
               {t("newLaunches")}
             </Link>
+
+            <button
+              // href={routes.NewLaunches}
+              onClick={() => {
+                if (!isAuthenticated) {
+                  setOpenAlertDialog(true);
+                } else {
+                  setOpenByitTeamDialog(true);
+                  setIsSheetOpen(false);
+                }
+              }}
+              className={linkClass(routes.LeadGenration.Root)}
+            >
+              Byit A-Team
+            </button>
 
             <Link
               href={routes.SharedProperties}
@@ -326,6 +346,33 @@ function MobileNavigation({
               {t("deals")}
             </Button>
           </div>
+        </div>
+      </ModalDemo>
+
+      <ModalDemo
+        isOpen={openByitTeamDialog}
+        onClose={() => setOpenByitTeamDialog(false)}
+      >
+        <div className="flex flex-col p-10 gap-4">
+          <Button
+            onClick={() => {
+              router.push(routes.LeadGenration.Root);
+              setOpenByitTeamDialog(false);
+            }}
+            disabled={!enableLeadGenration || !enableByitATeam}
+          >
+            Lead Generation
+          </Button>
+
+          <Button
+            onClick={() => {
+              router.push(routes.IncentiveByMeetings);
+              setOpenByitTeamDialog(false);
+            }}
+            disabled={!enableMeetings || !enableByitATeam}
+          >
+            Incentive By Meetings
+          </Button>
         </div>
       </ModalDemo>
     </>

@@ -27,7 +27,6 @@ const PropertiesList = () => {
   // const { getPropertiesApi } = useGetApis();
   const { getProjectsUnitsApi } = useGetApisV2();
   const propertyType = searchParams.get("propertyType") || "";
-  // console.log(propertyType);
 
   const [loadingPg, setLoadingPg] = useState(true);
 
@@ -183,7 +182,7 @@ const PropertiesList = () => {
                   <div className="my-[2vmin]" />
                   <PropertyListItem item={item} />
                 </div>
-              )
+              ),
             )
           )}
         </div>
@@ -214,7 +213,7 @@ const PropertiesList = () => {
                     selectedBedroom,
                     selectedCompound,
                     fromPrice,
-                    toPrice
+                    toPrice,
                   ) => {}
                   // fetchProperties(
                   //   1,
@@ -237,7 +236,7 @@ const PropertiesList = () => {
           <div
             className={cn(
               "w-[28%] bg-white max-h-[85vh] fixed overflow-y-auto p-4 rounded-xl shadow-md",
-              isRTL ? "left-10" : "right-10"
+              isRTL ? "left-10" : "right-10",
             )}
           >
             <PropertiesFilter
@@ -251,7 +250,7 @@ const PropertiesList = () => {
                   selectedBedroom,
                   selectedCompound,
                   fromPrice,
-                  toPrice
+                  toPrice,
                 ) => {}
                 // fetchProperties(
                 //   1,

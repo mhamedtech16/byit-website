@@ -11,6 +11,7 @@ import { routes } from "@/_lib/routes";
 import { useActiveLink } from "@/_utils/navigation";
 import { imgs } from "@/assets";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { Button } from "@/shadcn/components/ui/button";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -25,6 +26,7 @@ import { cn } from "@/shadcn/lib/utils";
 import { useAuthStore } from "@/store/authStore";
 
 import { AlertDialogDemo } from "./Alret";
+import ModalDemo from "./Modal";
 import UserAccount from "./UserAccount";
 
 function WebNavigation({
@@ -37,12 +39,18 @@ function WebNavigation({
   const locale = useLocale();
   const router = useRouter();
   const [openAlertDialog, setOpenAlertDialog] = useState(false);
+  const [openByitTeamDialog, setOpenByitTeamDialog] = useState(false);
   const isRTL = locale === "ar";
   const { user } = useCurrentUser();
   const { currentUser, hasHydrated } = useAuthStore();
-  const isAuthenticated = currentUser?.user.approved;
+
   if (!hasHydrated) return null;
 
+  const isAuthenticated = currentUser?.user?.approved ?? false;
+
+  const enableMeetings = currentUser?.user?.enableMeetings ?? false;
+  const enableLeadGenration = currentUser?.user?.enableLeadGeneration ?? false;
+  const enableByitATeam = currentUser?.user?.enableByitATeam ?? false;
   const openLoginModal = () => {
     setOpenAlertDialog(false);
     onOpen("login");
@@ -85,7 +93,7 @@ function WebNavigation({
             <NavigationMenuTrigger
               className={cn(
                 linkClass(routes.PropertiesList.Root ?? routes.PropertyDetails),
-                "cursor-pointer"
+                "cursor-pointer",
               )}
               onPointerMove={(e) => e.preventDefault()}
               onPointerLeave={(e) => e.preventDefault()}
@@ -106,7 +114,7 @@ function WebNavigation({
                         className={cn(
                           linkClass(routes.PropertiesList.Root, "COMPOUND"),
                           isRTL &&
-                            "text-right flex-row items-center justify-end gap-3"
+                            "text-right flex-row items-center justify-end gap-3",
                         )}
                       >
                         {t("searchCompounds")}
@@ -126,7 +134,7 @@ function WebNavigation({
                         className={cn(
                           linkClass(routes.PropertiesList.Root, "SEPARATED"),
                           isRTL &&
-                            "text-right flex-row items-center justify-end gap-3"
+                            "text-right flex-row items-center justify-end gap-3",
                         )}
                       >
                         {t("searchSeparates")}
@@ -149,7 +157,7 @@ function WebNavigation({
                           linkClass(routes.PropertiesList.Root, "COMPOUND"),
                           isRTL
                             ? "text-right flex-row items-center justify-end gap-3"
-                            : "text-left flex-row items-center justify-start gap-3"
+                            : "text-left flex-row items-center justify-start gap-3",
                         )}
                       >
                         <Building2 size={24} />
@@ -170,7 +178,7 @@ function WebNavigation({
                           linkClass(routes.PropertiesList.Root, "SEPARATED"),
                           isRTL
                             ? "text-right flex-row items-center justify-end gap-3"
-                            : "text-left flex-row items-center justify-start gap-3"
+                            : "text-left flex-row items-center justify-start gap-3",
                         )}
                       >
                         <Building size={24} />
@@ -194,6 +202,33 @@ function WebNavigation({
               >
                 {t("newLaunches")}
               </Link>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+
+          <NavigationMenuItem>
+            <NavigationMenuLink
+              asChild
+              className={navigationMenuTriggerStyle()}
+            >
+              <button
+                onClick={() => {
+                  if (!isAuthenticated) {
+                    setOpenAlertDialog(true);
+                  } else {
+                    setOpenByitTeamDialog(true);
+                  }
+                }}
+                className={cn(
+                  linkClass(
+                    routes.LeadGenration.Root &&
+                      routes.IncentiveByMeetings &&
+                      routes.NewMeetings,
+                  ),
+                  "cursor-pointer",
+                )}
+              >
+                Byit A-Team
+              </button>
             </NavigationMenuLink>
           </NavigationMenuItem>
 
@@ -267,6 +302,36 @@ function WebNavigation({
               onAction={openLoginModal}
             />
           )}
+
+          <ModalDemo
+            isOpen={openByitTeamDialog}
+            onClose={() => setOpenByitTeamDialog(false)}
+          >
+            <div className="flex justify-center items-center p-16 space-x-6">
+              <Button
+                onClick={() => {
+                  router.push(routes.LeadGenration.Root);
+                  setOpenByitTeamDialog(false);
+                }}
+                disabled={!enableLeadGenration || !enableByitATeam}
+              >
+                Lead Generation
+              </Button>
+
+              <Button
+                onClick={() => {
+                  router.push(routes.IncentiveByMeetings);
+                  setOpenByitTeamDialog(false);
+                }}
+                disabled={!enableMeetings || !enableByitATeam}
+              >
+                Incentive By Meetings
+              </Button>
+              {/* <Button onClick={() => router.push(routes.LeadGenration)}>
+                Close
+              </Button> */}
+            </div>
+          </ModalDemo>
 
           {/* <NavigationMenuItem>
             <NavigationMenuLink

@@ -7,7 +7,7 @@ const passwordRegex = /^(?=.*\d)[A-Za-z\d]{8,}$/;
 
 export const validatePhoneNumber = (
   numberField: string,
-  countryField: string
+  countryField: string,
 ) => {
   return (data: Record<string, unknown>, ctx: z.RefinementCtx) => {
     const phoneRaw = data[numberField];
@@ -107,7 +107,6 @@ export const newMeetingsFormSchema = z
   });
 
 export const sharesPropertiesSchema = z
-
   .object({
     shared_unit: z.string().min(1, "Shared unit is required"),
     shared_count: z

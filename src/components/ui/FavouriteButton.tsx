@@ -17,10 +17,10 @@ const FavouriteButton = ({ item, favoriteType }: Props) => {
 
   const currentUser = useAuthStore((state) => state.currentUser);
   const favProperties = useFavouritesStore(
-    (state) => state.favouritesProperties
+    (state) => state.favouritesProperties,
   );
   const favNewLaunches = useFavouritesStore(
-    (state) => state.favouritesNewLaunches
+    (state) => state.favouritesNewLaunches,
   );
 
   const { setFavouritesProperties, setFavouritesNewlaunches } =
@@ -40,20 +40,20 @@ const FavouriteButton = ({ item, favoriteType }: Props) => {
     addFavouriteApi(
       item?.id,
       isProjectUnit ? "Project Units" : "New Launch",
-      nextValue
+      nextValue,
     )
       .then(() => {
         if (isProjectUnit) {
           setFavouritesProperties(
             nextValue
               ? [item as ProjectsUnit, ...favProperties] // Add Fav
-              : favProperties.filter((i) => i.id !== item?.id) // Remove Fav
+              : favProperties.filter((i) => i.id !== item?.id), // Remove Fav
           );
         } else {
           setFavouritesNewlaunches(
             nextValue
               ? [item as NewLaunch, ...favNewLaunches]
-              : favNewLaunches.filter((i) => i.id !== item?.id)
+              : favNewLaunches.filter((i) => i.id !== item?.id),
           );
         }
       })
@@ -64,7 +64,7 @@ const FavouriteButton = ({ item, favoriteType }: Props) => {
     <button
       className={cn(
         "rounded-full bg-[var(--primary)] flex justify-center items-center shadow-md",
-        isMobile ? "w-[8vmin] h-[8vmin]" : "w-[5vmin] h-[5vmin]"
+        isMobile ? "w-[8vmin] h-[8vmin]" : "w-[5vmin] h-[5vmin]",
       )}
       onClick={addAndRemoveFavorite}
     >
@@ -72,14 +72,14 @@ const FavouriteButton = ({ item, favoriteType }: Props) => {
         <i
           className={cn(
             "fa-solid fa-heart text-[3vmin] text-white",
-            isMobile ? "text-[5vmin]" : "text-[3vmin]"
+            isMobile ? "text-[5vmin]" : "text-[3vmin]",
           )}
         ></i>
       ) : (
         <i
           className={cn(
             "fa-regular fa-heart text-[3vmin] text-white",
-            isMobile ? "text-[5vmin]" : "text-[3vmin]"
+            isMobile ? "text-[5vmin]" : "text-[3vmin]",
           )}
         ></i>
       )}

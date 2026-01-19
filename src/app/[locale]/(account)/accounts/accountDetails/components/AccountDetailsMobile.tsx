@@ -32,7 +32,7 @@ export default function AccountDetailsMobile() {
     <div className="flex min-h-screen w-full bg-slate-50 relative">
       <div className="absolute w-full">
         <MobileNavigationSelect
-          label="settings"
+          label={t("settings")}
           options={[
             { label: t("account"), value: routes.AccountDetails },
             { label: t("changePassword"), value: routes.ChangePassword },

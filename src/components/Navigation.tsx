@@ -68,7 +68,7 @@ export function NavigationMenuDemo() {
   const [mode, setMode] = React.useState<"login" | "signup">("login");
   const { user } = useCurrentUser();
   const { currentUser, hasHydrated } = useAuthStore();
-  const isAuthenticated = currentUser?.user.approved;
+  const isAuthenticated = currentUser?.user?.approved;
   const isMobile = useMobile();
   const isRTL = useIsRTL();
   const router = useRouter();

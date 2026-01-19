@@ -52,6 +52,7 @@ export interface Property {
   };
   project: {
     name: string;
+    imgs: string;
     ratio: number;
     location: {
       type: string;

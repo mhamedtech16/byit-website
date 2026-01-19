@@ -20,6 +20,8 @@ import { Label } from "@/shadcn/components/ui/label";
 import { Separator } from "@/shadcn/components/ui/separator";
 import { useAuthStore } from "@/store/authStore";
 
+import AccountMenu from "./AccountMenu";
+
 export default function AccountDetails() {
   const t = useTranslations("Settings");
   const { user } = useCurrentUser();
@@ -33,7 +35,9 @@ export default function AccountDetails() {
 
   return (
     <div className="flex min-h-screen w-screen p-16 bg-slate-50">
-      <Sidebar />
+      <Sidebar label="settings">
+        <AccountMenu />
+      </Sidebar>
 
       <div className="flex-1 p-10">
         <motion.div
@@ -66,7 +70,7 @@ export default function AccountDetails() {
                       <HandCoins color="gold" size={40} />
                       <p className="text-gray-500 text-xl font-bold">
                         {`${pricePerLangauge(user?.total_earned, locale)} ${t(
-                          "currency"
+                          "currency",
                         )}`}
                       </p>
                     </div>

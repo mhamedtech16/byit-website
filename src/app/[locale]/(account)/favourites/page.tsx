@@ -22,10 +22,10 @@ import PropertyListItem from "../../PropertiesList/components/PropertyListItem";
 export default function Page() {
   const t = useTranslations("Settings");
   const favProperties = useFavouritesStore(
-    (state) => state.favouritesProperties
+    (state) => state.favouritesProperties,
   );
   const favNewLaunches = useFavouritesStore(
-    (state) => state.favouritesNewLaunches
+    (state) => state.favouritesNewLaunches,
   );
   const { getProjectsUnitsApi, getNewLaunchApi } = useGetApisV2();
   const isMobile = useMobile();
@@ -34,7 +34,7 @@ export default function Page() {
   const [favouriteType, setFavouriteType] = useState<string>("Projects Unit");
   const [loadingPg, setLoadingPg] = useState(true);
   const [favourites, setFavourites] = useState<ProjectsUnit[] | NewLaunch[]>(
-    []
+    [],
   );
   console.log(favourites);
 
@@ -85,7 +85,7 @@ export default function Page() {
       getProjectsUnitsApi,
       setFavouritesNewlaunches,
       setFavouritesProperties,
-    ]
+    ],
   );
 
   useEffect(() => {
@@ -100,7 +100,7 @@ export default function Page() {
       className={cn(
         isMobile
           ? "bg-primary overflow-hidden"
-          : "flex justify-between w-full p-16 mx-auto pt-4 bg-primary"
+          : "flex justify-between w-full p-16 mx-auto pt-4 bg-primary",
       )}
     >
       {isMobile ? (
@@ -133,7 +133,7 @@ export default function Page() {
       <div
         className={cn(
           "flex flex-col",
-          isMobile ? "w-full mt-14 p-4" : "w-[80%]"
+          isMobile ? "w-full mt-14 p-4" : "w-[80%]",
         )}
       >
         {(favouriteType == "Projects Unit" ? favProperties : favNewLaunches)
@@ -157,7 +157,7 @@ export default function Page() {
                 {index !== 0 && <div className="my-[2vmin]" />}
                 <NewLaunchItem key={item.id} item={item as NewLaunch} />
               </div>
-            )
+            ),
           )
         )}
       </div>

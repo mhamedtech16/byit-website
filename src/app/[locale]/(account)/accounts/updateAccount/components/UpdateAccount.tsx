@@ -12,6 +12,7 @@ import { z } from "zod";
 import { routes } from "@/_lib/routes";
 import { updateAccountSchema } from "@/_utils/validation";
 import { updateAccountApi } from "@/Apis/v1/Auth";
+import AccountMenu from "@/components/AccountMenu";
 import { AlertDialogDemo } from "@/components/Alret";
 import { CountryDropdown } from "@/components/CountryCodeDropdown";
 import { FormDropdownInput } from "@/components/form/FormDropdownInput";
@@ -118,7 +119,7 @@ export default function UpdateAccount() {
       setOpenAlertDialog,
       setErrorMsg,
       setLoading,
-    ]
+    ],
   );
 
   if (!hasHydrated) return null;
@@ -128,13 +129,13 @@ export default function UpdateAccount() {
       className={cn(
         isMobile
           ? "flex w-screen bg-slate-50 relative"
-          : "flex min-h-screen w-screen p-16 bg-slate-50"
+          : "flex min-h-screen w-screen p-16 bg-slate-50",
       )}
     >
       {isMobile ? (
         <div className="absolute w-full z-50">
           <MobileNavigationSelect
-            label="settings"
+            label={t("settings")}
             options={[
               { label: t("account"), value: routes.AccountDetails },
               { label: t("changePassword"), value: routes.ChangePassword },
@@ -144,7 +145,9 @@ export default function UpdateAccount() {
           />
         </div>
       ) : (
-        <Sidebar />
+        <Sidebar label="settings">
+          <AccountMenu />
+        </Sidebar>
       )}
 
       <motion.div
@@ -208,7 +211,7 @@ export default function UpdateAccount() {
                     className={cn(
                       isRTL
                         ? "text-right rounded-r-none"
-                        : "text-left rounded-l-none"
+                        : "text-left rounded-l-none",
                     )}
                   />
                 </div>
@@ -238,7 +241,7 @@ export default function UpdateAccount() {
                   width="w-full"
                   translate="Auth"
                   className={cn(
-                    form.formState.errors.yearsExperience && "border-red-400"
+                    form.formState.errors.yearsExperience && "border-red-400",
                   )}
                 />
 

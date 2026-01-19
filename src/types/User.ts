@@ -20,9 +20,16 @@ export interface User {
     networkEarns: number;
     totalNetworkEarns: number;
     totalNetworkDeals: number;
+    totalMeetingsCount: number;
+    monthMeetingsCount: number;
+    meetingsEarns: number;
+    totalMeetingsEarns: number;
     country: Country;
     city: City;
     yearsExperience: string;
+    enableMeetings: boolean;
+    enableByitATeam: boolean;
+    enableLeadGeneration: boolean;
   };
   token: string;
 }
@@ -217,6 +224,15 @@ export interface SignUpRequest {
   yearsExperience?: string; // Array of objects with id and name for years of experience
   country: number; // Country code for phone number validation
   //   token?: string; // JWT or session token
+}
+
+export interface CreateFeedback {
+  notes: string;
+  status: string | undefined;
+}
+
+export interface CreateFeedbackResponse {
+  success: boolean;
 }
 
 export interface UpdateAccountRequest {

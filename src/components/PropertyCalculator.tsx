@@ -44,11 +44,11 @@ const PropertyCalculator = ({
   const isMobile = useMobile();
 
   const [calcType, setCalcType] = useState<"OnspotCalc" | "NormalCalc">(
-    "NormalCalc"
+    "NormalCalc",
   );
   const [earnings, setEarnings] = useState(0);
   const [selectedPartnerId, setSelectedPartnerId] = useState<string | null>(
-    null
+    null,
   );
   const [dealValue, setDealValue] = useState<number>(0);
 
@@ -64,12 +64,12 @@ const PropertyCalculator = ({
       const bestPartner = partners.reduce((prev, curr) => {
         const prevRatio =
           calcType === "OnspotCalc"
-            ? prev.on_spot_commission ?? 0
-            : prev.communicated_commission ?? 0;
+            ? (prev.on_spot_commission ?? 0)
+            : (prev.communicated_commission ?? 0);
         const currRatio =
           calcType === "OnspotCalc"
-            ? curr.on_spot_commission ?? 0
-            : curr.communicated_commission ?? 0;
+            ? (curr.on_spot_commission ?? 0)
+            : (curr.communicated_commission ?? 0);
         return currRatio > prevRatio ? curr : prev;
       });
       setSelectedPartnerId(bestPartner.id);
@@ -88,12 +88,12 @@ const PropertyCalculator = ({
 
     const ratio =
       calcType === "OnspotCalc"
-        ? selectedPartner.on_spot_commission ?? 0
-        : selectedPartner.communicated_commission ?? 0;
+        ? (selectedPartner.on_spot_commission ?? 0)
+        : (selectedPartner.communicated_commission ?? 0);
     const netRatio =
       calcType === "OnspotCalc"
         ? selectedPartner.on_spot_broker_commission
-        : selectedPartner.broker_commission ?? 0;
+        : (selectedPartner.broker_commission ?? 0);
 
     const grossComm = dealValue * (ratio / 100);
     const txs = grossComm * 0.36;
@@ -181,7 +181,7 @@ const PropertyCalculator = ({
                     size="lg"
                     className={cn(
                       "w-full",
-                      isRTL ? "flex flex-row-reverse" : ""
+                      isRTL ? "flex flex-row-reverse" : "",
                     )}
                     icon={
                       isRTL ? (
@@ -208,13 +208,13 @@ const PropertyCalculator = ({
                           !isMobile &&
                             (isRTL ? "absolute left-28" : "absolute right-35"),
                           isMobile &&
-                            (isRTL ? "absolute left-13" : "absolute right-20")
+                            (isRTL ? "absolute left-13" : "absolute right-20"),
                         )}
                       >
                         <i
                           className={cn(
                             "fa-play fa-solid h-3.5 w-4 text-primary",
-                            isRTL && "rotate-180"
+                            isRTL && "rotate-180",
                           )}
                         />
                       </motion.div>
@@ -236,7 +236,7 @@ const PropertyCalculator = ({
           <div
             className={cn(
               "flex items-center justify-center gap-2 text-base font-bold mt-2 text-[var(--app-gray)]",
-              isRTL ? "flex-row-reverse" : "flex-row"
+              isRTL ? "flex-row-reverse" : "flex-row",
             )}
           >
             <span className="text-black">
@@ -250,7 +250,7 @@ const PropertyCalculator = ({
                 (
                 {pricePerLangauge(
                   selectedPartner.broker_commission ?? 0,
-                  locale
+                  locale,
                 )}
                 %)
               </span>
@@ -264,7 +264,7 @@ const PropertyCalculator = ({
           {calcType === "OnspotCalc" && (
             <Label className="text-[var(--orangeApp)] mt-3 text-center text-sm">
               {t(
-                "Disclaimer On-spot requests need a 10%+ down payment Contact support for exceptions"
+                "Disclaimer On-spot requests need a 10%+ down payment Contact support for exceptions",
               )}
             </Label>
           )}

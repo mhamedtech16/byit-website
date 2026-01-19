@@ -35,7 +35,7 @@ export function useDevelopersAndProjects(propertyType?: string) {
           setDevelopers((prev) =>
             refresh
               ? [...response.data.data, OTHER_DEVELOPER]
-              : [...prev, ...response.data.data]
+              : [...prev, ...response.data.data],
           );
           setDevPage(response.data.page);
           setDevPages(response.data.pageCount);
@@ -46,7 +46,7 @@ export function useDevelopersAndProjects(propertyType?: string) {
         setDevLoading(false);
       }
     },
-    [getDevelopersApi]
+    [getDevelopersApi],
   );
 
   // ===== Fetch Projects (all or by developer) with pagination =====
@@ -57,12 +57,12 @@ export function useDevelopersAndProjects(propertyType?: string) {
 
         const response = await getProjectsByDeveloperIdApi(
           developerId || "",
-          page
+          page,
         );
 
         if (response?.data?.data) {
           setProjects((prev) =>
-            refresh ? response.data.data : [...prev, ...response.data.data]
+            refresh ? response.data.data : [...prev, ...response.data.data],
           );
           setProjectPage(response.data.page);
           setProjectPages(response.data.pageCount);
@@ -75,7 +75,7 @@ export function useDevelopersAndProjects(propertyType?: string) {
         setProjectsLoading(false);
       }
     },
-    [getProjectsByDeveloperIdApi]
+    [getProjectsByDeveloperIdApi],
   );
 
   return {

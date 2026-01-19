@@ -1,68 +1,58 @@
+import { useLocale, useTranslations } from "next-intl";
 import { ReactNode } from "react";
 
-import { Button } from "@/shadcn/components/ui/button";
-import { Input } from "@/shadcn/components/ui/input";
+import { pricePerLangauge } from "@/lib/PriceArray";
 import { Label } from "@/shadcn/components/ui/label";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/shadcn/components/ui/popover";
+import { Apartment, Mall, Villa } from "@/types/Properties";
 
 type Props = {
   title?: string;
   className: string;
   children: ReactNode;
+  item: Apartment[] | Villa[] | Mall[] | undefined;
+  type: string;
 };
-export function AvailabilityPopoverButton({ className, children }: Props) {
+export function AvailabilityPopoverButton({
+  className,
+  children,
+  item,
+}: Props) {
+  const t = useTranslations();
+  const currentLang = useLocale();
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button className={className} variant="outline">
-          {children}
-        </Button>
+        <button className={className}>{children}</button>
       </PopoverTrigger>
       <PopoverContent className="w-80">
         <div className="grid gap-4">
-          <div className="space-y-2">
-            <h4 className="leading-none font-medium">Dimensions</h4>
-            <p className="text-muted-foreground text-sm">
-              Set the dimensions for the layer.
-            </p>
-          </div>
           <div className="grid gap-2">
-            <div className="grid grid-cols-3 items-center gap-4">
-              <Label htmlFor="width">Width</Label>
-              <Input
-                id="width"
-                defaultValue="100%"
-                className="col-span-2 h-8"
-              />
-            </div>
-            <div className="grid grid-cols-3 items-center gap-4">
-              <Label htmlFor="maxWidth">Max. width</Label>
-              <Input
-                id="maxWidth"
-                defaultValue="300px"
-                className="col-span-2 h-8"
-              />
-            </div>
-            <div className="grid grid-cols-3 items-center gap-4">
-              <Label htmlFor="height">Height</Label>
-              <Input
-                id="height"
-                defaultValue="25px"
-                className="col-span-2 h-8"
-              />
-            </div>
-            <div className="grid grid-cols-3 items-center gap-4">
-              <Label htmlFor="maxHeight">Max. height</Label>
-              <Input
-                id="maxHeight"
-                defaultValue="none"
-                className="col-span-2 h-8"
-              />
-            </div>
+            {item?.map((itm, index) => (
+              <div className="flex flex-col gap-2" key={index}>
+                <p className="font-bold">- {t(`${itm.type}`)}</p>
+                {itm.available ? (
+                  <div className="w-[100%] flex-col gap-4">
+                    <p>
+                      {t("Price")} :{" "}
+                      {pricePerLangauge(itm.price || 0, currentLang)}
+                    </p>
+                    <p>
+                      {t("Area")} :{" "}
+                      {pricePerLangauge(itm.area || 0, currentLang)}
+                    </p>
+                  </div>
+                ) : (
+                  <Label className="text-red-600" htmlFor="width">
+                    {t("Not Available")}
+                  </Label>
+                )}
+              </div>
+            ))}
           </div>
         </div>
       </PopoverContent>
