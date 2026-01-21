@@ -1,4 +1,3 @@
-import { AxiosResponse } from "axios";
 import { useCallback, useState } from "react";
 
 import useGetApis from "@/Apis/useGetApis";
@@ -19,14 +18,14 @@ export function useDevelopersAndProjects(propertyType?: string) {
 
   // ===== Fetch Developers with pagination =====
   const fetchDevelopers = useCallback(
-    async (page: number = 1, refresh: boolean = true, search: string = "") => {
+    async (page: number = 1, refresh: boolean = true, search: string) => {
       try {
         setDevLoading(true);
         const response = await getAllDevelopersApi(page, search, propertyType);
 
         if (response?.data?.data) {
           setDevelopers((prev) =>
-            refresh ? response.data.data : [...prev, ...response.data.data]
+            refresh ? response.data.data : [...prev, ...response.data.data],
           );
           setDevPage(response.data.page);
           setDevPages(response.data.pageCount);
@@ -37,27 +36,29 @@ export function useDevelopersAndProjects(propertyType?: string) {
         setDevLoading(false);
       }
     },
-    [getAllDevelopersApi, propertyType]
+    [getAllDevelopersApi, propertyType],
   );
 
   // ===== Fetch Projects (all or by developer) with pagination =====
   const fetchProjects = useCallback(
-    async (developerId?: number, page: number = 1, refresh: boolean = true) => {
+    async (
+      search: string,
+      developerId?: number,
+      page: number = 1,
+      refresh: boolean = true,
+    ) => {
       try {
         setProjectsLoading(true);
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        let response: AxiosResponse<any, any>;
-
-        if (developerId && developerId > 0) {
-          response = await getProjectsByDeveloperApi(developerId, page);
-        } else {
-          response = await getProjectsByDeveloperApi(developerId || 0, page);
-        }
+        const response = await getProjectsByDeveloperApi(
+          developerId || 0,
+          page,
+          search,
+        );
 
         if (response?.data?.data) {
           setProjects((prev) =>
-            refresh ? response.data.data : [...prev, ...response.data.data]
+            refresh ? response.data.data : [...prev, ...response.data.data],
           );
           setProjectPage(response.data.page);
           setProjectPages(response.data.pageCount);
@@ -70,7 +71,7 @@ export function useDevelopersAndProjects(propertyType?: string) {
         setProjectsLoading(false);
       }
     },
-    [getProjectsByDeveloperApi]
+    [getProjectsByDeveloperApi],
   );
 
   return {

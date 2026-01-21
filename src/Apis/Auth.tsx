@@ -20,7 +20,7 @@ import { api } from "./apiInstance";
 
 export const loginApi = async (
   values: LoginRequestValues,
-  lang: string
+  lang: string,
 ): Promise<LoginResponse> => {
   const data = {
     phone: `${values.phone}`,
@@ -37,7 +37,7 @@ export const loginApi = async (
 
 export const signupApi = async (
   values: SignUpRequest,
-  lang: string
+  lang: string,
 ): Promise<LoginResponse> => {
   const data = {
     fullname: values.fullname,
@@ -60,7 +60,7 @@ export const signupApi = async (
 
 export const confirmLoginCodeApi = async (
   values: ConfirmLoginCode,
-  lang: string
+  lang: string,
 ): Promise<LoginResponse> => {
   const data = {
     phone: `${values.phone}`,
@@ -77,7 +77,7 @@ export const confirmLoginCodeApi = async (
 
 export const logoutApi = async (
   token: string,
-  lang: string
+  lang: string,
 ): Promise<LoginResponse> => {
   const data = {
     token, // sent in the body
@@ -105,7 +105,7 @@ export const updateAccountApi = async (
   values: UpdateAccountRequest,
   lang: string,
   id: number | undefined,
-  token: string | undefined
+  token: string | undefined,
 ): Promise<LoginResponse> => {
   const data = {
     fullname: values.fullname,
@@ -129,7 +129,7 @@ export const updateAccountApi = async (
 export const updatePassowrdApi = async (
   values: UpdatePasswordRequest,
   lang: string,
-  token: string | undefined
+  token: string | undefined,
 ): Promise<LoginResponse> => {
   const data = {
     currentPassword: values.oldPassword,
@@ -148,7 +148,7 @@ export const updatePassowrdApi = async (
 export const deleteAccountApi = async (
   lang: string,
   id: number | undefined,
-  token: string | undefined
+  token: string | undefined,
 ): Promise<LoginResponse> => {
   return api.delete(`${id}/delete`, {
     headers: {
@@ -160,7 +160,7 @@ export const deleteAccountApi = async (
 
 export const closingFormApi = async (
   values: ClosignFormRequest,
-  lang: string
+  lang: string,
 ): Promise<ClosignFormResponse> => {
   const token = useAuthStore.getState().currentUser?.token;
 
@@ -180,7 +180,13 @@ export const closingFormApi = async (
   formData.append("salesPhone", values.developerSalesNumber || ""); // Sales Number
   formData.append("value", String(values.dealValue ?? 0)); // Value
   formData.append("type", String(values.type ?? "")); // Type
+  if (values.developerName) {
+    formData.append("developerName", values.developerName);
+  }
 
+  if (values.projectName) {
+    formData.append("projectName", values.projectName);
+  }
   if (values.uploadFile) {
     formData.append("provement", values.uploadFile as unknown as File); // Provement
   }
@@ -196,7 +202,7 @@ export const closingFormApi = async (
 
 export const sharesDealFormApi = async (
   values: SharesDealRequest,
-  lang: string
+  lang: string,
 ): Promise<SharesDealResponse> => {
   const token = useAuthStore.getState().currentUser?.token;
 
@@ -230,7 +236,7 @@ export const sharesDealFormApi = async (
 
 export const newMeetingsApi = async (
   values: NewMeetingsRequest,
-  lang: string
+  lang: string,
 ): Promise<ClosignFormResponse> => {
   const token = useAuthStore.getState().currentUser?.token;
 
@@ -264,7 +270,7 @@ export const newMeetingsApi = async (
 export const createFeedbackApi = async (
   values: CreateFeedback,
   lang: string,
-  id: number | undefined
+  id: number | undefined,
 ): Promise<CreateFeedbackResponse> => {
   const token = useAuthStore.getState().currentUser?.token;
   const data = {
@@ -283,7 +289,7 @@ export const createFeedbackApi = async (
 export const updateFeedbackApi = async (
   values: CreateFeedback,
   lang: string,
-  id: number | undefined
+  id: number | undefined,
 ): Promise<CreateFeedbackResponse> => {
   const token = useAuthStore.getState().currentUser?.token;
   const data = {
@@ -300,7 +306,7 @@ export const updateFeedbackApi = async (
 };
 
 export const deleteFeedbackApi = async (
-  id: number | undefined
+  id: number | undefined,
 ): Promise<CreateFeedbackResponse> => {
   const token = useAuthStore.getState().currentUser?.token;
 

@@ -28,13 +28,18 @@ import { Input } from "@/shadcn/components/ui/input";
 import { Label } from "@/shadcn/components/ui/label";
 import { cn } from "@/shadcn/lib/utils";
 import { useAuthStore } from "@/store/authStore";
-import { ClosignFormRequest, DropdownCountry } from "@/types/User";
+import {
+  ClosignFormRequest,
+  DropdownCountry,
+  DropdownVendors,
+} from "@/types/User";
 
 import { AlertDialogDemo } from "./Alret";
 import { CountryDropdown } from "./CountryCodeDropdown";
 import { FormCurrencyInput } from "./form/FormCurrencyInput";
 import { FormDropdownInput } from "./form/FormDropdownInput";
 import { FormTextInput } from "./form/FormTextInput";
+import ModalDemo from "./Modal";
 
 type ClosingFormValues = z.infer<typeof closingFormSchema>;
 
@@ -45,6 +50,7 @@ export default function ClosingForm() {
     useState<DropdownCountry | null>(null);
 
   const { vendors } = useVendors();
+  const [part, setPart] = useState<DropdownVendors[]>([]);
   const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
   const isRTL = useIsRTL();
@@ -72,6 +78,8 @@ export default function ClosingForm() {
   const form = useForm<ClosingFormValues>({
     resolver: zodResolver(closingFormSchema),
     defaultValues: {
+      developerName: "",
+      projectName: "",
       developer: "",
       project: "",
       vendor: "",
@@ -85,16 +93,42 @@ export default function ClosingForm() {
     },
   });
 
+  const devName = form.watch("developer");
+  const isSelected = developers.find((el) => String(el.id) === String(devName));
+  const isSelectedOther = isSelected?.name === "Other";
+
+  const proName = form.watch("project");
+  const isSelectedPro = projects.find((id) => id.id === proName);
+  const isSelectedProOther = isSelectedPro?.name === "Other";
+
+  const selectedProjectId = form.watch("project");
+
+  const selectedProject = projects.find(
+    (p) => String(p.id) === String(selectedProjectId),
+  );
+
+  useEffect(() => {
+    if (isSelectedProOther) {
+      setPart(vendors);
+    } else {
+      const filterd = vendors.filter((pv) =>
+        selectedProject?.vendors.some(
+          (v) => String(v.vendor) === String(pv.id),
+        ),
+      );
+      setPart(filterd);
+    }
+  }, [isSelectedProOther, selectedProject?.vendors, vendors]);
+
   // ===== Effect to fetch projects when developer changes =====
   useEffect(() => {
     const developerId = Number(form.watch("developer"));
-
     form.setValue("project", "");
 
     if (developerId) {
-      fetchProjects(developerId, 1, true);
+      fetchProjects("", developerId, 1, true);
     } else {
-      fetchProjects(undefined, 1, true);
+      fetchProjects("", undefined, 1, true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form.watch("developer")]);
@@ -104,6 +138,12 @@ export default function ClosingForm() {
       const payload: ClosignFormRequest = {
         ...values,
         type: "CONTRACTED",
+        developerName: isSelectedOther
+          ? values.developerName
+          : values.developerName,
+        projectName: isSelectedProOther
+          ? values.projectName
+          : values.projectName,
         developer:
           typeof values.developer === "string"
             ? Number(values.developer)
@@ -129,7 +169,6 @@ export default function ClosingForm() {
       setErrorMsg("");
       try {
         const response = await closingFormApi(payload, locale);
-
         if (!response?.data) {
           throw new Error("Invalid response from server");
         }
@@ -137,6 +176,8 @@ export default function ClosingForm() {
         if (response?.data) {
           setClsosingFormUser(response.data);
           form.reset({
+            developerName: "",
+            projectName: "",
             developer: "",
             project: "",
             vendor: "",
@@ -164,7 +205,14 @@ export default function ClosingForm() {
         setLoading(false);
       }
     },
-    [selectedCountry?.id, locale, setClsosingFormUser, form]
+    [
+      selectedCountry?.id,
+      isSelectedOther,
+      isSelectedProOther,
+      locale,
+      setClsosingFormUser,
+      form,
+    ],
   );
 
   return (
@@ -178,45 +226,83 @@ export default function ClosingForm() {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
           {/* Developer Dropdown */}
-          <FormDropdownInput
-            form={form}
-            name="developer"
-            label="developer"
-            title="selectDeveloper"
-            titleSearch="searchDeveloper"
-            titleLoading="developerLoading"
-            data={developers}
-            width="w-full"
-            translate="ClosingForm"
-            outlineSecoundry
-            className="text-white"
-            hasMore={devPages > devPage}
-            onLoadMore={(page) => fetchDevelopers(page, false)}
-            page={devPage}
-            loadingMore={devLoading}
-            onClick={() => fetchDevelopers(1, true)}
-          />
+
+          {isSelectedOther ? (
+            <FormTextInput
+              form={form}
+              name="developerName"
+              label="developerName"
+              placeholder="developerName"
+              translate="ClosingForm"
+              type="text"
+              className="text-white"
+            />
+          ) : (
+            <FormDropdownInput
+              form={form}
+              name="developer"
+              label="developer"
+              title="selectDeveloper"
+              titleSearch="searchDeveloper"
+              titleLoading="developerLoading"
+              data={developers}
+              width="w-full"
+              translate="ClosingForm"
+              outlineSecoundry
+              className="text-white"
+              hasMore={devPages > devPage}
+              onLoadMore={(page, refresh, search) =>
+                fetchDevelopers(page, refresh, search)
+              }
+              page={devPage}
+              loadingMore={devLoading}
+              onClick={() => fetchDevelopers(1, true, "")}
+            />
+          )}
 
           {/* Projects Dropdown (from API) */}
-          <FormDropdownInput
-            form={form}
-            name="project"
-            label="project"
-            title="selectProject"
-            titleSearch="searchProject"
-            titleLoading="projectLoading"
-            translate="ClosingForm"
-            className="text-white"
-            outlineSecoundry
-            data={projects}
-            width="w-full"
-            hasMore={projectPages > projectPage}
-            onLoadMore={(page) =>
-              fetchProjects(Number(form.watch("developer")), page, false)
-            }
-            page={projectPage}
-            loadingMore={projectsLoading}
-          />
+          {isSelectedProOther ? (
+            <ModalDemo
+              isOpen={isSelectedProOther}
+              onClose={() => !isSelectedProOther}
+            >
+              <FormTextInput
+                form={form}
+                name="projectName"
+                label="projectName"
+                placeholder="projectName"
+                translate="ClosingForm"
+                type="text"
+                className="text-white"
+              />
+            </ModalDemo>
+          ) : (
+            <FormDropdownInput
+              form={form}
+              name="project"
+              label="project"
+              title="selectProject"
+              titleSearch="searchProject"
+              titleLoading="projectLoading"
+              translate="ClosingForm"
+              className="text-white"
+              outlineSecoundry
+              data={projects}
+              disabled={!isSelected}
+              width="w-full"
+              hasMore={projectPages > projectPage}
+              onLoadMore={(page, refresh, search) =>
+                fetchProjects(
+                  search,
+                  Number(form.watch("developer")),
+                  page,
+                  false,
+                )
+              }
+              page={projectPage}
+              loadingMore={projectsLoading}
+            />
+          )}
 
           {/* Vendor Dropdown */}
           <FormDropdownInput
@@ -226,7 +312,8 @@ export default function ClosingForm() {
             title="selectPartner"
             titleSearch="searchPartner"
             titleLoading="partnerLoading"
-            data={vendors}
+            data={part}
+            disabled={!isSelectedPro}
             width="w-full"
             translate="ClosingForm"
             className="text-white"
@@ -266,7 +353,7 @@ export default function ClosingForm() {
           <Label
             className={cn(
               "text-white mb-2",
-              form.formState.errors.developerSalesNumber && "text-red-500 mb-2"
+              form.formState.errors.developerSalesNumber && "text-red-500 mb-2",
             )}
           >
             {t("developerSalesNumber")}
@@ -288,7 +375,9 @@ export default function ClosingForm() {
               type="tel"
               className={cn(
                 "text-white",
-                isRTL ? "text-right rounded-r-none" : "text-left rounded-l-none"
+                isRTL
+                  ? "text-right rounded-r-none"
+                  : "text-left rounded-l-none",
               )}
             />
           </div>

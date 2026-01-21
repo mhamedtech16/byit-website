@@ -85,6 +85,22 @@ export interface ClosignForm {
   updatedAt: string;
   id: number;
   user: User;
+  developerName: string;
+  projectName: string;
+}
+
+export interface Meetings {
+  status: string; // extend if more statuses
+  clientName: string;
+  project: number;
+  clientCountry: number;
+  salesName: string;
+  salesPhone: string;
+  salesCountry: number;
+  developer: number;
+  provement: string; // file URL
+  createdAt: string;
+  id: number;
 }
 
 type SharedProperty = {
@@ -243,6 +259,8 @@ export interface FileProps {
 
 export interface ClosignFormRequest {
   salesName?: string;
+  developerName?: string;
+  projectName?: string;
   developer: number;
   project: number;
   vendor?: number;

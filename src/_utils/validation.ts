@@ -7,7 +7,7 @@ const passwordRegex = /^(?=.*\d)[A-Za-z\d]{8,}$/;
 
 export const validatePhoneNumber = (
   numberField: string,
-  countryField: string
+  countryField: string,
 ) => {
   return (data: Record<string, unknown>, ctx: z.RefinementCtx) => {
     const phoneRaw = data[numberField];
@@ -58,6 +58,8 @@ export const validatePhoneNumber = (
 
 export const closingFormSchema = z
   .object({
+    developerName: z.string().optional(),
+    projectName: z.string().optional(),
     developer: z
       .union([z.string(), z.number()])
       .refine((val) => val !== "" && val !== null && val !== undefined, {

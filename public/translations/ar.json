@@ -24,7 +24,8 @@
     "sharesDeals": "صفقات بالحصص",
     "deals": "الصفقات",
     "sharedProperties": "العقارات الجزئية",
-    "myAccount": "حسابي"
+    "myAccount": "حسابي",
+    "callUs": "اتصل بنا"
   },
   "HomePage": {
     "title": "مرحبا بالعالم!",
@@ -79,6 +80,8 @@
   "ClosingForm": {
     "closeForm": "إغلاق النموذج",
     "developer": "المطور",
+    "developerName": "اسم المطور",
+    "projectName": "اسم المشروع",
     "project": "المشروع",
     "clientName": "اسم العميل",
     "clientPhone": "رقم العميل",

@@ -39,10 +39,11 @@ type Props = {
   className?: ClassNameValue;
   outlineSecoundry?: boolean;
   hasMore?: boolean;
-  onLoadMore?: (page: number, refresh: boolean, search: "") => void;
+  onLoadMore?: (page: number, refresh: boolean, search: string) => void;
   page?: number;
   loadingMore?: boolean;
   translate?: string;
+  disabled?: boolean;
 };
 export function DropdownInput({
   title,
@@ -60,18 +61,27 @@ export function DropdownInput({
   onLoadMore,
   page,
   loadingMore,
+  disabled,
 }: Props) {
   const t = useTranslations(translate);
   const [open, setOpen] = React.useState(false);
   const isRTL = useIsRTL();
   const buttonRef = React.useRef<HTMLButtonElement>(null);
   const [popoverWidth, setPopoverWidth] = React.useState<number | null>(null);
+  const [search, setSearch] = React.useState<string>("");
 
   React.useEffect(() => {
     if (buttonRef.current) {
       setPopoverWidth(buttonRef.current.offsetWidth);
     }
   }, []);
+
+  React.useEffect(() => {
+    if (onLoadMore) {
+      onLoadMore(1, true, search);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search]);
 
   const onOpenCh = (isOpen: boolean) => {
     setOpen(isOpen);
@@ -85,10 +95,11 @@ export function DropdownInput({
           ref={buttonRef}
           variant={outlineSecoundry ? "outlineSecoundry" : "outline"}
           role="combobox"
+          disabled={disabled}
           aria-expanded={open}
           className={cn(
             `${width ? width : "w-[300px]"} justify-between`,
-            className
+            className,
           )}
         >
           {value
@@ -99,7 +110,7 @@ export function DropdownInput({
                     name: string;
                     name_ar: string;
                     name_en: string;
-                  }) => framework.id === value
+                  }) => framework.id === value,
                 );
                 if (!selected) return "";
                 return isRTL ? selected.name_ar : selected.name_en;
@@ -114,6 +125,7 @@ export function DropdownInput({
       >
         <Command>
           <CommandInput
+            onValueChange={(value) => setSearch(value)}
             placeholder={titleSearch && t(titleSearch)}
             className="h-9"
           />
@@ -141,11 +153,11 @@ export function DropdownInput({
                     <Check
                       className={cn(
                         "ml-auto",
-                        value === framework.id ? "opacity-100" : "opacity-0"
+                        value === framework.id ? "opacity-100" : "opacity-0",
                       )}
                     />
                   </CommandItem>
-                )
+                ),
               )}
               {hasMore && (
                 <div className="flex justify-center p-2">
@@ -154,7 +166,9 @@ export function DropdownInput({
                     className="text-sm"
                     disabled={loadingMore}
                     onClick={() =>
-                      onLoadMore ? onLoadMore((page || 0) + 1, false, "") : null
+                      onLoadMore
+                        ? onLoadMore((page || 0) + 1, false, search)
+                        : null
                     }
                   >
                     {loadingMore ? "Loading..." : "Load More"}

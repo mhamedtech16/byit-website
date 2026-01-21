@@ -1,7 +1,13 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-import { AuthUser, ClosignForm, SharesDealData, User } from "@/types/User";
+import {
+  AuthUser,
+  ClosignForm,
+  Meetings,
+  SharesDealData,
+  User,
+} from "@/types/User";
 
 import { UserState } from "./authStore.types";
 
@@ -13,6 +19,7 @@ const useAuthStore = create<UserState>()(
       sharesDeal: null,
       currentUser: null,
       signupUser: null,
+      meetings: null,
       token: "",
       hasHydrated: false,
       setHasHydrated: () => set({ hasHydrated: true }),
@@ -21,6 +28,7 @@ const useAuthStore = create<UserState>()(
       setSignupUser: (signupUser: User) => set({ signupUser }),
       setClsosingFormUser: (closingFormUser: ClosignForm) =>
         set({ closingFormUser }),
+      setMeetings: (meetings: Meetings) => set({ meetings }),
       setSharesDeal: (sharesDeal: SharesDealData) => set({ sharesDeal }),
       // setUser: (currentUser: SignUp) => set({ user }),
       clearUser: () => set({ currentUser: null }),
@@ -34,8 +42,8 @@ const useAuthStore = create<UserState>()(
       onRehydrateStorage: () => (state) => {
         state?.setHasHydrated?.(); // mark hydrated once Zustand is ready
       },
-    }
-  )
+    },
+  ),
 );
 
 export { useAuthStore };

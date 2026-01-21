@@ -35,6 +35,8 @@ import { AlertDialogDemo } from "./Alret";
 import LocaleSwitcher from "./LocaleSwitcher";
 import ModalDemo from "./Modal";
 
+const CALLUS = "+201119377823";
+
 function MobileNavigation({
   onOpen,
 }: {
@@ -119,7 +121,7 @@ function MobileNavigation({
           <SheetHeader
             className={cn(
               "shadow-md w-full",
-              isRTL ? "flex-row-reverse" : "flex-row"
+              isRTL ? "flex-row-reverse" : "flex-row",
             )}
           >
             <Image
@@ -154,7 +156,7 @@ function MobileNavigation({
               }}
               className={cn(
                 "flex items-center justify-between font-normal text-foreground px-2",
-                linkClass(routes.PropertiesList ?? routes.PropertyDetails)
+                linkClass(routes.PropertiesList ?? routes.PropertyDetails),
               )}
             >
               {t("properties")}
@@ -286,7 +288,7 @@ function MobileNavigation({
                 <button
                   onClick={handleLogout}
                   className={cn(
-                    "flex items-center gap-2 px-3 py-3 border-b-[0.5px] border-gray-300"
+                    "flex items-center gap-2 px-3 py-3 border-b-[0.5px] border-gray-300",
                   )}
                 >
                   <LogOut size={24} color="gray" />
@@ -403,6 +405,16 @@ function MobileNavigation({
                 <li>اللِيدز بتوصلك ببيانات عملاء حقيقية وجاهزة للمتابعة.</li>
                 <li>الحملات مصممة تساعدك تقفل أسرع وتزود دخلك.</li>
               </ul>
+            </div>
+
+            <div className="flex items-center justify-center mt-2">
+              <Button
+                variant={"underline"}
+                size={"underline"}
+                onClick={() => (window.location.href = `tel:${CALLUS}`)}
+              >
+                {t("callUs")}
+              </Button>
             </div>
           </>
         )}

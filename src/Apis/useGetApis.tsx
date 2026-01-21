@@ -24,7 +24,7 @@ const useGetApis = () => {
     page: number,
     propertyType: string,
     user: AuthUser | null,
-    projectId: number
+    projectId: number,
   ): Promise<PropertiesResponse> => {
     let paramsArray: string[] = [];
     if (isFilter) {
@@ -70,7 +70,7 @@ const useGetApis = () => {
   const getAllDevelopersApi = (
     page: number,
     search: string,
-    propertyType?: string
+    propertyType?: string,
   ) => {
     let params = "";
 
@@ -92,15 +92,20 @@ const useGetApis = () => {
           "Content-Type": "application/json",
           "Accept-Language": `${currentLang}`,
         },
-      }
+      },
     );
   };
 
   ///////
-  const getProjectsByDeveloperApi = (developerId: number, page: number = 1) => {
-    const params = developerId ? `&company=${developerId}` : "";
+  const getProjectsByDeveloperApi = (
+    developerId: number,
+    page: number = 1,
+    search: string,
+  ) => {
+    const idParams = developerId ? `&company=${developerId}` : "";
+    const searchParams = developerId ? `&search=${search}` : "";
 
-    return api.get(`projects?page=${page}&${params}`, {
+    return api.get(`projects?page=${page}&${idParams}&${searchParams}`, {
       headers: {
         "Content-Type": "application/json",
         "Accept-Language": currentLang,
@@ -113,7 +118,7 @@ const useGetApis = () => {
     page: number,
     search: string,
     propertyType: string,
-    developerId: number
+    developerId: number,
   ) => {
     let params = developerId ? `&company=${developerId}` : "";
     if (search) {
@@ -128,14 +133,14 @@ const useGetApis = () => {
           "Content-Type": "application/json",
           "Accept-Language": `${currentLang}`,
         },
-      }
+      },
     );
   };
   //////////////
   const getAllNewLaunchesApi = (
     page: number,
     search: string,
-    developerId: number
+    developerId: number,
   ) => {
     let params = developerId ? `&company=${developerId}` : "";
     if (search) {
@@ -167,7 +172,7 @@ const useGetApis = () => {
           "Content-Type": "application/json",
           "Accept-Language": currentLang,
         },
-      }
+      },
     );
   };
 
@@ -211,7 +216,7 @@ const useGetApis = () => {
         },
       });
     },
-    []
+    [],
   );
 
   const getDealsApi = useCallback((user: AuthUser | null) => {
@@ -250,7 +255,7 @@ const useGetApis = () => {
         },
       });
     },
-    []
+    [],
   );
 
   const getPropertyDetailsApi = useCallback(
@@ -263,7 +268,7 @@ const useGetApis = () => {
         },
       });
     },
-    [currentLang]
+    [currentLang],
   );
 
   const getFeedbackApi = useCallback(
@@ -275,7 +280,7 @@ const useGetApis = () => {
         },
       });
     },
-    []
+    [],
   );
 
   const getGuideLinesApi = useCallback(() => {

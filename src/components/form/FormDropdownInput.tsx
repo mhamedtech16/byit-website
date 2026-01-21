@@ -40,9 +40,10 @@ type FormDropdownInputProps<T extends FieldValues> = {
   onClick?: () => void;
   onChange?: (value: string | number) => void;
   hasMore?: boolean;
-  onLoadMore?: (page: number, refresh: boolean, search: "") => void;
+  onLoadMore?: (page: number, refresh: boolean, search: string) => void;
   page?: number;
   loadingMore?: boolean;
+  disabled?: boolean;
 };
 
 export function FormDropdownInput<T extends FieldValues>({
@@ -65,6 +66,7 @@ export function FormDropdownInput<T extends FieldValues>({
   onLoadMore,
   page,
   loadingMore,
+  disabled,
 }: FormDropdownInputProps<T>) {
   const t = useTranslations(translate);
 
@@ -88,7 +90,7 @@ export function FormDropdownInput<T extends FieldValues>({
                   {...field}
                   className={cn(
                     form.formState.errors[name] && "border-red-400",
-                    className
+                    className,
                   )}
                 />
               ) : (
@@ -102,7 +104,7 @@ export function FormDropdownInput<T extends FieldValues>({
                   {...field}
                   className={cn(
                     form.formState.errors[name] && "border-red-400",
-                    className
+                    className,
                   )}
                 />
               )}
@@ -123,6 +125,7 @@ export function FormDropdownInput<T extends FieldValues>({
             <FormControl>
               <DropdownInput
                 title={title}
+                disabled={disabled}
                 titleSearch={titleSearch}
                 titleLoading={titleLoading}
                 data={data}
@@ -134,7 +137,7 @@ export function FormDropdownInput<T extends FieldValues>({
                 onClick={onClick}
                 className={cn(
                   form.formState.errors[name] && "border-red-400",
-                  className
+                  className,
                 )}
                 hasMore={hasMore}
                 onLoadMore={onLoadMore}

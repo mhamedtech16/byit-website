@@ -17,7 +17,9 @@ interface Vendors {
   onspotRatio: number;
   netRatio: number;
   companyRatio: number;
+  vendor: number;
 }
+
 export interface Property {
   /// Property or Compound
   type: string;
@@ -145,6 +147,17 @@ export type Project = {
     coordinates: [number, number];
   };
   villas: Villa[];
+  vendors: {
+    contactName: string;
+    contactPhone: string;
+    contactTitle: string;
+    ratio: number;
+    onspotRatio: number;
+    netRatio: number;
+    companyRatio: number;
+    contactCountry: number;
+    vendor: number;
+  }[];
   apartments: Apartment[];
   mall: Mall[];
   nawyApp: boolean;

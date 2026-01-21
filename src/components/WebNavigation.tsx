@@ -28,6 +28,8 @@ import { AlertDialogDemo } from "./Alret";
 import ModalDemo from "./Modal";
 import UserAccount from "./UserAccount";
 
+const CALLUS = "+201119377823";
+
 function WebNavigation({
   onOpen,
 }: {
@@ -53,10 +55,6 @@ function WebNavigation({
     setOpenAlertDialog(false);
     onOpen("login");
   };
-  console.log(enableLeadGenration);
-
-  console.log(!enableByitATeam);
-
   return (
     <div className="lg:flex hidden">
       {/* <div
@@ -94,7 +92,7 @@ function WebNavigation({
             <NavigationMenuTrigger
               className={cn(
                 linkClass(routes.PropertiesList ?? routes.PropertyDetails),
-                "cursor-pointer"
+                "cursor-pointer",
               )}
               onPointerMove={(e) => e.preventDefault()}
               onPointerLeave={(e) => e.preventDefault()}
@@ -115,7 +113,7 @@ function WebNavigation({
                         className={cn(
                           linkClass(routes.PropertiesList, "COMPOUND"),
                           isRTL &&
-                            "text-right flex-row items-center justify-end gap-3"
+                            "text-right flex-row items-center justify-end gap-3",
                         )}
                       >
                         {t("searchCompounds")}
@@ -135,7 +133,7 @@ function WebNavigation({
                         className={cn(
                           linkClass(routes.PropertiesList, "SEPARATED"),
                           isRTL &&
-                            "text-right flex-row items-center justify-end gap-3"
+                            "text-right flex-row items-center justify-end gap-3",
                         )}
                       >
                         {t("searchSeparates")}
@@ -158,7 +156,7 @@ function WebNavigation({
                           linkClass(routes.PropertiesList, "COMPOUND"),
                           isRTL
                             ? "text-right flex-row items-center justify-end gap-3"
-                            : "text-left flex-row items-center justify-start gap-3"
+                            : "text-left flex-row items-center justify-start gap-3",
                         )}
                       >
                         <Building2 size={24} />
@@ -179,7 +177,7 @@ function WebNavigation({
                           linkClass(routes.PropertiesList, "SEPARATED"),
                           isRTL
                             ? "text-right flex-row items-center justify-end gap-3"
-                            : "text-left flex-row items-center justify-start gap-3"
+                            : "text-left flex-row items-center justify-start gap-3",
                         )}
                       >
                         <Building size={24} />
@@ -223,9 +221,9 @@ function WebNavigation({
                   linkClass(
                     routes.LeadGenration.Root &&
                       routes.IncentiveByMeetings &&
-                      routes.NewMeetings
+                      routes.NewMeetings,
                   ),
-                  "cursor-pointer"
+                  "cursor-pointer",
                 )}
               >
                 Byit A-Team
@@ -307,7 +305,7 @@ function WebNavigation({
             isOpen={openByitTeamDialog}
             onClose={() => setOpenByitTeamDialog(false)}
           >
-            <div className="flex justify-center items-center p-12 space-x-6">
+            <div className="flex justify-center items-center p-8 space-x-6">
               <Button
                 onClick={() => {
                   router.push(routes.LeadGenration.Root);
@@ -377,6 +375,16 @@ function WebNavigation({
                     </li>
                     <li>الحملات مصممة تساعدك تقفل أسرع وتزود دخلك.</li>
                   </ul>
+                </div>
+
+                <div className="flex items-center justify-center mt-2">
+                  <Button
+                    variant={"underline"}
+                    size={"underline"}
+                    onClick={() => (window.location.href = `tel:${CALLUS}`)}
+                  >
+                    {t("callUs")} {CALLUS}
+                  </Button>
                 </div>
               </>
             )}

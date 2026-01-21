@@ -51,7 +51,7 @@ export default function NewMeetings() {
 
   const [openAlertDialog, setOpenAlertDialog] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-  const { setClsosingFormUser } = useAuthStore();
+  const { setMeetings } = useAuthStore();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [fileName, setFileName] = useState<string | undefined>("");
 
@@ -90,9 +90,9 @@ export default function NewMeetings() {
     form.setValue("project", "");
 
     if (developerId) {
-      fetchProjects(developerId, 1, true);
+      fetchProjects("", developerId, 1, true);
     } else {
-      fetchProjects(undefined, 1, true);
+      fetchProjects("", undefined, 1, true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form.watch("developer")]);
@@ -130,7 +130,7 @@ export default function NewMeetings() {
         }
 
         if (response?.data) {
-          setClsosingFormUser(response.data);
+          setMeetings(response.data);
           form.reset({
             developer: "",
             project: "",
@@ -157,7 +157,7 @@ export default function NewMeetings() {
         setLoading(false);
       }
     },
-    [selectedCountry?.id, locale, setClsosingFormUser, form]
+    [selectedCountry?.id, locale, setMeetings, form],
   );
 
   return (
@@ -186,10 +186,12 @@ export default function NewMeetings() {
             outlineSecoundry
             className="text-primary border-primary hover:bg-primary hover:text-white bg-white"
             hasMore={devPages > devPage}
-            onLoadMore={(page) => fetchDevelopers(page, false)}
+            onLoadMore={(page, refresh, search) =>
+              fetchDevelopers(page, false, search)
+            }
             page={devPage}
             loadingMore={devLoading}
-            onClick={() => fetchDevelopers(1, true)}
+            onClick={() => fetchDevelopers(1, true, "")}
           />
 
           {/* Projects Dropdown (from API) */}
@@ -206,8 +208,13 @@ export default function NewMeetings() {
             data={projects}
             width="w-full"
             hasMore={projectPages > projectPage}
-            onLoadMore={(page) =>
-              fetchProjects(Number(form.watch("developer")), page, false)
+            onLoadMore={(page, refresh, search) =>
+              fetchProjects(
+                search,
+                Number(form.watch("developer")),
+                page,
+                false,
+              )
             }
             page={projectPage}
             loadingMore={projectsLoading}
@@ -228,7 +235,7 @@ export default function NewMeetings() {
           <Label
             className={cn(
               "text-primary mb-2",
-              form.formState.errors.clientPhone && "text-red-500 mb-2"
+              form.formState.errors.clientPhone && "text-red-500 mb-2",
             )}
           >
             {t("clientPhone")}
@@ -251,7 +258,9 @@ export default function NewMeetings() {
               type="tel"
               className={cn(
                 "text-primary border-primary bg-white",
-                isRTL ? "text-right rounded-r-none" : "text-left rounded-l-none"
+                isRTL
+                  ? "text-right rounded-r-none"
+                  : "text-left rounded-l-none",
               )}
             />
           </div>
@@ -270,7 +279,7 @@ export default function NewMeetings() {
           <Label
             className={cn(
               "text-primary mb-2",
-              form.formState.errors.salesPhone && "text-red-500 mb-2"
+              form.formState.errors.salesPhone && "text-red-500 mb-2",
             )}
           >
             {t("developerSalesNumber")}
@@ -293,7 +302,9 @@ export default function NewMeetings() {
               type="tel"
               className={cn(
                 "text-primary border-primary bg-white",
-                isRTL ? "text-right rounded-r-none" : "text-left rounded-l-none"
+                isRTL
+                  ? "text-right rounded-r-none"
+                  : "text-left rounded-l-none",
               )}
             />
           </div>

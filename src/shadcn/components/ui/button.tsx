@@ -34,6 +34,7 @@ const buttonVariants = cva(
         scrollUp: `bg-primary text-white border-2 border-white shadow-md transition duration-300 hover:bg-white hover:text-primary hover:border-primary hover:shadow-lg active:scale-95`,
         icon: "bg-white text-primary hover:text-white shadow-xs hover:bg-primary/90 items-center justify-center flex",
         login: "bg-white text-black underline",
+        underline: "bg-none text-primary underline font-bold text-xl",
       },
       size: {
         default: "h-9 px-10 py-6 has-[>svg]:px-3",
@@ -45,13 +46,14 @@ const buttonVariants = cva(
         iconClose: "px-2",
         linkUnderline: "p-0",
         login: "p-3",
+        underline: "p-3",
       },
     },
     defaultVariants: {
       variant: "default",
       size: "default",
     },
-  }
+  },
 );
 
 function Button({
