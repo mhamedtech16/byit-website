@@ -3,6 +3,7 @@
 import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
 
+import { useMobile } from "@/hooks/useMobile";
 import { getStatusColor } from "@/lib/statusColor";
 import {
   Card,
@@ -11,6 +12,7 @@ import {
   CardTitle,
 } from "@/shadcn/components/ui/card";
 import { Separator } from "@/shadcn/components/ui/separator";
+import { cn } from "@/shadcn/lib/utils";
 import { Meeting } from "@/types/Meetings";
 
 interface MeetingsContentProps {
@@ -18,7 +20,8 @@ interface MeetingsContentProps {
   activeMeetings: Meeting[];
   remainingMeetings: number;
   acceptedMeetings: number;
-  earning: number;
+  meetingsEarning: number;
+  reiceveEarning: number;
 }
 
 export default function MeetingsContent({
@@ -26,8 +29,10 @@ export default function MeetingsContent({
   activeMeetings,
   remainingMeetings,
   acceptedMeetings,
-  earning,
+  meetingsEarning,
+  reiceveEarning,
 }: MeetingsContentProps) {
+  const isMobile = useMobile();
   const t = useTranslations();
 
   return (
@@ -41,26 +46,44 @@ export default function MeetingsContent({
       <CardContent className="space-y-4">
         {/* === Summary Cards === */}
         <div className="space-y-3">
-          <Card className="p-3 text-center bg-blue-100 rounded-lg border">
+          <Card className="p-3 text-center bg-blue-100 rounded-lg border space-y-4">
             <p className="text-lg text-black font-bold">
               {t("myMeetingEarnings")}
             </p>
-            <p className="font-bold text-lg text-green-500">
-              {`${earning ?? 0} ${t("EGP")}`}
-            </p>
+            <div
+              className={cn(
+                isMobile
+                  ? "flex flex-col space-y-4"
+                  : "flex flex-row justify-around",
+              )}
+            >
+              <div className="flex flex-col space-y-4">
+                <p className="text-xl font-bold">Total earning</p>
+                <p className="font-bold text-lg text-green-500">
+                  {`${meetingsEarning - reiceveEarning} ${t("EGP")}`}
+                </p>
+              </div>
+
+              <div className="flex flex-col space-y-4">
+                <p className="text-xl font-bold">Total recive cash</p>
+                <p className="font-bold text-lg text-green-500">
+                  {`${reiceveEarning ?? 0} ${t("EGP")}`}
+                </p>
+              </div>
+            </div>
           </Card>
 
           <div className="flex gap-3">
+            <Card className="flex-1 p-3 text-center bg-green-100 rounded-lg border">
+              <p className="text-lg font-bold text-black">{t("noMeetings")}</p>
+              <p className="font-bold text-lg">{acceptedMeetings}</p>
+            </Card>
+
             <Card className="flex-1 p-3 text-center bg-red-100 rounded-lg border">
               <p className="text-lg font-bold text-black">
                 {t("remainingMeetings")}
               </p>
               <p className="font-bold text-lg">{remainingMeetings}</p>
-            </Card>
-
-            <Card className="flex-1 p-3 text-center bg-green-100 rounded-lg border">
-              <p className="text-lg font-bold text-black">{t("noMeetings")}</p>
-              <p className="font-bold text-lg">{acceptedMeetings}</p>
             </Card>
           </div>
         </div>

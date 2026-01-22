@@ -1,3 +1,14 @@
+export interface Earnings {
+  _id: string;
+  broker: number;
+  month: string;
+  updatedAt: string;
+  amount: number;
+  reason: string;
+  __v: number;
+  createdAt: string;
+}
+
 export interface Meeting {
   id: number;
   clientName: string;
@@ -11,14 +22,5 @@ export interface Meeting {
   borker: { fullname: string; id: number; type: string } | null;
   clientCountry: { countryCode: string; name: string; id: number };
   salesCountry: { name: string; id: number } | null;
-  earning: {
-    _id: string;
-    broker: number;
-    month: string;
-    updatedAt: string;
-    amount: number;
-    reason: string;
-    __v: number;
-    createdAt: string;
-  };
+  earning: Earnings[];
 }

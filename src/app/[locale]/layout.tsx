@@ -12,6 +12,8 @@ import ScrollUpButton from "@/components/ScrollUpButton";
 import { isLocale } from "@/lib/isLocale";
 import { siteConfig } from "@/lib/siteConfig";
 
+import OnlineGuard from "./RootLayout";
+
 export async function generateMetadata({
   params,
 }: {
@@ -51,12 +53,14 @@ export default async function LocaleLayout({
         <div className="flex flex-col min-h-screen">
           <NextIntlClientProvider>
             <HydrationGate>
-              <NavigationMenuDemo />
-              <main className="pt-[11vmin] flex-1">
-                {children}
-                <ScrollUpButton />
-              </main>
-              <Footer />
+              <OnlineGuard>
+                <NavigationMenuDemo />
+                <main className="pt-[11vmin] flex-1">
+                  {children}
+                  <ScrollUpButton />
+                </main>
+                <Footer />
+              </OnlineGuard>
             </HydrationGate>
           </NextIntlClientProvider>
         </div>

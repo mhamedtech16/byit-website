@@ -1,5 +1,6 @@
 "use client";
 
+import { AxiosError } from "axios";
 import { motion, useScroll, useTransform, Variants } from "framer-motion";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
@@ -18,18 +19,21 @@ function HomePage() {
   const { currentUser, setcurrentUser } = useAuthStore();
 
   useEffect(() => {
+    if (!currentUser?.token) return;
+
     getUserDataApi(currentUser)
       .then((res) => {
         if (res && res.data && res.data.data) {
           const currentUserData = { ...currentUser };
-
           currentUserData["user"] = res.data.data;
           if (currentUserData) {
             setcurrentUser(currentUserData);
           }
         }
       })
-      .catch(() => {});
+      .catch((error: AxiosError) => {
+        console.error("Error fetching user data:", error);
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

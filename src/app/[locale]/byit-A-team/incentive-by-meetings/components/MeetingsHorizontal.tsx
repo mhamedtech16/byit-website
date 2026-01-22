@@ -23,7 +23,7 @@ import { useIsRTL } from "@/hooks/useRTL";
 import { Button } from "@/shadcn/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/shadcn/components/ui/scroll-area";
 import { cn } from "@/shadcn/lib/utils";
-import { Meeting } from "@/types/Meetings";
+import { Earnings, Meeting } from "@/types/Meetings";
 
 import MeetingsContent from "./MeetingsContent";
 
@@ -34,12 +34,12 @@ const linkVariants = {
 
 export default function MeetingsHorizontal({
   data,
-  earning,
+  earning = [],
   activeMonth,
   setActiveMonth,
 }: {
   data: Meeting[];
-  earning: number;
+  earning: Earnings[];
   activeMonth: string;
   setActiveMonth: Dispatch<SetStateAction<string>>;
 }) {
@@ -56,7 +56,7 @@ export default function MeetingsHorizontal({
 
   const months = useMemo(() => {
     return Array.from({ length: 12 }).map((_, i) =>
-      dayjs.utc(`${year}-${i + 1}-01`).format("MMMM YYYY")
+      dayjs.utc(`${year}-${i + 1}-01`).format("MMMM YYYY"),
     );
   }, [year]);
 
@@ -99,9 +99,21 @@ export default function MeetingsHorizontal({
 
   const activeMeetings = useMemo(() => data, [data]);
 
+  const safeEarning = Array.isArray(earning) ? earning : [];
+
+  const meetingEarnings = safeEarning.reduce(
+    (sum, i: Earnings) => (i.reason === "MEETINGS" ? sum + i.amount : sum),
+    0,
+  );
+
+  const resiveEarnings = safeEarning.reduce(
+    (sum, i: Earnings) => (i.reason === "PAID-MEETING" ? sum + i.amount : sum),
+    0,
+  );
+
   const acceptedMeetings = useMemo(
     () => activeMeetings.filter((m) => m.status === "ACCEPTED").length,
-    [activeMeetings]
+    [activeMeetings],
   );
 
   const remainingMeetings = Math.max(4 - acceptedMeetings, 0);
@@ -170,7 +182,8 @@ export default function MeetingsHorizontal({
           <MeetingsContent
             activeMonth={activeMonth}
             activeMeetings={activeMeetings}
-            earning={earning}
+            meetingsEarning={meetingEarnings}
+            reiceveEarning={resiveEarnings}
             remainingMeetings={remainingMeetings}
             acceptedMeetings={acceptedMeetings}
           />
