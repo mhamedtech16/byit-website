@@ -3,6 +3,7 @@
 import { motion, Variants } from "framer-motion";
 import { History } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
+import { useState } from "react";
 
 import { imgs } from "@/assets";
 import BackgroundImage from "@/components/BackgroundImage";
@@ -13,16 +14,21 @@ import useHistory from "@/hooks/useHistory";
 import { formatDate } from "@/lib/formateDate";
 import { pricePerLangauge } from "@/lib/PriceArray";
 import { Card, CardContent } from "@/shadcn/components/ui/card";
+import { Tabs, TabsList, TabsTrigger } from "@/shadcn/components/ui/tabs";
+import { cn } from "@/shadcn/lib/utils";
 
 export default function HistoryListMobile() {
   const t = useTranslations("History");
-  const { history, loading } = useHistory();
+  const { history, loading, dealType, refetch } = useHistory(1, 20);
+  const [activeType, setActiveType] = useState<string>(
+    dealType ?? "CONTRACTED",
+  );
   const locale = useLocale();
 
   const totalValue = history.reduce((sum, item) => sum + item.value, 0);
   const totalEarnings = history.reduce(
     (sum, item) => sum + item.userCommission,
-    0
+    0,
   );
 
   const fadeUp: Variants = {
@@ -63,7 +69,7 @@ export default function HistoryListMobile() {
         </motion.h1>
 
         <div className="absolute top-[55%] w-full px-8 flex justify-between">
-          {/*  Total Value */}
+          {/*  Total price */}
           <motion.div
             variants={fadeUp}
             initial="hidden"
@@ -92,71 +98,86 @@ export default function HistoryListMobile() {
           </motion.div>
         </div>
       </motion.div>
-      {history.length === 0 ? (
-        <NoData
-          message="noHistoryFound"
-          imageSrc={<History size={100} color={colors.white} />}
-        />
-      ) : (
-        <div className="flex flex-col px-4">
-          {history.map((item, index) => (
-            <Card key={index} className="shadow-lg mb-4">
-              <CardContent>
-                <div className="space-y-2">
-                  {/*  Client Name */}
-                  <div className="flex space-x-2">
-                    <span className="text-black font-bold">
-                      {`${t("clientName")}:`}
-                    </span>
-                    <span className="font-medium text-app-gray">
-                      {item.clientName}
-                    </span>
-                  </div>
+      <div className="flex flex-col px-4">
+        <Tabs
+          value={activeType}
+          onValueChange={(value) => {
+            setActiveType(value);
+            refetch(value);
+          }}
+        >
+          <TabsList className={cn("w-full h-16")}>
+            <TabsTrigger value="CONTRACTED">Closed deal</TabsTrigger>
 
-                  {/* Date */}
-                  <div className="flex  space-x-2">
-                    <span className="text-black font-bold">
-                      {`${t("createdAt")}:`}
-                    </span>
-                    <span className="font-medium text-app-gray">
-                      {formatDate(item.createdAt, locale)}
-                    </span>
-                  </div>
+            <TabsTrigger value="SHARING">Shared deal</TabsTrigger>
+          </TabsList>
+          {history.length === 0 ? (
+            <NoData
+              message="noHistoryFound"
+              imageSrc={<History size={100} color={colors.white} />}
+            />
+          ) : (
+            <div className="mt-5">
+              {history.map((item, index) => (
+                <Card key={index} className="shadow-lg mb-4">
+                  <CardContent>
+                    <div className="space-y-2">
+                      {/*  Client Name */}
+                      <div className="flex space-x-2">
+                        <span className="text-black font-bold">
+                          {`${t("clientName")}:`}
+                        </span>
+                        <span className="font-medium text-app-gray">
+                          {item.clientName}
+                        </span>
+                      </div>
 
-                  {/*  Deal Value */}
-                  <div className="flex  space-x-2">
-                    <span className="font-bold text-green-500">
-                      {`${t("dealValue")}:`}
-                    </span>
-                    <span className="font-medium text-green-500">
-                      {pricePerLangauge(item.value || 0, locale)}
-                    </span>
-                    <span className="font-medium text-green-500">
-                      {t("EGP")}
-                    </span>
-                  </div>
+                      {/* Date */}
+                      <div className="flex  space-x-2">
+                        <span className="text-black font-bold">
+                          {`${t("createdAt")}:`}
+                        </span>
+                        <span className="font-medium text-app-gray">
+                          {formatDate(item.createdAt, locale)}
+                        </span>
+                      </div>
 
-                  {/* Status */}
-                  <div className="flex justify-between items-center">
-                    <span className="text-slate-950 font-medium text-xl">
-                      {`${t("status")}:`}
-                    </span>
-                    <span
-                      className={`font-semibold ${
-                        item.status === "ACCEPTED"
-                          ? "text-white bg-green-500 p-2 rounded-xl"
-                          : "text-white bg-orangeApp p-2 rounded-xl"
-                      }`}
-                    >
-                      {item.status}
-                    </span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      )}
+                      {/*  Deal Value */}
+                      <div className="flex  space-x-2">
+                        <span className="font-bold text-green-500">
+                          {`${t("dealValue")}:`}
+                        </span>
+                        <span className="font-medium text-green-500">
+                          {pricePerLangauge(item.value || 0, locale)}
+                        </span>
+                        <span className="font-medium text-green-500">
+                          {t("EGP")}
+                        </span>
+                      </div>
+
+                      {/* Status */}
+                      <div className="flex justify-between items-center">
+                        <span className="text-slate-950 font-medium text-xl">
+                          {`${t("status")}:`}
+                        </span>
+                        <span
+                          className={`font-semibold ${
+                            item.status === "ACCEPTED"
+                              ? "text-white bg-green-500 p-2 rounded-xl"
+                              : "text-white bg-orangeApp p-2 rounded-xl"
+                          }`}
+                        >
+                          {item.status}
+                        </span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+        </Tabs>
+      </div>
     </div>
   );
 }

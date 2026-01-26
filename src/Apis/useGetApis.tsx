@@ -219,14 +219,17 @@ const useGetApis = () => {
     [],
   );
 
-  const getDealsApi = useCallback((user: AuthUser | null) => {
-    return api.get("deals", {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${user?.token}`,
-      },
-    });
-  }, []);
+  const getDealsApi = useCallback(
+    (user: AuthUser | null, page: number, limit: number, type: string) => {
+      return api.get(`deals?page=${page}&limit=${limit}&type=${type}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user?.token}`,
+        },
+      });
+    },
+    [],
+  );
 
   const getCampaignApi = useCallback((user: AuthUser | null) => {
     return api.get("campaigns", {
