@@ -18,6 +18,7 @@
     "mustLogin": "You must Login first",
     "warning": "Warning",
     "guideLines": "Guideline Videos",
+    "closedDeals": "Closed deals",
     "sharesDeals": "Shares deals",
     "deals": "Deals",
     "sharedProperties": "Fractional Real Estate",
@@ -362,6 +363,8 @@
     "createdAt": "Date",
     "status": "Status",
     "dealValue": "Deal Value",
-    "EGP": "EGP"
+    "EGP": "EGP",
+    "closedDeals": "Closed deals",
+    "sharesDeals": "Shares deals"
   }
 }

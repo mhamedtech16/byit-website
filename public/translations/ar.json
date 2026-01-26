@@ -21,6 +21,7 @@
     "mustLogin": "يجب عليك تسجيل الدخول أولاً",
     "warning": "تحذير",
     "guideLines": "فيديوهات شرح التطبيق",
+    "closedDeals": "الصفقات المغلقة",
     "sharesDeals": "صفقات بالحصص",
     "deals": "الصفقات",
     "sharedProperties": "العقارات الجزئية",
@@ -358,6 +359,8 @@
     "createdAt": "تاريخ",
     "status": "الحالة",
     "dealValue": "قيمة الصفقة",
-    "EGP": "جم"
+    "EGP": "جم",
+    "closedDeals": "الصفقات المغلقة",
+    "sharesDeals": "صفقات بالحصص"
   }
 }

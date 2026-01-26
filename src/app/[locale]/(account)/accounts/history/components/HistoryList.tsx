@@ -30,6 +30,8 @@ export default function HistoryList() {
     page,
     10,
   );
+  console.log(totalPages);
+
   console.log(page === totalPages);
 
   const locale = useLocale();
@@ -222,12 +224,16 @@ export default function HistoryList() {
                 if (page === totalPages) {
                   e.preventDefault();
                   return;
+                } else if (totalPages === 0) {
+                  e.preventDefault();
+                  return;
                 }
                 setPage((p) => p + 1);
               }}
               className={cn(
                 "text-white",
                 page === totalPages ? "opacity-50 cursor-not-allowed" : "",
+                totalPages === 0 ? "opacity-50 cursor-not-allowed" : "",
               )}
             />
           </PaginationItem>

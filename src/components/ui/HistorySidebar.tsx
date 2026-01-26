@@ -32,7 +32,7 @@ type Props = {
 };
 
 export function HistorySidebar({ onChoiceCallback, activeType }: Props) {
-  const t = useTranslations();
+  const t = useTranslations("Header");
 
   // نخزن نسخة محلية من الـ activeType
   const [currentActive, setCurrentActive] = useState<string>(
@@ -58,7 +58,7 @@ export function HistorySidebar({ onChoiceCallback, activeType }: Props) {
       animate="visible"
       className="w-64 border-r p-6 space-y-6 bg-white shadow-sm rounded-xl h-[40vmin]"
     >
-      <h2 className="text-xl font-semibold">{t("Header.favourites")}</h2>
+      <h2 className="text-xl font-semibold">{t("deals")}</h2>
 
       <motion.div className="flex flex-col space-y-4">
         <motion.div variants={linkVariants}>
@@ -72,7 +72,7 @@ export function HistorySidebar({ onChoiceCallback, activeType }: Props) {
                 : ""
             }
           >
-            Closed deal
+            {t("closedDeals")}
           </Button>
         </motion.div>
 
@@ -87,7 +87,7 @@ export function HistorySidebar({ onChoiceCallback, activeType }: Props) {
                 : ""
             }
           >
-            Shared deal
+            {t("sharesDeals")}
           </Button>
         </motion.div>
       </motion.div>

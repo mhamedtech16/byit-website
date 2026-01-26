@@ -14,12 +14,24 @@ import useHistory from "@/hooks/useHistory";
 import { formatDate } from "@/lib/formateDate";
 import { pricePerLangauge } from "@/lib/PriceArray";
 import { Card, CardContent } from "@/shadcn/components/ui/card";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/shadcn/components/ui/pagination";
 import { Tabs, TabsList, TabsTrigger } from "@/shadcn/components/ui/tabs";
 import { cn } from "@/shadcn/lib/utils";
 
 export default function HistoryListMobile() {
   const t = useTranslations("History");
-  const { history, loading, dealType, refetch } = useHistory(1, 20);
+  const [page, setPage] = useState(1);
+  const { history, loading, dealType, totalPages, refetch } = useHistory(
+    page,
+    10,
+  );
   const [activeType, setActiveType] = useState<string>(
     dealType ?? "CONTRACTED",
   );
@@ -107,9 +119,9 @@ export default function HistoryListMobile() {
           }}
         >
           <TabsList className={cn("w-full h-16")}>
-            <TabsTrigger value="CONTRACTED">Closed deal</TabsTrigger>
+            <TabsTrigger value="CONTRACTED">{t("closedDeals")}</TabsTrigger>
 
-            <TabsTrigger value="SHARING">Shared deal</TabsTrigger>
+            <TabsTrigger value="SHARING">{t("sharesDeals")}</TabsTrigger>
           </TabsList>
           {history.length === 0 ? (
             <NoData
@@ -177,6 +189,67 @@ export default function HistoryListMobile() {
             </div>
           )}
         </Tabs>
+        <Pagination className="mt-10 mb-10">
+          <PaginationContent>
+            {/* Previous */}
+            <PaginationItem>
+              <PaginationPrevious
+                onClick={(e) => {
+                  if (page === 1) {
+                    e.preventDefault();
+                    return;
+                  }
+                  setPage((p) => p - 1);
+                }}
+                className={cn(
+                  "text-white",
+                  page === 1 ? "opacity-50 cursor-not-allowed" : "text-white",
+                )}
+              />
+            </PaginationItem>
+
+            {/* Pages */}
+            {Array.from({ length: totalPages }).map((_, i) => {
+              const pageNumber = i + 1;
+
+              return (
+                <PaginationItem key={pageNumber}>
+                  <PaginationLink
+                    isActive={page === pageNumber}
+                    className={cn(
+                      "text-white",
+                      page === pageNumber && "bg-white text-black",
+                    )}
+                    onClick={() => setPage(pageNumber)}
+                  >
+                    {pageNumber}
+                  </PaginationLink>
+                </PaginationItem>
+              );
+            })}
+
+            {/* Next */}
+            <PaginationItem>
+              <PaginationNext
+                onClick={(e) => {
+                  if (page === totalPages) {
+                    e.preventDefault();
+                    return;
+                  } else if (totalPages === 0) {
+                    e.preventDefault();
+                    return;
+                  }
+                  setPage((p) => p + 1);
+                }}
+                className={cn(
+                  "text-white",
+                  page === totalPages ? "opacity-50 cursor-not-allowed" : "",
+                  totalPages === 0 ? "opacity-50 cursor-not-allowed" : "",
+                )}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
       </div>
     </div>
   );
