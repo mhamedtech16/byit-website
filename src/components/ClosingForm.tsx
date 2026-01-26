@@ -39,7 +39,6 @@ import { CountryDropdown } from "./CountryCodeDropdown";
 import { FormCurrencyInput } from "./form/FormCurrencyInput";
 import { FormDropdownInput } from "./form/FormDropdownInput";
 import { FormTextInput } from "./form/FormTextInput";
-import ModalDemo from "./Modal";
 
 type ClosingFormValues = z.infer<typeof closingFormSchema>;
 
@@ -262,20 +261,15 @@ export default function ClosingForm() {
 
           {/* Projects Dropdown (from API) */}
           {isSelectedProOther ? (
-            <ModalDemo
-              isOpen={isSelectedProOther}
-              onClose={() => !isSelectedProOther}
-            >
-              <FormTextInput
-                form={form}
-                name="projectName"
-                label="projectName"
-                placeholder="projectName"
-                translate="ClosingForm"
-                type="text"
-                className="text-white"
-              />
-            </ModalDemo>
+            <FormTextInput
+              form={form}
+              name="projectName"
+              label="projectName"
+              placeholder="projectName"
+              translate="ClosingForm"
+              type="text"
+              className="text-white"
+            />
           ) : (
             <FormDropdownInput
               form={form}
