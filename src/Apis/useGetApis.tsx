@@ -290,8 +290,8 @@ const useGetApis = () => {
     return api.get("guidelines");
   }, []);
 
-  const getSharedPropertiesApi = useCallback(() => {
-    return api.get("sharedProperties");
+  const getSharedPropertiesApi = useCallback((page: number) => {
+    return api.get(`sharedProperties?page=${page}`);
   }, []);
 
   const getVendorsApi = useCallback(() => {

@@ -13,6 +13,7 @@ import { colors } from "@/constants/colors";
 import useHistory from "@/hooks/useHistory";
 import { formatDate } from "@/lib/formateDate";
 import { pricePerLangauge } from "@/lib/PriceArray";
+import { getVisiblePages } from "@/lib/VisiblePages";
 import { Card, CardContent } from "@/shadcn/components/ui/card";
 import {
   Pagination,
@@ -209,20 +210,26 @@ export default function HistoryListMobile() {
             </PaginationItem>
 
             {/* Pages */}
-            {Array.from({ length: totalPages }).map((_, i) => {
-              const pageNumber = i + 1;
+            {getVisiblePages(page, totalPages).map((p, i) => {
+              if (p === "...") {
+                return (
+                  <PaginationItem key={`dots-${i}`}>
+                    <span className="px-3 text-white">…</span>
+                  </PaginationItem>
+                );
+              }
 
               return (
-                <PaginationItem key={pageNumber}>
+                <PaginationItem key={p}>
                   <PaginationLink
-                    isActive={page === pageNumber}
+                    isActive={page === p}
                     className={cn(
                       "text-white",
-                      page === pageNumber && "bg-white text-black",
+                      page === p && "bg-white text-black",
                     )}
-                    onClick={() => setPage(pageNumber)}
+                    onClick={() => setPage(p)}
                   >
-                    {pageNumber}
+                    {p}
                   </PaginationLink>
                 </PaginationItem>
               );

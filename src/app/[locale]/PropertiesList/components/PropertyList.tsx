@@ -12,7 +12,16 @@ import { SkeletonLoading } from "@/components/SkeletonComponent";
 import { colors } from "@/constants/colors";
 import { useMobile } from "@/hooks/useMobile";
 import { useIsRTL } from "@/hooks/useRTL";
+import { getVisiblePages } from "@/lib/VisiblePages";
 import { Button } from "@/shadcn/components/ui/button";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/shadcn/components/ui/pagination";
 import { cn } from "@/shadcn/lib/utils";
 import { useAuthStore } from "@/store/authStore";
 import { Project, Property } from "@/types/Properties";
@@ -23,7 +32,8 @@ import PropertyListItem from "./PropertyListItem";
 const PropertiesList = () => {
   const params = useSearchParams();
   const projectIdFromQuery = Number(params.get("project"));
-
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
   const currentUser = useAuthStore((state) => state.currentUser);
   const isMobile = useMobile();
   const isRTL = useIsRTL();
@@ -48,7 +58,7 @@ const PropertiesList = () => {
       selectedBedroom: string[] = [],
       fromPrice: number = 0,
       toPrice: number = 0,
-      selectedProject?: Project
+      selectedProject?: Project,
     ) => {
       setLoadingPg(true);
 
@@ -70,7 +80,7 @@ const PropertiesList = () => {
         page,
         propertyType,
         currentUser,
-        projectIdFromQuery
+        projectIdFromQuery,
       )
         .then((res) => {
           setProperties((prev) => {
@@ -80,11 +90,12 @@ const PropertiesList = () => {
                 : [...prev, ...res.data.data];
 
             const unique = Array.from(
-              new Map(combined.map((item) => [item.id, item])).values()
+              new Map(combined.map((item) => [item.id, item])).values(),
             );
 
             return unique;
           });
+          setTotalPages(res.data.pageCount);
         })
         .catch((err: unknown) => {
           const error = err as AxiosError;
@@ -94,13 +105,13 @@ const PropertiesList = () => {
           setLoadingPg(false);
         });
     },
-    [currentUser, getPropertiesApi, projectIdFromQuery, propertyType]
+    [currentUser, getPropertiesApi, projectIdFromQuery, propertyType],
   );
 
   useEffect(() => {
-    fetchProperties(1, true, false);
+    fetchProperties(page, true, false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [propertyType]);
+  }, [propertyType, page]);
 
   if (loadingPg) {
     return <SkeletonLoading />;
@@ -130,7 +141,7 @@ const PropertiesList = () => {
                   <div className="my-[2vmin]" />
                   <PropertyListItem item={item} />
                 </div>
-              )
+              ),
             )
           )}
         </div>
@@ -160,10 +171,10 @@ const PropertiesList = () => {
                   selectedBedroom,
                   selectedCompound,
                   fromPrice,
-                  toPrice
+                  toPrice,
                 ) =>
                   fetchProperties(
-                    1,
+                    page,
                     true,
                     true,
                     selectedLocationIds,
@@ -173,7 +184,7 @@ const PropertiesList = () => {
                     selectedBedroom,
                     fromPrice,
                     toPrice,
-                    selectedCompound
+                    selectedCompound,
                   )
                 }
               />
@@ -183,7 +194,7 @@ const PropertiesList = () => {
           <div
             className={cn(
               "w-[28%] bg-white max-h-[85vh] fixed overflow-y-auto p-4 rounded-xl shadow-md",
-              isRTL ? "left-10" : "right-10"
+              isRTL ? "left-10" : "right-10",
             )}
           >
             <PropertiesFilter
@@ -196,10 +207,10 @@ const PropertiesList = () => {
                 selectedBedroom,
                 selectedCompound,
                 fromPrice,
-                toPrice
+                toPrice,
               ) =>
                 fetchProperties(
-                  1,
+                  page,
                   true,
                   true,
                   selectedLocationIds,
@@ -209,13 +220,80 @@ const PropertiesList = () => {
                   selectedBedroom,
                   fromPrice,
                   toPrice,
-                  selectedCompound
+                  selectedCompound,
                 )
               }
             />
           </div>
         )}
       </div>
+      <Pagination className="mt-10 mb-10">
+        <PaginationContent>
+          {/* Previous */}
+          <PaginationItem>
+            <PaginationPrevious
+              onClick={(e) => {
+                if (page === 1) {
+                  e.preventDefault();
+                  return;
+                }
+                setPage((p) => p - 1);
+              }}
+              className={cn(
+                "text-white",
+                page === 1 ? "opacity-50 cursor-not-allowed" : "text-white",
+              )}
+            />
+          </PaginationItem>
+
+          {/* Pages */}
+          {getVisiblePages(page, totalPages).map((p, i) => {
+            if (p === "...") {
+              return (
+                <PaginationItem key={`dots-${i}`}>
+                  <span className="px-3 text-white">…</span>
+                </PaginationItem>
+              );
+            }
+
+            return (
+              <PaginationItem key={p}>
+                <PaginationLink
+                  isActive={page === p}
+                  className={cn(
+                    "text-white",
+                    page === p && "bg-white text-black",
+                  )}
+                  onClick={() => setPage(p)}
+                >
+                  {p}
+                </PaginationLink>
+              </PaginationItem>
+            );
+          })}
+
+          {/* Next */}
+          <PaginationItem>
+            <PaginationNext
+              onClick={(e) => {
+                if (page === totalPages) {
+                  e.preventDefault();
+                  return;
+                } else if (totalPages === 0) {
+                  e.preventDefault();
+                  return;
+                }
+                setPage((p) => p + 1);
+              }}
+              className={cn(
+                "text-white",
+                page === totalPages ? "opacity-50 cursor-not-allowed" : "",
+                totalPages === 0 ? "opacity-50 cursor-not-allowed" : "",
+              )}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </div>
   );
 };

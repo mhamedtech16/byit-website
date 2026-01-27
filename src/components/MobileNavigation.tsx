@@ -58,8 +58,8 @@ function MobileNavigation({
   if (!hasHydrated) return null;
 
   const enableMeetings = currentUser?.user?.enableMeetings ?? false;
-  const enableLeadGenration = currentUser?.user?.enableLeadGeneration ?? false;
-  const enableByitATeam = currentUser?.user?.enableByitATeam ?? false;
+  const enableLeadGeneration = currentUser?.user?.enableLeadGeneration ?? false;
+  // const enableByitATeam = currentUser?.user?.enableByitATeam ?? false;
 
   const handleLogout = async () => {
     try {
@@ -359,7 +359,7 @@ function MobileNavigation({
               router.push(routes.LeadGenration.Root);
               setOpenByitTeamDialog(false);
             }}
-            disabled={!enableLeadGenration}
+            disabled={!enableLeadGeneration}
           >
             Lead Generation
           </Button>
@@ -369,13 +369,13 @@ function MobileNavigation({
               router.push(routes.IncentiveByMeetings);
               setOpenByitTeamDialog(false);
             }}
-            disabled={!enableMeetings || !enableByitATeam}
+            disabled={!enableMeetings}
           >
             Incentive By Meetings
           </Button>
         </div>
 
-        {enableLeadGenration && enableMeetings ? null : (
+        {enableLeadGeneration && enableMeetings ? null : (
           <>
             <div className="text-right">
               <strong className="text-primary">

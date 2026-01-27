@@ -27,7 +27,7 @@ const NewLaunchItem = ({ item }: Props) => {
   const [isAlretOpen, setAlretOpen] = useState(false);
   if (isMobile) {
     return (
-      <div className="w-[100%] mx-auto rounded-xl shadow-md bg-white mb-3">
+      <div className="w-[100%] mt-5 mx-auto rounded-xl shadow-md bg-white mb-3">
         <div className="relative w-full h-[50vmin]">
           <Image
             alt="property image"
@@ -46,7 +46,7 @@ const NewLaunchItem = ({ item }: Props) => {
             />
           </div>
 
-          <div className="absolute top-30 mx-[3vmin] flex flex-col justify-between h-[70%]">
+          <div className="absolute top-4 mx-[3vmin] flex flex-col justify-between h-[70%]">
             <button
               onClick={() => {
                 setCalcOpen(true);
@@ -138,7 +138,7 @@ const NewLaunchItem = ({ item }: Props) => {
     );
   } else {
     return (
-      <div className="w-[90%] mx-auto p-2 rounded-xl shadow-md bg-white mt-3 ">
+      <div className="w-[90%] mx-auto p-2 rounded-xl shadow-md bg-white mt-5 ">
         <div className="relative w-[100%] h-[50vh]">
           <Image
             alt="property image"
