@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import React, { useRef } from "react";
 
 import EmblaCarousel from "@/components/EmblaCarousel";
+import SupportSectionMobile from "@/components/SupportSectionMobile";
 import { APP_STORE, GOOGLE_APP } from "@/constants/downloadApps";
 import { HOMEIMAGES } from "@/constants/imgs";
 import { OPTIONS } from "@/constants/options";
@@ -36,7 +37,7 @@ function HomePageMobile() {
   };
 
   return (
-    <div className="text-white min-h-screen pb-12">
+    <div className="text-white min-h-screen">
       {/* Section 1: Full Width Image */}
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
@@ -141,6 +142,8 @@ function HomePageMobile() {
       <section className="mt-12">
         <EmblaCarousel slides={HOMEIMAGES} options={OPTIONS} />
       </section>
+
+      <SupportSectionMobile />
     </div>
   );
 }

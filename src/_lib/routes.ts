@@ -3,7 +3,6 @@
 export const routes = {
   Home: "/",
   About: "/about",
-  Contact: "/contact",
   Profile: "/profile",
   PropertiesList: "/PropertiesList",
   PropertyDetails: {
@@ -51,7 +50,6 @@ export const routes = {
 export type RoutePaths =
   | typeof routes.Home
   | typeof routes.About
-  | typeof routes.Contact
   | typeof routes.Profile
   | typeof routes.Blog.Root
   | ReturnType<typeof routes.Blog.slug>

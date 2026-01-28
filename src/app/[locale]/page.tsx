@@ -11,10 +11,11 @@ import HomePageMobile from "../components/HomePageMobile";
 export default function HomePage1() {
   const isOnline = useOnlineStatus();
   const isMobile = useMobile();
+  const isTabletOrMobile = isMobile || window.innerWidth <= 1230;
 
   if (!isOnline) {
     notFound();
   }
 
-  return <>{isMobile ? <HomePageMobile /> : <HomePage />}</>;
+  return <>{isTabletOrMobile ? <HomePageMobile /> : <HomePage />}</>;
 }

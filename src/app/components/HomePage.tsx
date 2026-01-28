@@ -8,6 +8,7 @@ import React, { useEffect, useRef } from "react";
 
 import { getUserDataApi } from "@/Apis/Auth";
 import EmblaCarousel from "@/components/EmblaCarousel";
+import SupportSection from "@/components/SupportSection";
 import { APP_STORE, GOOGLE_APP } from "@/constants/downloadApps";
 import { HOMEIMAGES } from "@/constants/imgs";
 import { OPTIONS } from "@/constants/options";
@@ -59,7 +60,7 @@ function HomePage() {
   };
 
   return (
-    <div className="text-white min-h-screen pb-12">
+    <div className="text-white min-h-screen">
       {/* Section 1: Full Width Image */}
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
@@ -165,6 +166,7 @@ function HomePage() {
       <section>
         <EmblaCarousel slides={HOMEIMAGES} options={OPTIONS} />
       </section>
+      <SupportSection />
     </div>
   );
 }

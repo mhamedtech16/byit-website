@@ -114,7 +114,7 @@ export function NavigationMenuDemo() {
     <header
       className={cn(
         "fixed top-0 left-0 w-full bg-white dark:bg-gray-900 shadow-md flex z-50 items-center md:justify-between lg:justify-around h-[11vmin] md:h-[11vmin]",
-        isTabletOrMobile && "h-[11vmin] justify-between px-4"
+        isTabletOrMobile && "h-[11vmin] justify-between px-4",
       )}
     >
       {/* The Responsive of (Mobile,IPad) and Web */}

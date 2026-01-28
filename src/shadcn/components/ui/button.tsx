@@ -35,6 +35,8 @@ const buttonVariants = cva(
         icon: "bg-white text-primary hover:text-white shadow-xs hover:bg-primary/90 items-center justify-center flex",
         login: "bg-white text-black underline",
         underline: "bg-none text-primary underline font-bold text-xl",
+        contactUs:
+          "bg-none text-white shadow-xs hover:bg-primary/90 border flex items-center justify-center w-full",
       },
       size: {
         default: "h-9 px-10 py-6 has-[>svg]:px-3",
@@ -47,6 +49,8 @@ const buttonVariants = cva(
         linkUnderline: "p-0",
         login: "p-3",
         underline: "p-3",
+        contactUs: "pl-6 pr-60 py-4",
+        contactUsMobile: "pl-4 pr-25 py-4",
       },
     },
     defaultVariants: {
