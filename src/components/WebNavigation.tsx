@@ -50,7 +50,6 @@ function WebNavigation({
 
   const enableMeetings = currentUser?.user?.enableMeetings ?? false;
   const enableLeadGenration = currentUser?.user?.enableLeadGeneration ?? false;
-  const enableByitATeam = currentUser?.user?.enableByitATeam ?? false;
   const openLoginModal = () => {
     setOpenAlertDialog(false);
     onOpen("login");
@@ -311,7 +310,7 @@ function WebNavigation({
                   router.push(routes.LeadGenration.Root);
                   setOpenByitTeamDialog(false);
                 }}
-                disabled={!enableLeadGenration || !enableByitATeam}
+                disabled={!enableLeadGenration}
               >
                 Lead Generation
               </Button>
@@ -321,7 +320,7 @@ function WebNavigation({
                   router.push(routes.IncentiveByMeetings);
                   setOpenByitTeamDialog(false);
                 }}
-                disabled={!enableMeetings || !enableByitATeam}
+                disabled={!enableMeetings}
               >
                 Incentive By Meetings
               </Button>

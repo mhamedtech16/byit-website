@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { routes } from "@/_lib/routes";
 import useMeetings from "@/hooks/useMeeting";
@@ -14,6 +14,8 @@ import { useAuthStore } from "@/store/authStore";
 
 import MeetingsHorizontal from "./components/MeetingsHorizontal";
 
+const MAXACCEPTEDMEETINGS = 4;
+
 export default function Page() {
   const isMobile = useMobile();
   const router = useRouter();
@@ -24,12 +26,18 @@ export default function Page() {
   const { startDate, endDate } = getMonthRange(activeMonth, locale);
   const { meetings, earning } = useMeetings(currentUser, startDate, endDate);
 
+  const activeMeetings = useMemo(() => meetings, [meetings]);
+
+  const acceptedMeetings = useMemo(
+    () => activeMeetings.filter((m) => m.status === "ACCEPTED").length,
+    [activeMeetings],
+  );
   return (
     <div className="p-6 bg-slate-50">
       <div
         className={cn(
           "flex items-center justify-between",
-          isMobile ? "px-0" : "justify-between px-6"
+          isMobile ? "px-0" : "justify-between px-6",
         )}
       >
         <h1 className="text-xl font-bold">{t("myMeetings")}</h1>
@@ -43,6 +51,7 @@ export default function Page() {
         ) : ( */}
         <Button
           onClick={() => router.push(routes.NewMeetings)}
+          disabled={acceptedMeetings === MAXACCEPTEDMEETINGS}
           className={cn(isMobile && "px-4")}
         >
           {t("newMeetings")}

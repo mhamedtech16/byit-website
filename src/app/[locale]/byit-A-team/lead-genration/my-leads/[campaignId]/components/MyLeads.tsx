@@ -50,7 +50,7 @@ export default function CampaignLeadsPage() {
   // Get Leads
   const { leads: apiLeads, loading } = useLeads(
     currentUser,
-    Number(campaignId)
+    Number(campaignId),
   );
   const [leads, setLeads] = useState<Leads[] | null>(apiLeads);
   ///
@@ -88,7 +88,7 @@ export default function CampaignLeadsPage() {
 
   // Get Lead by ID
   const [selectedLeadId, setSelectedLeadId] = useState<number | undefined>(
-    undefined
+    undefined,
   );
 
   // Call API get Feedback
@@ -148,22 +148,20 @@ export default function CampaignLeadsPage() {
 
       createFeedbackApi(payload, locale, id)
         .then(() => {
-          if (feedback !== "" && status !== "") {
-            setLeads((prev: Leads[] | null) => {
-              if (!prev) return prev;
+          setLeads((prev: Leads[] | null) => {
+            if (!prev) return prev;
 
-              return prev.map((lead) =>
-                lead.id === selectedLeadId ? { ...lead, status } : lead
-              );
-            });
-            setOpenFeedbackForm(false);
-            setFeedback("");
-            setStatus("");
-          }
+            return prev.map((lead) =>
+              lead.id === selectedLeadId ? { ...lead, status } : lead,
+            );
+          });
+          setOpenFeedbackForm(false);
+          setFeedback("");
+          setStatus("");
         })
         .catch(() => setErrorMessage(t("feedback_status_required")));
     },
-    [feedback, locale, selectedLeadId, status, t]
+    [feedback, locale, selectedLeadId, status, t],
   );
 
   // (Edit, Update) Feedback
@@ -178,13 +176,12 @@ export default function CampaignLeadsPage() {
 
       updateFeedbackApi(payload, locale, id)
         .then(() => {
-          if (feedback !== "" && status !== "") {
-            setFeedbacks((prev: Feedback[]) => {
-              if (!prev) return prev;
+          setFeedbacks((prev: Feedback[]) => {
+            if (!prev) return prev;
 
-              return prev.map((f) =>
-                f.id === currentFeedbackId
-                  ? {
+            return prev.map((f) =>
+              f.id === currentFeedbackId
+                ? {
                     ...f,
                     status,
                     notes: feedback,
@@ -194,17 +191,16 @@ export default function CampaignLeadsPage() {
                       year: "numeric",
                     }),
                   }
-                  : f
-              );
-            });
-            setOpenFeedbackForm(false);
-            setFeedback("");
-            setStatus("");
-          }
+                : f,
+            );
+          });
+          setOpenFeedbackForm(false);
+          setFeedback("");
+          setStatus("");
         })
         .catch(() => setErrorMessage(t("feedback_status_required")));
     },
-    [currentFeedbackId, feedback, locale, status, t]
+    [currentFeedbackId, feedback, locale, status, t],
   );
 
   // Delete Feedback By ID
@@ -248,7 +244,7 @@ export default function CampaignLeadsPage() {
           setLoadingFeedBack(false);
         });
     },
-    [currentUser, getFeedbackApi]
+    [currentUser, getFeedbackApi],
   );
 
   if (shouldShowSkeleton) return <SkeletonLoading />;
@@ -263,7 +259,7 @@ export default function CampaignLeadsPage() {
             <BreadcrumbItem>
               <BreadcrumbPage
                 className={cn(
-                  isMobile ? "text-lg font-bold" : "text-2xl font-bold"
+                  isMobile ? "text-lg font-bold" : "text-2xl font-bold",
                 )}
               >
                 {`${isRTL ? campaign?.name_ar : campaign?.name_en}`}
@@ -273,10 +269,11 @@ export default function CampaignLeadsPage() {
             <BreadcrumbItem>
               <BreadcrumbLink
                 onClick={() => setOpenFeedback(false)}
-                className={`text-2xl font-bold  cursor-pointer ${!openFeedback
+                className={`text-2xl font-bold  cursor-pointer ${
+                  !openFeedback
                     ? "text-2xl font-bold text-orangeApp"
                     : " text-primary"
-                  } ${isRTL ? "mr-1" : "ml-1"} 
+                } ${isRTL ? "mr-1" : "ml-1"} 
                 ${isMobile ? "text-lg font-bold" : "text-2xl font-bold"}
                 `}
               >
@@ -289,14 +286,16 @@ export default function CampaignLeadsPage() {
                 <BreadcrumbItem>
                   <BreadcrumbLink
                     onClick={() => getFeedbacks(selectedLeadId)}
-                    className={`text-2xl font-bold ml-1 cursor-pointer ${openFeedback
+                    className={`text-2xl font-bold ml-1 cursor-pointer ${
+                      openFeedback
                         ? " text-orangeApp"
                         : "bg-gray-200 text-primary"
-                      } ${isRTL ? "mr-1" : "ml-1"}
-                                    ${isMobile
-                        ? "text-lg font-bold"
-                        : "text-2xl font-bold"
-                      }
+                    } ${isRTL ? "mr-1" : "ml-1"}
+                                    ${
+                                      isMobile
+                                        ? "text-lg font-bold"
+                                        : "text-2xl font-bold"
+                                    }
                     `}
                   >
                     {`${t("feedback_list")}`}
@@ -328,7 +327,7 @@ export default function CampaignLeadsPage() {
                   onClick={() =>
                     window.open(
                       `https://wa.me/${campaign?.whatsappNumber}`,
-                      "_blank"
+                      "_blank",
                     )
                   }
                 >

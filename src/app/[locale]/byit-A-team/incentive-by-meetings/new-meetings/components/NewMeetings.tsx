@@ -75,7 +75,6 @@ export default function NewMeetings() {
       developer: "",
       project: "",
       clientName: "",
-      clientPhone: "",
       salesName: "",
       salesPhone: "",
       countryCode: selectedCountry?.countryCode ?? "+20", // Default to Egypt
@@ -111,7 +110,6 @@ export default function NewMeetings() {
             : values.project,
 
         clientName: values.clientName,
-        clientPhone: values.clientPhone,
         clientCountry: selectedCountry?.id ?? 0, // من الـ CountryDropdown
 
         salesName: values.salesName,
@@ -135,7 +133,6 @@ export default function NewMeetings() {
             developer: "",
             project: "",
             clientName: "",
-            clientPhone: "",
             salesName: "",
             salesPhone: "",
             uploadFile: undefined,
@@ -230,40 +227,6 @@ export default function NewMeetings() {
             type="text"
             className="text-primary border-primary bg-white"
           />
-
-          {/* Client Number + Country Code */}
-          <Label
-            className={cn(
-              "text-primary mb-2",
-              form.formState.errors.clientPhone && "text-red-500 mb-2",
-            )}
-          >
-            {t("clientPhone")}
-          </Label>
-          <div className="flex">
-            <CountryDropdown
-              onChange={(country) => {
-                setSelectedCountry(country);
-              }}
-              slim={true}
-              disabled={false}
-              placeholder="Code"
-              className="border-primary"
-            />
-            <FormTextInput
-              form={form}
-              name="clientPhone"
-              placeholder="clientPhone"
-              translate="ClosingForm"
-              type="tel"
-              className={cn(
-                "text-primary border-primary bg-white",
-                isRTL
-                  ? "text-right rounded-r-none"
-                  : "text-left rounded-l-none",
-              )}
-            />
-          </div>
 
           <FormTextInput
             form={form}

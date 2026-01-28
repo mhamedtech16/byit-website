@@ -282,7 +282,6 @@ export interface NewMeetingsRequest {
   developer: number;
   project: number;
   clientName?: string;
-  clientPhone?: string;
   clientCountry?: number;
   uploadFile?: File; // File object for the uploaded document
 }

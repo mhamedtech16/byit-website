@@ -106,7 +106,6 @@ export const newMeetingsFormSchema = z
         message: "Project is required",
       }),
     clientName: z.string().min(1, "Client name is required"),
-    clientPhone: z.string().min(1, "Client phone number is required"),
     salesName: z.string().min(1, "Developer sales name is required"),
     salesPhone: z.string().min(1, "Developer sales number is required"),
     uploadFile: z
@@ -115,9 +114,6 @@ export const newMeetingsFormSchema = z
       })
       .optional(),
     countryCode: z.string().min(1, "Country code is required"),
-  })
-  .superRefine((data, ctx) => {
-    validatePhoneNumber("clientPhone", "countryCode")(data, ctx);
   })
   .superRefine((data, ctx) => {
     validatePhoneNumber("salesPhone", "countryCode")(data, ctx);

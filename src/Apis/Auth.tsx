@@ -249,7 +249,6 @@ export const newMeetingsApi = async (
   formData.append("clientCountry", String(values.clientCountry ?? 0)); // client country
 
   formData.append("clientName", values.clientName || ""); // Client Name
-  formData.append("clientPhone", values.clientPhone || ""); // Client Phone
   formData.append("salesName", values.salesName || ""); // Sales Name
   formData.append("salesCountry", String(values.salesCountry ?? 0)); // sales country
   formData.append("salesPhone", values.salesPhone || ""); // Sales Number
