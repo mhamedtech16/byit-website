@@ -65,7 +65,7 @@ export default function MeetingsContent({
               </div>
 
               <div className="flex flex-col space-y-4">
-                <p className="text-xl font-bold">Total recive cash</p>
+                <p className="text-xl font-bold">Total recived cash</p>
                 <p className="font-bold text-lg text-green-500">
                   {`${reiceveEarning ?? 0} ${t("EGP")}`}
                 </p>
@@ -98,7 +98,6 @@ export default function MeetingsContent({
                 key={item.id}
                 className="p-3 rounded-lg border bg-muted/30 border-primary/30 space-y-2"
               >
-                <p className="font-bold text-xl text-primary">{`#${item.id}`}</p>
                 <p className="space-x-1">
                   <b>{t("clientName")}:</b>
                   <span className="text-primary">{item.clientName}</span>

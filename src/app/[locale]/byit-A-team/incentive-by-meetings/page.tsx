@@ -51,7 +51,7 @@ export default function Page() {
         ) : ( */}
         <Button
           onClick={() => router.push(routes.NewMeetings)}
-          disabled={acceptedMeetings === MAXACCEPTEDMEETINGS}
+          disabled={acceptedMeetings >= MAXACCEPTEDMEETINGS}
           className={cn(isMobile && "px-4")}
         >
           {t("newMeetings")}
